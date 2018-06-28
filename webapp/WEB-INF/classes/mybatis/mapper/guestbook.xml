@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="guestbook">
+	<select id="selectList" resultType="bvo" parameterType="Map"> <!-- 이 프레임워크에서 EmpVo를 만들어줌 -->
+		select * from guestbook 
+			<!--동적쿼리 추가  -->
+			<if test="search_option != null and search_option != all">
+				<choose>
+					<when test="search_option == 'name'">
+						where writer = #{search_text}
+					</when>
+					<when test="search_option == 'msg'">
+						where msg like '%'||#{search_text}||'%' 
+					</when>
+					<otherwise> <!-- case문의 default문  -->
+						 where writer = #{search_text} 
+						 	or msg like '%'||#{search_text}||'%' 
+					</otherwise>
+				</choose>
+			</if>
+		order by id desc
+	</select> 
+	<insert id="add" parameterType="bvo">
+		insert into guestbook values (seq_guestbook_id.nextval,
+			#{password},#{msg},#{writer},#{ip},systimestamp)
+	</insert>
+	<delete id="delete" parameterType="int">
+		delete from guestbook where id = #{value}
+	</delete>
+	<select id="selectOne" parameterType="int" resultType="bvo">
+		select * from guestbook where id = #{value}
+	</select>
+	<update id="modify" parameterType="bvo">		
+		update guestbook set writer = #{writer}, msg = #{msg}
+		<if test="password != ''">
+			, password = #{password}
+		</if>		
+			where id = #{id}
+	</update>
+	<select id="get_password" parameterType="int" resultType="String">
+		select password from guestbook where id = #{value}
+	</select>
+	<select id="get_count" parameterType="String" resultType="int">
+		select count(writer) from guestbook
+			where writer = #{writer}
+	</select>
+</mapper>

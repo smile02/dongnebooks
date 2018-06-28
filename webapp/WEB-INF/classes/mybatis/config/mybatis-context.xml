@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<typeAliases>
+	<typeAlias type="com.inc.vo.BookVo" alias="bvo"/>
+</typeAliases> <!-- mapper에 vo패키지에 별칭을 주는 태그 -->
+  <mappers>
+  	<mapper resource="mybatis/mapper/guestbook.xml"/>
+  </mappers>
+</configuration>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+	<!-- 외부에서 아래의 파일을 참조하게 되면 중복된 코드를 줄일 수 있다. 그리고, db.propertise를 수정하면 자동적용 됨 
+	아래에서 ${}안에 키값을 넣어서 사용 -->
+	<context:property-placeholder 
+		location="classpath:mybatis/config/db.properties"/>
+	
+	<bean id="bookDao" class="com.inc.dao.BookDao"
+		 p:sqlSession-ref="sqlSession"/>
+		 
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory"/>	
+	</bean>
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:configLocation="classpath:mybatis/config/mybatis-context.xml"
+		p:dataSource-ref="dataSource-pool"/>
+		
+	<bean id="dataSource-pool" class="org.apache.commons.dbcp.BasicDataSource"
+	p:driverClassName="${driver-class}"
+	p:url="${url}"
+	p:username="${user-name}"
+	p:password="${password}"
+	p:maxActive="${max-active}"/> <!-- maxActive는 pool 설정 -->
+	
+	<bean id="dataSource-simple" class="org.springframework.jdbc.datasource.SimpleDriverDataSource"
+	p:driverClass="${driver-class}"
+	p:url="${url}"
+	p:username="${user-name}"
+	p:password="${password}"/> 
+</beans>
