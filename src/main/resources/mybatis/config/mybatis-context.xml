@@ -4,9 +4,9 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 <typeAliases>
-	
-</typeAliases> <!-- mapper에 vo패키지에 별칭을 주는 태그 -->
+	<package name="com.inc.domain"/>
+</typeAliases>
   <mappers>
-  	<mapper resource="mybatis/mapper/???.xml"/>
+  	<mapper resource="mybatis/mapper/users.xml"/>
   </mappers>
 </configuration>

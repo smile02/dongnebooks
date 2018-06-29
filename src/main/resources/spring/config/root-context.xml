@@ -30,4 +30,5 @@
 	p:url="${url}"
 	p:username="${user-name}"
 	p:password="${password}"/> 
+	<context:component-scan base-package="com.inc.dao com.inc.service"/>
 </beans>

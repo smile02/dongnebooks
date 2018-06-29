@@ -1,5 +1,5 @@
 package com.inc.dao;
 
-public class UsersDao {
+public interface UsersDao {
 
 }

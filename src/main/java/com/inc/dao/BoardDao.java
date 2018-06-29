@@ -1,5 +1,5 @@
 package com.inc.dao;
 
-public class BoardDao {
+public interface BoardDao {
 
 }

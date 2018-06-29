@@ -1,5 +1,5 @@
 package com.inc.service;
 
-public class CommentService {
+public interface CommentService {
 
 }

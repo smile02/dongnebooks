@@ -1,5 +1,12 @@
 package com.inc.controller;
 
-public class CommentController {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
+import com.inc.service.CommentService;
+
+@Controller
+public class CommentController {
+	@Autowired
+	private CommentService commentService;
 }
