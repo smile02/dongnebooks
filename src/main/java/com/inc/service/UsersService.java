@@ -1,5 +1,5 @@
 package com.inc.service;
 
-public class UserService {
+public class UsersService {
 
 }
