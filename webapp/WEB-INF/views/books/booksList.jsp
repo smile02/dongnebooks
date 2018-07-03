@@ -13,11 +13,11 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <style>
 .thumbnail {
-	height: 400px;
+	height: 450px;
 }
 
 .img-container {
-	height: 200px;
+	height: 220px;
 }
 
 .thumbnail img {
@@ -33,7 +33,13 @@
 				<div class="col-xs-3">
 					<div class="thumbnail">
 						<div class="img-container">
+						<c:if test="${books.photo ne null}">
+							<img src="/image/photo/${books.photo }" />
+						</c:if>
+						<c:if test="${books.photo == null}">
 							<img src="/image/photo/noimage.png" />
+						</c:if>
+						
 						</div>
 						<div class="caption">
 							<h4>작성자 : ${books.nickname }</h4>
@@ -46,7 +52,11 @@
 							</p>
 							<p>가격 : ${books.price }</p>
 							<p>책 상태 :${books.status }</p>
+							<span>
+								<button id="detail" type="button" class="btn btn-primary">자세히 보기</button>
+							</span>
 						</div>
+						
 					</div>
 				</div>
 			</c:forEach>
@@ -68,125 +78,125 @@
 				</div>
 				<div class="modal-body">
 				
-				<form:form 
-				class="form-horizontal" modelAttribute="books">
+				<form enctype="multipart/form-data" action="/books/add" method="post"
+				class="form-horizontal">
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="title" class="control-label">제목 : </form:label>
+							<label for="title" class="control-label">제목 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="text" path="title" 
-								class="form-control" placeholder="책 제목을 입력해주세요."/>							
-						    <form:errors path="title" class="error"/>
+							<input type="text" id="title" name="title" 
+								class="form-control" placeholder="책 제목을 입력해주세요."/>		
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="comments" class="control-label">내용 : </form:label>
+							<label for="comments" class="control-label">내용 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="text" path="comments" 
+							<input type="text" id="comments" name="comments" 
 								class="form-control" placeholder="내용을 입력해주세요."/>
-							<form:errors path="comments" class="error"/>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="price" class="control-label">가격 : </form:label>
+							<label for="price" class="control-label">가격 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="text" path="price" 
+							<input type="text" id="price" name="price" 
 								class="form-control" placeholder="가격을 입력해주세요."/>
-							<form:errors path="price" class="error"/>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="status" class="control-label">책 상태 : </form:label>
+							<label for="status" class="control-label">책 상태 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="text" path="status" 
-								class="form-control" placeholder="책 상태를 입력해주세요."/>
-							<form:errors path="status" class="error"/>
+							<select name="status" id="status" class="form-control">
+								<option value="a">최상</option>
+								<option value="b">상</option>
+								<option value="c">중상</option>
+								<option value="d">중</option>
+								<option value="e">중하</option>
+								<option value="f">하</option>
+							</select>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="d_type" class="control-label">거래유형 : </form:label>
+							<label for="d_type" class="control-label">거래유형 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="text" path="d_type" 
-								class="form-control" placeholder="거래유형을 입력해주세요."/>
-							<form:errors path="d_type" class="error"/>
+							<select name="d_type" id="d_type" class="form-control"
+								onchange="deal();">										
+								<option value="end">택배(착불)</option>
+								<option value="start">택배(선불)</option>
+								<option value="direct">직거래</option>
+							</select>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="fee" class="control-label">배송비 : </form:label>
+							<label for="fee" class="control-label">배송비 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="text" path="fee" 
+							<input type="text" id="fee" name="fee" 
 								class="form-control" placeholder="배송비를 입력해주세요."/>
-							<form:errors path="fee" class="error"/>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="author" class="control-label">저자 : </form:label>
+							<label for="author" class="control-label">저자 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="text" path="author" 
+							<input type="text" id="author" name="author" 
 								class="form-control" placeholder="저자를 입력해주세요."/>
-							<form:errors path="author" class="error"/>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="b_category" class="control-label">대분류 : </form:label>
+							<label for="b_category" class="control-label">대분류 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="text" path="b_category" 
+							<input type="text" id="b_category" name="b_category" 
 								class="form-control" placeholder="대분류를 입력해주세요."
-								value="IT"/>
-							<form:errors path="b_category" class="error"/>
+								value="IT"/>							
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="s_category" class="control-label">소분류 : </form:label>
+							<label for="s_category" class="control-label">소분류 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="text" path="s_category" 
+							<input type="text" id="s_category" name="s_category" 
 								class="form-control" placeholder="소분류를 입력해주세요."
 								value="programming"/>
-							<form:errors path="s_category" class="error"/>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="photo_file" class="control-label">사진 : </form:label>
+							<label for="photo_file" class="control-label">사진 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="file" path="photo_file" 
+							<input type="file" id="photo_file" name="photo_file" 
 								class="form-control"/>							
 						</div>			
 					</div>
 					
 						<div class="modal-footer">
-							<button type="button" class="btn btn-success" data-dismiss="modal"
-								onclick="reg(this.form);">등록</button>
+							<button type="submit" class="btn btn-success">등록</button>
 							<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
 						</div>					
-					</form:form>					
+					</form>					
 				</div>				
 			</div>
 
@@ -198,51 +208,17 @@
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script>	
-		 function reg(form){
-			var data = {
-					title:$("#title").val(),
-					comments:$("#comments").val(),
-					price:$("#price").val(),
-					status:$("#status").val(),
-					d_type:$("#d_type").val(),
-					fee:$("#fee").val(),
-					author:$("#author").val(),
-					b_category:$("#b_category").val(),
-					s_category:$("#s_category").val(),
-					photo_file:$("#photo_file").val()
-			};
-			
-			console.log(data);
-			
-			form.method="post";
-			form.action="/books/add";
-			form.submit();			
-			 /*  $.ajax({
-				url:"/books/add",
-				type:"post",
-				data:{
-					 title:$("#title").val(),
-					 comments:$("#comments").val(),
-				     price:$("#price").val(),
-					 status:$("#status").val(),
-					 d_type:$("#d_type").val(),
-					 fee:$("#fee").val(),
-					 author:$("#author").val(),
-					 b_category:$("#b_category").val(),
-					 s_category:$("#s_category").val(),
-					 photo_file:$("#photo_file").val()}
-			  		,
-					 success:function(data){
-					if(data=='오류발생'){
-						$("#myModal").modal();
-					}else if(data=='등록완료'){
-						location.reload();
-					}else{
-						alert("서버에 문제가 발생했습니다.\n잠시후에 시도해주세요.");
-					}
-				}
-			}); */
-		}
+		 function deal(){
+			 var $d_type = $("#d_type").val();
+			 
+			 if($d_type=='end'){
+				 $("#fee").val('');
+				 $("#fee").removeAttr("readonly","readonly");
+			 }else{
+				 $("#fee").val(0);
+				 $("#fee").attr("readonly","readonly");
+			 }
+		 }
 	</script>
 </body>
 </html>
