@@ -12,6 +12,7 @@ create table users(
 desc users;
 alter table users add constraint uni_id unique(id);
 alter table users modify address varchar2(200);
+alter table users modify password varchar2(70);
 --name varchar2(30) not null
 
 -------------------------
