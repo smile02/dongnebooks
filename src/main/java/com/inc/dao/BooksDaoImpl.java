@@ -24,5 +24,10 @@ public class BooksDaoImpl implements BooksDao{
 		session.insert("books.booksAdd",books);
 	}
 
+	@Override
+	public Books booksView(int idx) {
+		return session.selectOne("books.booksView",idx);
+	}
+
 	
 }

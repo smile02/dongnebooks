@@ -9,5 +9,7 @@ public interface BooksService {
 	//책의 목록을 보여주는 메서드
 	public List<Books> booksList();
 
-	public void booksAdd(Books books); 
+	public void booksAdd(Books books);
+
+	public Books booksView(int idx); 
 }

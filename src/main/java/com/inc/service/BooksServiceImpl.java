@@ -1,6 +1,7 @@
 package com.inc.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,11 @@ public class BooksServiceImpl implements BooksService{
 	@Override
 	public void booksAdd(Books books) {
 		booksDao.booksAdd(books);
+	}
+
+	@Override
+	public Books booksView(int idx) {
+		return booksDao.booksView(idx);
 	}
 
 }

@@ -9,4 +9,6 @@ public interface BooksDao {
 	public List<Books> booksList();
 
 	public void booksAdd(Books books);
+
+	public Books booksView(int idx);
 }

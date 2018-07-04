@@ -1,25 +1,22 @@
 package com.inc.domain;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
 
 public class Books {
 	private int idx;
-	@Size(min=1,max=10,message="제목은 1~10글자 이내")
 	private String title;
-	private String nickname;
-	@Size(min=1,max=300,message="내용은 1~300글자 이내")
+	private String nickname;	
 	private String comments;
 	private String regdate;
-	private int price;	
+	private int price;
 	private String status;
 	private int fee;
 	private String photo;
 	private MultipartFile photo_file;
 	private String d_type;
-	@Pattern(regexp="[가-힣]{2,30}",message="저자는 2~30글자 이내")
+	@Pattern(regexp="[가-힣]{1,30}",message="저자 한글 1~30글자이내")
 	private String author;
 	private String b_category;
 	private String s_category;
