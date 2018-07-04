@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.inc.domain.Books;
 import com.inc.service.BooksService;
 import com.inc.service.FileService;
 
 @Controller
+@SessionAttributes(value= {"bk"})
 public class BooksController {
 	
 	@Autowired
@@ -40,6 +42,7 @@ public class BooksController {
 		return "/books/booksList.jsp";
 	}
 	
+	//도서를 판매할 사람이 "도서 등록"버튼을 클릭 했을 때
 	@RequestMapping(value ="/books/add", method= RequestMethod.POST)
 	@ResponseBody
 	public Map<String, String> booksAdd(@ModelAttribute("books") @Valid Books books, BindingResult result,
@@ -75,17 +78,20 @@ public class BooksController {
 		return erMap;		
 	}
 	
+	//도서목록에서 "자세히 보기"버튼을 클릭 했을 때 등록한 책의 상세정보를 볼 수 있도록
 	@RequestMapping(value="/books/view", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Books> booksView(@RequestParam int idx){
+	public String booksView(@RequestParam int idx,Model model){
 		
 		Books books = booksService.booksView(idx);
+		if(books != null) {
+			model.addAttribute("bk",books);
+			return "y";
+		}				
 		
-		Map<String, Books> bMap = new HashMap<>();
-		
-		bMap.put("book", books);
-		
-		
-		return bMap;
+		return "n";
 	}
+	
+	//판매자 본인일 경우에만 수정이 가능하도록
+	
 }

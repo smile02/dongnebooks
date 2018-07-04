@@ -35,7 +35,7 @@
 
 #photo{
 	width:100%;
-	height: 100% !important;
+	height: 200px !important;
 }
 </style>
 </head>
@@ -73,6 +73,7 @@
 							<c:if test="${books.status == 'f'}">하</c:if>
 							</p>								
 							<span>
+							<input type="hidden" value="${books.nickname }" id="detail_nickname" />
 								<button id="detail" type="button" 
 								class="btn btn-primary btn-xs" onclick="detail(${books.idx});">자세히 보기</button>
 							</span>
@@ -86,8 +87,9 @@
 	<div class="modal" id="detailModal" tabindex="-1" role="dialog">
 	<div class="modal-dialog">
 		<div class="modal-content detail-modal">
+		<button type="button" class="close btn-md" data-dismiss="modal">&times;</button>			
 			<div class="modal-header text-center" id="title">
-				자세히 보기
+				<label class="control-label">제목 : </label> ${bk.title }
 			</div>
 			<div class="modal-body">
 			<form action="" class="form-horizontal">
@@ -96,7 +98,12 @@
 							<label class="control-label">사진 : </label>
 						</div>
 						<div class="col-xs-5">
-							<img class="form-control" id="photo"/>
+						<c:if test="${bk.photo ne null}">
+							<img src="/image/photo/${bk.photo }" id="photo" class="form-control"/>
+						</c:if>
+						<c:if test="${bk.photo == null}">
+							<img src="/image/photo/noimage.png" />
+						</c:if>
 						</div>			
 				</div>
 				
@@ -105,7 +112,7 @@
 							<label class="control-label">작성자 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="nickname" class="form-control"></p>
+							<p id="nickname" class="form-control">${bk.nickname }</p>
 						</div>			
 				</div>
 				<div class="form-group">
@@ -113,7 +120,11 @@
 							<label class="control-label">등록시간 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="regdate" class="form-control"></p>
+							<p id="regdate" class="form-control">
+							<f:parseDate var="date" value="${bk.regdate }"
+									pattern="yyyy-MM-dddd HH:mm:ss" />
+								<f:formatDate value="${date }" pattern="yy년 MM월 dd일 HH시 mm분" />
+							</p>
 						</div>			
 				</div>
 				<div class="form-group">
@@ -121,7 +132,7 @@
 							<label class="control-label">가격 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="price" class="form-control"></p>
+							<p id="price" class="form-control">${bk.price }</p>
 						</div>			
 				</div>
 				<div class="form-group">
@@ -129,7 +140,13 @@
 							<label class="control-label">책 상태 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="status" class="form-control"></p>
+							<p id="status" class="form-control">
+							<c:if test="${bk.status == 'a'}">최상</c:if>
+							<c:if test="${bk.status == 'b'}">상</c:if>
+							<c:if test="${bk.status == 'c'}">중상</c:if>
+							<c:if test="${bk.status == 'd'}">중</c:if>
+							<c:if test="${bk.status == 'e'}">중하</c:if>
+							<c:if test="${bk.status == 'f'}">하</c:if></p>
 						</div>			
 				</div>				
 				<div class="form-group">
@@ -137,7 +154,11 @@
 							<label class="control-label">거래유형 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="d_type" class="form-control"></p>
+							<p id="d_type" class="form-control">
+								<c:if test="${bk.d_type == 'direct' }">직거래</c:if>
+								<c:if test="${bk.d_type == 'start' }">택배(선불)</c:if>
+								<c:if test="${bk.d_type == 'end' }">택배(착불)</c:if>
+							</p>
 						</div>			
 				</div>
 				<div class="form-group">
@@ -145,7 +166,7 @@
 							<label class="control-label">배송비 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="fee" class="form-control"></p>
+							<p id="fee" class="form-control">${bk.fee }</p>
 						</div>			
 				</div>				
 				<div class="form-group">
@@ -153,7 +174,7 @@
 							<label class="control-label">저자 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="author" class="form-control"></p>
+							<p id="author" class="form-control">${bk.author }</p>
 						</div>			
 				</div>
 				<div class="form-group">
@@ -161,7 +182,7 @@
 							<label class="control-label">대분류 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="b_category" class="form-control"></p>
+							<p id="b_category" class="form-control">${bk.b_category }</p>
 						</div>			
 				</div>
 				<div class="form-group">
@@ -169,7 +190,7 @@
 							<label class="control-label">소분류 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="s_category" class="form-control"></p>
+							<p id="s_category" class="form-control">${bk.s_category }</p>
 						</div>			
 				</div>
 				<div class="form-group">
@@ -177,20 +198,28 @@
 							<label class="control-label">거래상태 : </label>
 						</div>
 						<div class="col-xs-5">
-							<p id="deal" class="form-control"></p>
+							<p id="deal" class="form-control">${bk.deal }</p>
 						</div>			
 				</div>
 				<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
 							<label class="control-label">내용 : </label>
 						</div>
-						<div class="col-xs-5">
-							<p id="comments" class="form-control"></p>
+						<div class="col-xs-5">							
+							<div class="form-control" id="comments"
+								style="overflow:scroll; width:220px; height:100px; padding:10px;"
+								>${bk.comments }</div>							
 						</div>			
 				</div>
 			</form>
 			</div>
-			<div class="modal-footer">
+			<div class="modal-footer">			
+				<c:if test="${bk.nickname == '관리자' }">
+					<button type="button" class="btn btn-warning" id="mod" onclick="mod(${bk.idx});" >수정하기</button>
+				</c:if>
+				<c:if test="${bk.nickname != '관리자' }">
+					<button type="button" class="btn btn-warning" id="mod" onclick="buy();" >구매하기</button>
+				</c:if>				
 				<button type="button" class="btn" data-dismiss="modal">닫기</button>
 			</div>
 		</div>
@@ -228,9 +257,8 @@
 						<div class="col-xs-2 col-xs-offset-3">
 							<form:label path="comments" class="control-label">내용 : </form:label>
 						</div>
-						<div class="col-xs-5">
-							<form:input path="comments" 
-								class="form-control" placeholder="내용을 입력해주세요."/>
+						<div class="col-xs-5">							
+							<form:textarea path="comments" class="form-control"></form:textarea>
 							<form:errors path="comments" class="error"/>	
 						</div>			
 					</div>
@@ -344,7 +372,8 @@
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-	<script>	
+	<script>
+	//거래유형 바뀔 때
 		 function deal(){
 			 var $d_type = $("#d_type").val();
 			 
@@ -356,6 +385,7 @@
 				 $("#fee").attr("readonly","readonly");
 			 }
 		 }		 
+		 //도서등록
 		   function reg(){
 			   var formData = new FormData($("#form")[0]);
 			 $.ajax({
@@ -368,7 +398,7 @@
 				 }).done(function(data){
 					//서버 통신 성공					
 					if(data.success == 'y'){
-						
+						location.reload();
 					}else{
 						console.log(data.error);
 						$("#aut").html(data.error);
@@ -377,64 +407,20 @@
 		 } 
 		   
 		   
-		   
+		   //자세히 보기
 		   function detail(idx){
 			   $.ajax({
 					type:"post",
 					url : "/books/view",
 					data : "idx="+idx
 				}).done(function(data){ 
-					$("#title").html(data.book.title);
-					$("#nickname").html(data.book.nickname);
-					$("#comments").html(data.book.comments);
-					$("#regdate").html(data.book.regdate);
-					$("#price").html(data.book.price);
-					$("#fee").html(data.book.fee);
-					///image/photo/noimage.png
-					if(data.book.photo == null){
-						$("#photo").attr("src","/image/photo/noimage.png");
-					}else{
-						$("#photo").attr("src","/image/photo/"+data.book.photo);
-					}
-					$("#d_type").html(data.book.d_type);
-					$("#author").html(data.book.author);
-					$("#b_category").html(data.book.b_category);
-					$("#s_category").html(data.book.s_category);
-					$("#deal").html(data.book.deal);
-					//$("#status").html(data.book.status);
-					switch(data.book.status){
-						case 'a': $("#status").html("최상"); break;
-						case 'b': $("#status").html("상"); break;
-						case 'c': $("#status").html("중상"); break;
-						case 'd': $("#status").html("중"); break;
-						case 'e': $("#status").html("중하"); break;
-						case 'f': $("#status").html("하"); break;
-					}
+					
 				}).fail(function(err){ 
 					//서버 통신시 오류가 있을 때
 				});
 			   $("#detailModal").modal();
 		   }
-/*
- * 
- $.ajax({
-	 url:"/books/add",
-	 enctype:"multipart/form-data",
-	 type:"post",
-	 contentType: false,
-	 processData: false,
-	 data:formData,
-	 success:function(data){
-		 if(data=='n'){
-			 console.log(data);
-			 alert("asd");
-		 }else if(data=='y'){
-			 alert("wh"+data);
-			 location.href="/books/list";
-		 }
-	 }
- });
- */		  
+		   //파일 확장자 검사
 		  function fileCheck(file){
 				var point = file.value.lastIndexOf("."); //뒤에있는 .의 위치
 				var extension = file.value.substring(point+1, file.value.length); //.다음부터 끝까지의 확장자
@@ -462,7 +448,39 @@
 			}); */
 
 
+		 /*
+		 $("#title").html(data.book.title);
+					$("#nickname").html(data.book.nickname);
+					$("#comments").html(data.book.comments);
+					$("#regdate").html(data.book.regdate);
+					$("#price").html(data.book.price);
+					$("#fee").html(data.book.fee);
+					///image/photo/noimage.png
+					if(data.book.photo == null){
+						$("#photo").attr("src","/image/photo/noimage.png");
+					}else{
+						$("#photo").attr("src","/image/photo/"+data.book.photo);
+					}
+					$("#author").html(data.book.author);
+					$("#b_category").html(data.book.b_category);
+					$("#s_category").html(data.book.s_category);
+					$("#deal").html(data.book.deal);
+					//$("#status").html(data.book.status);
+					switch(data.book.status){
+						case 'a': $("#status").html("최상"); break;
+						case 'b': $("#status").html("상"); break;
+						case 'c': $("#status").html("중상"); break;
+						case 'd': $("#status").html("중"); break;
+						case 'e': $("#status").html("중하"); break;
+						case 'f': $("#status").html("하"); break;
+					}
+					//$("#d_type").html(data.book.d_type);
+					switch(data.book.d_type){
+						case 'direct': $("#d_type").html("직거래"); break;
+						case 'start': $("#d_type").html("택배(선불)"); break;
+						case 'end': $("#d_type").html("택배(착불)"); break;
 		 
+		 */
 	</script>
 </body>
 </html>
