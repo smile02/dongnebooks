@@ -29,4 +29,17 @@
 		select * from books
 			where idx = #{value}
 	</select>
+	
+	<update id="booksMod" parameterType="books">
+		update books set price = #{price},
+						 status = #{status},
+						 d_type = #{d_type},
+						 fee = #{fee},
+						 author = #{author},
+						 b_category = #{b_category},
+						 s_category = #{s_category},
+						 deal = #{deal},
+						 comments = #{comments}
+			where idx = #{idx}
+	</update>
 </mapper>

@@ -11,4 +11,6 @@ public interface BooksDao {
 	public void booksAdd(Books books);
 
 	public Books booksView(int idx);
+
+	public void booksMod(Books books);
 }

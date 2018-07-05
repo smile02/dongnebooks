@@ -11,5 +11,7 @@ public interface BooksService {
 
 	public void booksAdd(Books books);
 
-	public Books booksView(int idx); 
+	public Books booksView(int idx);
+
+	public void booksMod(Books books); 
 }

@@ -30,4 +30,9 @@ public class BooksServiceImpl implements BooksService{
 		return booksDao.booksView(idx);
 	}
 
+	@Override
+	public void booksMod(Books books) {
+		booksDao.booksMod(books);
+	}
+
 }
