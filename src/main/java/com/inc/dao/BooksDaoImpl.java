@@ -29,5 +29,10 @@ public class BooksDaoImpl implements BooksDao{
 		return session.selectOne("books.booksView",idx);
 	}
 
+	@Override
+	public void booksMod(Books books) {
+		session.update("books.booksMod",books);
+	}
+
 	
 }

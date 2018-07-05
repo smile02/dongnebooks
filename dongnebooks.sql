@@ -92,3 +92,11 @@ select * from books;
 select * from cart;
 select * from board;
 
+delete from users ;
+
+
+update users set
+    password='989099e0edc9f04a2a06e3c5e4b5b56d04aed5e23973513d83068ee0cc76e0a9', email='dongnebooks21@gmail.com'
+        where id='admin';
+commit;
+
