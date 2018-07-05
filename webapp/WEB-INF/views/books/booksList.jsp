@@ -253,7 +253,7 @@
 			</div>
 			<div class="modal-footer">			
 				<c:if test="${cookie.nickname.value == '관리자' }">
-					<button type="button" class="btn btn-warning" onclick="mod(${cookie.idx.value})">수정하기</button>
+					<button type="button" class="btn btn-warning" onclick="mod('${cookie.idx.value}')">수정하기</button>
 				</c:if>
 				<c:if test="${cookie.nickname.value != '관리자' }">
 					<button type="button" class="btn btn-warning" id="mod" onclick="buy();" >구매하기</button>
@@ -458,7 +458,7 @@
 		  
 		 //도서 수정
 		 function mod(idx){
-			 idx = Number(idx);
+			 console.log(idx);
 			 $.ajax({
 				 url:"/books/mod",
 				 type:"post",

@@ -91,7 +91,7 @@ public class BooksController {
 			resMap.put("book", books);
 			response.addCookie(new Cookie("nickname",books.getNickname()));
 			response.addCookie(new Cookie("idx",books.getIdx()+""));
-			System.out.println(books.getTitle());
+			System.out.println(books.getIdx());
 			return resMap;
 		}				
 		
@@ -115,11 +115,12 @@ public class BooksController {
 			return erMap;
 		}
 		
-		System.out.println("1 : "+books.getComments());
-		System.out.println("2 : "+books.getTitle());
-		System.out.println("3 : "+books);
+//		System.out.println("1 : "+books.getComments());
+//		System.out.println("2 : "+books.getTitle());
+		System.out.println("1 : "+books.getIdx());
+//		System.out.println("4 : "+books);
 		
-		Books mod_books = new Books();
+		/*Books mod_books = new Books();
 		mod_books.setIdx(books.getIdx());
 		mod_books.setPrice(books.getPrice());
 		mod_books.setStatus(books.getStatus());
@@ -131,9 +132,9 @@ public class BooksController {
 		mod_books.setS_category(books.getS_category());
 		mod_books.setDeal(books.getDeal());		
 		
-		System.out.println("4 : "+mod_books.getAuthor());
+		System.out.println("4 : "+mod_books.getAuthor());*/
 		
-		booksService.booksMod(mod_books);
+		booksService.booksMod(books);
 		erMap.put("success", "y");
 		
 		return erMap;
