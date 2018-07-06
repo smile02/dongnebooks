@@ -11,7 +11,7 @@
 		insert into books
 			values(seq_books_idx.nextval,
 				   #{title},
-				   '관리자',
+				   'test',
 				   #{comments},
 				   sysdate,
 				   #{price},

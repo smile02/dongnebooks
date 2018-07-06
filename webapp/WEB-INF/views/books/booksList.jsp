@@ -37,6 +37,9 @@
 	width:100%;
 	height: 200px !important;
 }
+.err_color{
+	color:red;
+}
 </style>
 </head>
 <body>
@@ -80,6 +83,10 @@
 						</div>						
 					</div>
 				</div>
+				<c:if test="${nick == books.nickname }">
+					<c:set var="h_nickname" scope="page" value="${books.nickname }"/>
+				</c:if>
+				
 			</c:forEach>
 		</div>
 		
@@ -87,11 +94,11 @@
 	<div class="modal-dialog">
 		<div class="modal-content detail-modal">					
 			<div class="modal-header text-center" id="title">
-				<label class="control-label res_title">제목 : </label>
+				<label class="control-label res_title"> </label>
 				<button type="button" class="close btn-md" onclick="exit_btn()">&times;</button>
 			</div>
 			<div class="modal-body">
-			<form id="mod_form" class="form-horizontal">
+			<form id="mod_form" class="form-horizontal" method="post" action="/books/mod">
 				<div class="form-group photo">
 						<div class="col-xs-2 col-xs-offset-3">
 							<label class="control-label">사진 : </label>
@@ -122,11 +129,12 @@
 							<label class="control-label">가격 : </label>
 						</div>
 						<div class="col-xs-5">
-						<c:if test="${cookie.nickname.value != '관리자' }">
+						<c:if test="${cookie.nickname.value ne '관리자' }">
 							<p id="price" class="form-control res_price"></p>
 						</c:if>
 						<c:if test="${cookie.nickname.value == '관리자' }">
-							<input id="mod_price" name="price" type="number" class="form-control" />
+							<input id="mod_price" name="price" type="number" class="form-control" /><br />
+							<span class="error error_price err_color"></span>
 						</c:if>
 						</div>			
 				</div>
@@ -135,7 +143,7 @@
 							<label class="control-label">책 상태 : </label>
 						</div>
 						<div class="col-xs-5">
-						<c:if test="${cookie.nickname.value != '관리자' }">
+						<c:if test="${cookie.nickname.value ne '관리자' }">
 							<p id="status" class="form-control res_status"></p>
 						</c:if>
 						<c:if test="${cookie.nickname.value == '관리자' }">
@@ -146,7 +154,8 @@
 								<option value="d">중</option>
 								<option value="e">중하</option>
 								<option value="f">하</option>
-							</select>
+							</select><br />
+							<span class="error error_status err_color"></span>
 						</c:if>
 						</div>			
 				</div>				
@@ -155,7 +164,7 @@
 							<label class="control-label">거래유형 : </label>
 						</div>
 						<div class="col-xs-5">
-						<c:if test="${cookie.nickname.value != '관리자' }">
+						<c:if test="${cookie.nickname.value ne '관리자' }">
 							<p id="d_type" class="form-control res_d_type">
 							</p>
 						</c:if>
@@ -164,7 +173,8 @@
 								<option value="end">택배(착불)</option>
 								<option value="start">택배(선불)</option>
 								<option value="direct">직거래</option>
-							</select>
+							</select><br />
+							<span class="error error_d_type err_color"></span>
 						</c:if>
 						</div>			
 				</div>
@@ -173,11 +183,12 @@
 							<label class="control-label">배송비 : </label>
 						</div>
 						<div class="col-xs-5">
-						<c:if test="${cookie.nickname.value != '관리자' }">
+						<c:if test="${cookie.nickname.value ne '관리자' }">
 							<p id="fee" class="form-control res_fee"></p>
 						</c:if>
 						<c:if test="${cookie.nickname.value == '관리자' }">
-							<input id="mod_fee" type="number" name="fee" class="form-control"/>
+							<input id="mod_fee" type="number" name="fee" class="form-control"/><br />
+							<span class="error error_fee err_color"></span>
 						</c:if>
 						</div>			
 				</div>				
@@ -186,12 +197,12 @@
 							<label class="control-label">저자 : </label>
 						</div>
 						<div class="col-xs-5">
-						<c:if test="${cookie.nickname.value != '관리자' }">
+						<c:if test="${cookie.nickname.value ne '관리자' }">
 							<p id="author" class="form-control res_author"></p>
 						</c:if>
 						<c:if test="${cookie.nickname.value == '관리자' }">
-							<input id="mod_author" type="text" name="author" class="form-control"/>
-							<span id="mod_aut" class="error"></span>
+							<input id="mod_author" type="text" name="author" class="form-control"/><br />
+							<span class="error error_author err_color"></span>
 						</c:if>
 						</div>			
 				</div>
@@ -200,11 +211,12 @@
 							<label class="control-label">대분류 : </label>
 						</div>
 						<div class="col-xs-5">
-						<c:if test="${cookie.nickname.value != '관리자' }">
+						<c:if test="${cookie.nickname.value ne '관리자' }">
 							<p id="b_category" class="form-control res_b_category"></p>
 						</c:if>
 						<c:if test="${cookie.nickname.value == '관리자' }">
-							<input id="mod_b_category" type="text" class="form-control" name="b_category"/>
+							<input id="mod_b_category" type="text" class="form-control" name="b_category"/><br />
+							<span class="error error_b_category err_color"></span>
 						</c:if>
 						</div>			
 				</div>
@@ -213,11 +225,12 @@
 							<label class="control-label">소분류 : </label>
 						</div>
 						<div class="col-xs-5">
-							<c:if test="${cookie.nickname.value != '관리자' }">
+							<c:if test="${nick ne '관리자' }">
 							<p id="s_category" class="form-control res_s_category"></p>
 						</c:if>
-						<c:if test="${cookie.nickname.value == '관리자' }">
-							<input id="mod_s_category" type="text" class="form-control" name="s_category"/>
+						<c:if test="${nick == '관리자' }">
+							<input id="mod_s_category" type="text" class="form-control" name="s_category"/><br />
+							<span class="error error_s_category err_color"></span>
 						</c:if>
 						</div>			
 				</div>
@@ -226,11 +239,12 @@
 							<label class="control-label">거래상태 : </label>
 						</div>
 						<div class="col-xs-5">
-						<c:if test="${cookie.nickname.value != '관리자' }">
+						<c:if test="${cookie.nickname.value ne '관리자' }">
 							<p id="deal" class="form-control res_deal"></p>
 						</c:if>
 						<c:if test="${cookie.nickname.value == '관리자' }">
-							<input id="mod_deal" type="text" name="deal" class="form-control" />
+							<input id="mod_deal" type="text" name="deal" class="form-control" /><br />
+							<span class="error error_deal err_color"></span>
 						</c:if>
 						</div>			
 				</div>
@@ -239,27 +253,30 @@
 							<label class="control-label">내용 : </label>
 						</div>
 						<div class="col-xs-5">
-						<c:if test="${cookie.nickname.value != '관리자' }">					
+						<c:if test="${cookie.nickname.value ne '관리자' }">					
 							<div class="form-control res_comments" id="comments"
 								style="overflow:scroll; width:220px; height:100px; padding:10px;"
 								></div>			
 						</c:if>
 						<c:if test="${cookie.nickname.value == '관리자' }">
-							<textarea id="mod_comments" class="form-control res_comments" name="comments" cols="30" rows="10" >${bk.comments }</textarea>
+							<textarea id="mod_comments" class="form-control res_comments" name="comments" cols="30" rows="10" >${bk.comments }</textarea><br />
+							<span class="error error_comments err_color"></span>
 						</c:if>				
 						</div>			
 				</div>
-			</form>
-			</div>
-			<div class="modal-footer">			
-				<c:if test="${cookie.nickname.value == '관리자' }">
-					<button type="button" class="btn btn-warning" onclick="mod('${cookie.idx.value}')">수정하기</button>
+				
+				<div class="modal-footer">			
+				 <!--  onclick="mod('${cookie.idx.value}')" -->
+				<c:if test="${nick == h_nickname  }" >
+					<button type="button" class="btn btn-warning" onclick="mod(this.form);"> 수정하기</button>
 				</c:if>
-				<c:if test="${cookie.nickname.value != '관리자' }">
-					<button type="button" class="btn btn-warning" id="mod" onclick="buy();" >구매하기</button>
-				</c:if>				
-				<button type="button" class="btn" onclick="exit_btn()">나가기</button>
-			</div>
+				<c:if test="${nick != h_nickname  }" >
+					<button type="button" class="btn btn-warning" onclick="buy();" >구매하기</button>
+				</c:if>
+				<button type="button" class="btn" onclick="exit_btn();">나가기</button>
+			</div>				
+			</form>
+			</div>			
 		</div>
 	</div>
 </div>
@@ -274,46 +291,47 @@
 			<!-- Modal content-->
 			<div class="modal-content">
 		<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<button type="button" class="close" onclick="exit_btn();">&times;</button>
 					<h4 class="modal-title text-center">도서 등록 화면</h4>
 				</div>
 				<div class="modal-body">
 				
-				<form:form method="post" id="form" class="form-horizontal" modelAttribute="books">
+				<form method="post" id="form" class="form-horizontal" enctype="multipart/form-data"
+						action="/books/add">
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="title" class="control-label">제목 : </form:label>
+							<label for="title" class="control-label">제목 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input path="title" 
+							<input id="title" name="title" 
 								class="form-control" placeholder="책 제목을 입력해주세요."/>
-							<form:errors path="title" class="error"/>	
+							<span class="error error_title err_color"></span>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="comments" class="control-label">내용 : </form:label>
+							<label for="comments" class="control-label">내용 : </label>
 						</div>
 						<div class="col-xs-5">							
-							<form:textarea path="comments" class="form-control"></form:textarea>
-							<form:errors path="comments" class="error"/>	
+							<textarea id="comments" name="comments" cols="30" rows="10" class="form-control"></textarea>
+							<span class="error error_comments err_color"></span>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="price" class="control-label">가격 : </form:label>
+							<label for="price" class="control-label">가격 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="number" path="price" 
-								class="form-control" placeholder="가격을 입력해주세요."/>
+							<input type="number" id="price" name="price" 
+								class="form-control" placeholder="가격을 입력해주세요."/><br />							
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="status" class="control-label">책 상태 : </form:label>
+							<label for="status" class="control-label">책 상태 : </label>
 						</div>
 						<div class="col-xs-5">
 							<select name="status" id="status" class="form-control">
@@ -323,13 +341,14 @@
 								<option value="d">중</option>
 								<option value="e">중하</option>
 								<option value="f">하</option>
-							</select>
+							</select><br />
+							<span class="error error_status err_color"></span>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="d_type" class="control-label">거래유형 : </form:label>
+							<label for="d_type" class="control-label">거래유형 : </label>
 						</div>
 						<div class="col-xs-5">
 							<select name="d_type" id="d_type" class="form-control"
@@ -337,70 +356,74 @@
 								<option value="end">택배(착불)</option>
 								<option value="start">택배(선불)</option>
 								<option value="direct">직거래</option>
-							</select>
+							</select><br />
+							<span class="error error_d_type err_color"></span>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="fee" class="control-label">배송비 : </form:label>
+							<label for="fee" class="control-label">배송비 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="number" path="fee" 
-								class="form-control" placeholder="배송비를 입력해주세요."/>
+							<input type="number" id="fee" name="fee" 
+								class="form-control" placeholder="배송비를 입력해주세요."/>							
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="author" class="control-label">저자 : </form:label>
+							<label for="author" class="control-label">저자 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input path="author"
+							<input id="author" name="author"
 								class="form-control" placeholder="저자를 입력해주세요."/>
-							<span id="aut" class="error"></span>
+							<span class="error error_author err_color"></span>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="b_category" class="control-label">대분류 : </form:label>
+							<label for="b_category" class="control-label">대분류 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input path="b_category"
+							<input id="b_category" name="b_category"
 								class="form-control" placeholder="대분류를 입력해주세요."
-								value="IT"/>							
+								value="IT"/><br />
+								<span class="error error_b_category err_color"></span>						
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="s_category" class="control-label">소분류 : </form:label>
+							<label for="s_category" class="control-label">소분류 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input path="s_category"
+							<input id="s_category" name="s_category"
 								class="form-control" placeholder="소분류를 입력해주세요."
-								value="programming"/>
+								value="programming"/><br />
+						<span class="error error_s_category err_color"></span>
 						</div>			
 					</div>
 					
 					<div class="form-group">
 						<div class="col-xs-2 col-xs-offset-3">
-							<form:label path="photo_file" class="control-label">사진 : </form:label>
+							<label for="photo_file" class="control-label">사진 : </label>
 						</div>
 						<div class="col-xs-5">
-							<form:input type="file" path="photo_file"
+							<input type="file" id="photo_file" name="photo_file"
 								class="form-control" onchange="fileCheck(this);"
 								accept="image/gif, image/GIF, image/png, image/PNG, image/jpeg, image/JPEG"/>							
 						</div>			
 					</div>
-					
+
 						<div class="modal-footer">
 							<button id="modalBtn" type="button" class="btn btn-success"
 								onclick="reg();">등록</button>
-							<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-						</div>					
-					</form:form>
+							<button type="button" class="btn btn-default"
+								onclick="exit_btn();">취소</button>
+						</div>
+					</form>
 				</div>
 			</div>				
 		</div>
@@ -415,12 +438,6 @@
 	function exit_btn(){
 		$("#detailModal").modal("hide");
 		location.reload();
-				
-		
-				
-		//$("#detailModal").css("display") == "none";
-		//$("#detailModal").modal("hide");
-		//$("#close_btn").attr("data-dismiss","modal");		
 	}
 	
 	//거래유형 바뀔 때
@@ -435,7 +452,7 @@
 				 $("#fee").attr("readonly","readonly");
 			 }
 		 }		 
-		 //도서등록
+		  //도서등록
 		   function reg(){			 
 			 var formData = new FormData($("#form")[0]);
 			 $.ajax({
@@ -447,44 +464,59 @@
 				 data:formData
 				 }).done(function(data){
 					//서버 통신 성공					
-					if(data.success == 'y'){
+					if(data.error == null){						
 						location.reload();
 					}else{
-						console.log(data.error);
-						$("aut").html(data.error);
+						$(".error_title").html(data.error.title);
+						$(".error_author").html(data.error.author);
+				 		$(".error_comments").html(data.error.comments);
+				 		$(".error_status").html(data.error.status);
+				 		$(".error_d_type").html(data.error.d_type);
+				 		$(".error_b_category").html(data.error.b_category);
+				 		$(".error_s_category").html(data.error.s_category);
+				 		$(".error.deal").html(data.error.deal);
+				 		return;
 					}
 				 });
-		 } 
+		 }
 		  
-		 //도서 수정
-		 function mod(idx){
-			 console.log(idx);
+		 //유효성 검사
+		  function mod(form){
 			 $.ajax({
 				 url:"/books/mod",
 				 type:"post",
 				 data:{
-					 idx:idx,
-					 price:$("#mod_price").val(),
-					 status:$("#mod_status").val(),
-					 d_type:$("#mod_d_type").val(),
-					 fee:$("#mod_fee").val(),
-					 author:$("#mod_author").val(),
-					 b_category:$("#mod_b_category").val(),
-					 s_category:$("#mod_s_category").val(),
-					 deal:$("#mod_deal").val(),
-					 comments:$("#mod_comments").val()
+					 title:form.title.value,
+					 comments:form.comments.value,
+					 status:form.status.value,
+					 d_type:form.d_type.value,
+					 author:form.author.value,
+					 b_category:form.b_category.value,
+					 s_category:form.s_category.value,
+					 deal:form.deal.value
 				 },
 				 success:function(data){
-					 if(data.success == 'y'){
-						alert("수정이 완료되었습니다.");
-						location.reload();
+					 if(data.error == null){
+					 	location.reload();
+					 }else{
+						 console.log(data.error.author);
+						 console.log(data.error.comments);
+						 $(".error_author").html(data.error.author);
+						 $(".error_comments").html(data.error.comments);
+						 $(".error_status").html(data.error.status);
+						 $(".error_d_type").html(data.error.d_type);
+						 $(".error_b_category").html(data.error.b_category);
+						 $(".error_s_category").html(data.error.s_category);
+						 $(".error.deal").html(data.error.deal);
+						 return;
 					 }
-				 }					
-		 })
-		 }
+				 }				 
+			 });	 
+		 } 
 		   
 		   //자세히 보기
 		   function detail(idx){
+			 index = idx;
 			   $.ajax({
 					type:"post",
 					url : "/books/view",
@@ -492,6 +524,7 @@
 					success:function(data){	
 						if(data.book == null){
 							alert("서버에 문제가 발생했습니다.\n 잠시후에 시도해주세요.");
+							return;
 						}else{							
 							$(".res_title").html(data.book.title); //아직은 수정안되게		
 							$(".res_nickname").html(data.book.nickname); //수정안되게
@@ -570,7 +603,7 @@
 					
 					var parent = file.parentNode;			
 					var next = file.nextSibling;
-					var tmp = document.createElement("form:form");
+					var tmp = document.createElement("form");
 					//tmp에 appendChild하고 reset한 다음 parent에 insertBefore
 					tmp.appendChild(file);
 					tmp.reset();
@@ -579,40 +612,7 @@
 					return;
 				}
 			}
-		 /*
-					$("#title").html(data.book.title);
-					$("#nickname").html(data.book.nickname);
-					$("#comments").html(data.book.comments);
-					$("#regdate").html(data.book.regdate);
-					$("#price").html(data.book.price);
-					$("#fee").html(data.book.fee);
-					///image/photo/noimage.png
-					if(data.book.photo == null){
-						$("#photo").attr("src","/image/photo/noimage.png");
-					}else{
-						$("#photo").attr("src","/image/photo/"+data.book.photo);
-					}
-					$("#author").html(data.book.author);
-					$("#b_category").html(data.book.b_category);
-					$("#s_category").html(data.book.s_category);
-					$("#deal").html(data.book.deal);
-					//$("#status").html(data.book.status);
-					switch(data.book.status){
-						case 'a': $("#status").html("최상"); break;
-						case 'b': $("#status").html("상"); break;
-						case 'c': $("#status").html("중상"); break;
-						case 'd': $("#status").html("중"); break;
-						case 'e': $("#status").html("중하"); break;
-						case 'f': $("#status").html("하"); break;
-					}
-					//$("#d_type").html(data.book.d_type);
-					switch(data.book.d_type){
-						case 'direct': $("#d_type").html("직거래"); break;
-						case 'start': $("#d_type").html("택배(선불)"); break;
-						case 'end': $("#d_type").html("택배(착불)"); break;
-					}
-		 
-		 */
+	
 	</script>
 </body>
 </html>

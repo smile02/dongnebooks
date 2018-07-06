@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,11 +35,11 @@ public class BooksController {
 
 	//책의 목록을 보여주는 메서드
 	@RequestMapping(value = "/books/list", method=RequestMethod.GET)
-	public String booksList(Model model) {
-		
+	public String booksList(Model model,HttpServletRequest request) {
 		
 		model.addAttribute("booksList",booksService.booksList());
 		model.addAttribute("books",new Books());
+		request.getSession().setAttribute("nick", "관리자");
 		
 		return "/books/booksList.jsp";
 	}
@@ -46,20 +47,11 @@ public class BooksController {
 	//도서를 판매할 사람이 "도서 등록"버튼을 클릭 했을 때
 	@RequestMapping(value ="/books/add", method= RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> booksAdd(@ModelAttribute("books") @Valid Books books, BindingResult result,
-							HttpServletRequest request,Model model) {
+	public Map<String,Map<String,String>> booksAdd(@ModelAttribute @Valid Books books,BindingResult result,HttpServletRequest request) {
 		System.out.println(books.getAuthor());
 		
-		Map<String, String> erMap = new HashMap<>();
-		if(result.hasErrors()) {
-			for(ObjectError error : result.getAllErrors()) {
-				System.out.println(error.getCode()+":"+error.getDefaultMessage());				
-				erMap.put("error", error.getDefaultMessage());
-			}
-			model.addAttribute("booksList",booksService.booksList());
-			model.addAttribute("books",books);
-			return erMap;
-		}
+		Map<String,Map<String,String>> keyMap = booksValid(books,result);
+		
 		
 		try {
 			//파일 저장
@@ -67,30 +59,26 @@ public class BooksController {
 			String filename;
 			filename = fileService.saveFile(path, books.getPhoto_file());
 			books.setPhoto(filename);
-			erMap.put("success", "y");
 			booksService.booksAdd(books);
 		}catch (Exception e) {
 			e.printStackTrace();
-			/*model.addAttribute("msg", "서버오류입니다.");
-			model.addAttribute("url","/product/list");
-			return "/error.jsp";*/
 		}	
 		
-		return erMap;		
+		return keyMap;		
 	}
 	
 	//도서목록에서 "자세히 보기"버튼을 클릭 했을 때 등록한 책의 상세정보를 볼 수 있도록
 	@RequestMapping(value="/books/view", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Books> booksView(@RequestParam int idx,
-							HttpServletResponse response){
+							HttpServletResponse response,Model model){
 		Books books = booksService.booksView(idx);
 		
 		Map<String, Books> resMap = new HashMap<>();		
 		if(books != null) {
 			resMap.put("book", books);
-			response.addCookie(new Cookie("nickname",books.getNickname()));
 			response.addCookie(new Cookie("idx",books.getIdx()+""));
+			System.out.println(books.getNickname());
 			System.out.println(books.getIdx());
 			return resMap;
 		}				
@@ -101,43 +89,40 @@ public class BooksController {
 	//판매자 본인일 경우에만 수정이 가능하도록
 	@RequestMapping(value="/books/mod", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> booksMod(@ModelAttribute @Valid Books books,BindingResult result
-				,Model model) {
+	public Map<String, Map<String,String>> booksMod(@ModelAttribute @Valid Books books,BindingResult result,@CookieValue Cookie idx) {
 		
-		Map<String, String> erMap = new HashMap<>();
-		if(result.hasErrors()) {
-			for(ObjectError error : result.getAllErrors()) {
-				System.out.println(error.getCode()+":"+error.getDefaultMessage());				
-				erMap.put("error", error.getDefaultMessage());
-			}
-			model.addAttribute("booksList",booksService.booksList());
-			model.addAttribute("books",books);
-			return erMap;
+		
+		Map<String, Map<String, String>> keyMap = booksValid(books,result);
+		
+		if(keyMap != null && !result.hasErrors()) {
+			books.setIdx(Integer.parseInt(idx.getValue()));		
+			System.out.println("수정 : "+books.getIdx());		
+			booksService.booksMod(books);
 		}
 		
-//		System.out.println("1 : "+books.getComments());
-//		System.out.println("2 : "+books.getTitle());
-		System.out.println("1 : "+books.getIdx());
-//		System.out.println("4 : "+books);
+		return keyMap;
+	}
+	
+
+	//유효성검사를 진행하는 메서드
+	public Map<String,Map<String,String>> booksValid(@ModelAttribute @Valid Books books,
+													BindingResult result){
 		
-		/*Books mod_books = new Books();
-		mod_books.setIdx(books.getIdx());
-		mod_books.setPrice(books.getPrice());
-		mod_books.setStatus(books.getStatus());
-		mod_books.setD_type(books.getD_type());
-		mod_books.setFee(books.getFee());
-		mod_books.setAuthor(books.getAuthor());
-		mod_books.setComments(books.getComments());
-		mod_books.setB_category(books.getB_category());
-		mod_books.setS_category(books.getS_category());
-		mod_books.setDeal(books.getDeal());		
+		Map<String,Map<String,String>> keyMap = new HashMap<>();
+		Map<String, String> erMap = new HashMap<>();
 		
-		System.out.println("4 : "+mod_books.getAuthor());*/
+		if(result.hasErrors()) {
+			for(ObjectError error : result.getAllErrors()) {
+				System.out.println(error.getCode()+":"+error.getDefaultMessage());
+				String err_code = error.getDefaultMessage().substring(0, error.getDefaultMessage().indexOf(":"));
+				String err=error.getDefaultMessage().substring(error.getDefaultMessage().indexOf(":")+1, error.getDefaultMessage().length());
+				erMap.put(err_code, err);
+				keyMap.put("error", erMap);
+			}			
+			return keyMap;
+		}
 		
-		booksService.booksMod(books);
-		erMap.put("success", "y");
-		
-		return erMap;
+		return keyMap;
 	}
 
 }
