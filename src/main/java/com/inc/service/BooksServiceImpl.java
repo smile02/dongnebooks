@@ -35,4 +35,14 @@ public class BooksServiceImpl implements BooksService{
 		booksDao.booksMod(books);
 	}
 
+	@Override
+	public List<String> booksB_Category() {
+		return booksDao.booksB_Category();
+	}
+
+	@Override
+	public List<Books> booksS_Category(String b_category) {
+		return booksDao.booksS_Category(b_category);
+	}
+
 }

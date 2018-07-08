@@ -34,5 +34,15 @@ public class BooksDaoImpl implements BooksDao{
 		session.update("books.booksMod",books);
 	}
 
+	@Override
+	public List<String> booksB_Category() {
+		return session.selectList("books.booksB_Category");
+	}
+
+	@Override
+	public List<Books> booksS_Category(String b_category) {
+		return session.selectList("books.booksS_Category",b_category);
+	}
+
 	
 }

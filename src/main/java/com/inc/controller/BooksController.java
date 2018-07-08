@@ -1,6 +1,7 @@
 package com.inc.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -36,11 +37,14 @@ public class BooksController {
 	//책의 목록을 보여주는 메서드
 	@RequestMapping(value = "/books/list", method=RequestMethod.GET)
 	public String booksList(Model model,HttpServletRequest request) {
+		List<Books> booksList = booksService.booksList();
+		List<String> b_categoryList = booksService.booksB_Category();
 		
-		model.addAttribute("booksList",booksService.booksList());
+		model.addAttribute("booksList",booksList);
+		model.addAttribute("booksCategory",b_categoryList);
 		model.addAttribute("books",new Books());
-		request.getSession().setAttribute("nick", "관리자");
-		
+		request.getSession().setAttribute("nick", "test");
+				
 		return "/books/booksList.jsp";
 	}
 	
@@ -71,7 +75,8 @@ public class BooksController {
 	@RequestMapping(value="/books/view", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Books> booksView(@RequestParam int idx,
-							HttpServletResponse response,Model model){
+							HttpServletResponse response,Model model,
+							HttpServletRequest request){
 		Books books = booksService.booksView(idx);
 		
 		Map<String, Books> resMap = new HashMap<>();		
@@ -103,7 +108,14 @@ public class BooksController {
 		return keyMap;
 	}
 	
-
+	//대분류, 소분류 자동으로 입력되도록
+	@RequestMapping(value="/books/category", method=RequestMethod.POST)
+	@ResponseBody
+	public List<Books> booksCategory(@RequestParam String b_category, Model model) {
+		List<Books> getSCategory = booksService.booksS_Category(b_category);		
+		return getSCategory;
+	}
+	
 	//유효성검사를 진행하는 메서드
 	public Map<String,Map<String,String>> booksValid(@ModelAttribute @Valid Books books,
 													BindingResult result){

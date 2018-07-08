@@ -42,4 +42,12 @@
 						 comments = #{comments}
 			where idx = #{idx}
 	</update>
+	
+	<select id="booksB_Category" parameterType="String" resultType="String">
+		select distinct b_category from books
+	</select>
+	
+	<select id="booksS_Category" parameterType="String" resultType="String">
+		select * from books where b_category = #{value}
+	</select>
 </mapper>
