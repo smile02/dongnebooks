@@ -29,8 +29,8 @@ public class UsersController {
 	@RequestMapping("/main")
 	public String mainPage() {
 		//1. 로그인 기능 OK
-		//2. 책 목록
-		//3. 공지사항 출력
+		//2. 책 목록 최근 10개정도.
+		//3. 공지사항 최근게시물 출력
 		return "/main.jsp";
 	}
 	
@@ -129,14 +129,23 @@ public class UsersController {
 		}
 		
 		usersService.update(user);
+		//정보가 변경되었으므로 세션도 변경된 정보로 업데이트 해준다.
+		Users updatedUser = usersService.getUser(user.getId());
+		session.setAttribute("user", updatedUser);
 				
 		return "redirect:/user/mypage";
+	}
+	
+	private boolean idValidator(String id) {
+		return Pattern.compile("[0-9a-z]{4,20}").matcher(id).matches();
 	}
 	
 	@RequestMapping(value="/user/idCheck", method=RequestMethod.POST)
 	@ResponseBody
 	public String idCheck(@RequestParam String id){
-		//System.out.println(id);
+		if(!idValidator(id)) {
+			return "incorrect";
+		}
 		Users user = usersService.getUser(id);
 		//System.out.println(user);
 		if(user == null) {
@@ -150,6 +159,9 @@ public class UsersController {
 	@RequestMapping(value="/user/nickCheck", method=RequestMethod.POST)
 	@ResponseBody
 	public String nickCheck(@RequestParam String nickname){
+		if(nickname.length() < 2 || nickname.length() > 15) {
+			return "incorrect";
+		}
 		Users user = usersService.nickCheck(nickname);
 		if(user == null) {
 			return "n";
@@ -295,9 +307,7 @@ public class UsersController {
 	
 	@RequestMapping(value="/user/mypage", method=RequestMethod.GET)
 	public String myPage(Model model, HttpSession session) {
-		//정보 변경 후 변경사항을 바로 가져오기 위해 로드할때마다 새로 정보를 가져온다.
-		String id = ((Users)session.getAttribute("user")).getId();
-		Users user = usersService.getUser(id);
+		Users user = (Users)session.getAttribute("user");
 		model.addAttribute("user", user);
 		return "/users/mypage.jsp";
 	}
