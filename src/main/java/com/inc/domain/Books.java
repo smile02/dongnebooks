@@ -1,5 +1,6 @@
 package com.inc.domain;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -20,10 +21,13 @@ public class Books {
 	private String photo;
 	private MultipartFile photo_file;
 	private String d_type;
-	@Pattern(regexp="[가-힣]{1,30}",message="author:저자 - 한글 1~30글자이내")
+	@Pattern(regexp="[가-힣]{0,30}",message="author:저자 - 한글 1~30글자이내")
 	private String author;
+	@NotEmpty(message="잘못된 선택입니다.")
 	private String b_category;
+	@NotEmpty(message="잘못된 선택입니다.")
 	private String s_category;
+	@NotEmpty(message="잘못된 선택입니다.")
 	private String deal;
 	
 	public int getIdx() {

@@ -1,6 +1,4 @@
 @charset "UTF-8";
-<<<<<<< HEAD
-=======
 .error{
 		font-size:9pt;
 		color:red;
@@ -22,4 +20,4 @@
 	    0% { transform: rotate(0deg); }
 	    100% { transform: rotate(360deg); }
 	}
->>>>>>> 6ddbe20b0150be12824a7d04041f92467b4da1f4
+

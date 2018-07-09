@@ -1,7 +1,6 @@
 package com.inc.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -23,7 +22,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.domain.Books;
 import com.inc.service.BooksService;
+import com.inc.service.BooksServiceImpl;
+import com.inc.service.CategoryService;
 import com.inc.service.FileService;
+import com.inc.util.Paging;
 
 @Controller
 public class BooksController {
@@ -32,17 +34,28 @@ public class BooksController {
 	private BooksService booksService;
 	
 	@Autowired
+	private CategoryService categoryService;
+	
+	@Autowired
 	private FileService fileService;
+	
+	@Autowired
+	private Paging paging;
 
 	//책의 목록을 보여주는 메서드
 	@RequestMapping(value = "/books/list", method=RequestMethod.GET)
-	public String booksList(Model model,HttpServletRequest request) {
-		List<Books> booksList = booksService.booksList();
-		List<String> b_categoryList = booksService.booksB_Category();
-		
-		model.addAttribute("booksList",booksList);
-		model.addAttribute("booksCategory",b_categoryList);
+	public String booksList(Model model,HttpServletRequest request,
+			@RequestParam(defaultValue="1") int page) {
+				
+		model.addAttribute("booksList",booksService.booksList(page));
+		model.addAttribute("bigCategory",categoryService.bigCategoryList());
 		model.addAttribute("books",new Books());
+		model.addAttribute("paging", paging.getPaging("/books/list",
+				page,
+				booksService.getTotalCount(page),
+				BooksServiceImpl.numberOfList,
+				BooksServiceImpl.numberOfPage));
+		
 		request.getSession().setAttribute("nick", "test");
 				
 		return "/books/booksList.jsp";
@@ -52,21 +65,21 @@ public class BooksController {
 	@RequestMapping(value ="/books/add", method= RequestMethod.POST)
 	@ResponseBody
 	public Map<String,Map<String,String>> booksAdd(@ModelAttribute @Valid Books books,BindingResult result,HttpServletRequest request) {
-		System.out.println(books.getAuthor());
 		
-		Map<String,Map<String,String>> keyMap = booksValid(books,result);
+		Map<String,Map<String,String>> keyMap = booksValid(books,result);		
+		if(keyMap == null && !result.hasErrors()) {
+			try {
+				//파일 저장
+				String path = request.getServletContext().getRealPath("/WEB-INF/resources/image/photo");			
+				String filename;
+				filename = fileService.saveFile(path, books.getPhoto_file());
+				books.setPhoto(filename);
+				booksService.booksAdd(books);
+			}catch (Exception e) {
+				e.printStackTrace();
+			}	
+		}
 		
-		
-		try {
-			//파일 저장
-			String path = request.getServletContext().getRealPath("/WEB-INF/resources/image/photo");			
-			String filename;
-			filename = fileService.saveFile(path, books.getPhoto_file());
-			books.setPhoto(filename);
-			booksService.booksAdd(books);
-		}catch (Exception e) {
-			e.printStackTrace();
-		}	
 		
 		return keyMap;		
 	}
@@ -94,26 +107,19 @@ public class BooksController {
 	//판매자 본인일 경우에만 수정이 가능하도록
 	@RequestMapping(value="/books/mod", method=RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Map<String,String>> booksMod(@ModelAttribute @Valid Books books,BindingResult result,@CookieValue Cookie idx) {
+	public Map<String, Map<String,String>> booksMod(@ModelAttribute @Valid Books books,
+			BindingResult result,@CookieValue Cookie idx) {
 		
 		
 		Map<String, Map<String, String>> keyMap = booksValid(books,result);
 		
-		if(keyMap != null && !result.hasErrors()) {
+		if(keyMap == null && !result.hasErrors()) {
 			books.setIdx(Integer.parseInt(idx.getValue()));		
 			System.out.println("수정 : "+books.getIdx());		
 			booksService.booksMod(books);
 		}
 		
 		return keyMap;
-	}
-	
-	//대분류, 소분류 자동으로 입력되도록
-	@RequestMapping(value="/books/category", method=RequestMethod.POST)
-	@ResponseBody
-	public List<Books> booksCategory(@RequestParam String b_category, Model model) {
-		List<Books> getSCategory = booksService.booksS_Category(b_category);		
-		return getSCategory;
 	}
 	
 	//유효성검사를 진행하는 메서드

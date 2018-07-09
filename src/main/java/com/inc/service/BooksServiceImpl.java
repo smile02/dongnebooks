@@ -1,5 +1,6 @@
 package com.inc.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,9 +16,13 @@ public class BooksServiceImpl implements BooksService{
 	@Autowired
 	private BooksDao booksDao;
 	
+	public static final int numberOfList = 8;
+	public static final int numberOfPage = 5;
+	
+	
 	@Override
-	public List<Books> booksList() {
-		return booksDao.booksList();
+	public List<Books> booksList(int page) {
+		return booksDao.booksList(getSearchMap(page));
 	}
 
 	@Override
@@ -36,13 +41,19 @@ public class BooksServiceImpl implements BooksService{
 	}
 
 	@Override
-	public List<String> booksB_Category() {
-		return booksDao.booksB_Category();
+	public int getTotalCount(int page) {
+		return booksDao.getTotalCount(getSearchMap(page));
 	}
-
-	@Override
-	public List<Books> booksS_Category(String b_category) {
-		return booksDao.booksS_Category(b_category);
+	
+	private Map<String, Object> getSearchMap(int page){
+		
+		int start = (page -1)*numberOfList+1;
+		int end = start + numberOfList -1;
+		
+		Map<String, Object> searchMap = new HashMap<>();
+		searchMap.put("start", start);
+		searchMap.put("end", end);
+		
+		return searchMap;
 	}
-
 }

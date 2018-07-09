@@ -3,9 +3,21 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="books">
-	<select id="booksList" resultType="books">
-		select * from books order by regdate desc
+	<select id="booksList" resultMap="booksMap" parameterType="int">
+		 select * 
+	    from (select rownum as rnum, a.* from 
+	    	(
+	    		select * from 
+	    			books	    			
+	    			order by regdate desc	    		
+	    		) a
+	    	) 
+	    where rnum between #{start} and #{end}
 	</select>
+	
+	<resultMap type="books" id="booksMap">
+		
+	</resultMap>
 	
 	<insert id="booksAdd" parameterType="books">
 		insert into books
@@ -43,11 +55,8 @@
 			where idx = #{idx}
 	</update>
 	
-	<select id="booksB_Category" parameterType="String" resultType="String">
-		select distinct b_category from books
+	<select id="getTotalCount" resultType="int" parameterType="map">
+		select count(*) from board			
 	</select>
 	
-	<select id="booksS_Category" parameterType="String" resultType="String">
-		select * from books where b_category = #{value}
-	</select>
 </mapper>

@@ -7,7 +7,7 @@ import com.inc.domain.Books;
 public interface BooksService {
 
 	//책의 목록을 보여주는 메서드
-	public List<Books> booksList();
+	public List<Books> booksList(int page);
 
 	public void booksAdd(Books books);
 
@@ -15,7 +15,7 @@ public interface BooksService {
 
 	public void booksMod(Books books);
 
-	public List<String> booksB_Category();
-
-	public List<Books> booksS_Category(String b_category); 
+	public int getTotalCount(int page);
+	
+	
 }

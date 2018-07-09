@@ -1,6 +1,7 @@
 package com.inc.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,8 @@ public class BooksDaoImpl implements BooksDao{
 	private SqlSession session;
 	
 	@Override
-	public List<Books> booksList() {
-		return session.selectList("books.booksList");
+	public List<Books> booksList(Map<String, Object> map) {
+		return session.selectList("books.booksList",map);
 	}
 
 	@Override
@@ -35,14 +36,8 @@ public class BooksDaoImpl implements BooksDao{
 	}
 
 	@Override
-	public List<String> booksB_Category() {
-		return session.selectList("books.booksB_Category");
+	public int getTotalCount(Map<String, Object> searchMap) {
+		return session.selectOne("books.getTotalCount",searchMap);
 	}
 
-	@Override
-	public List<Books> booksS_Category(String b_category) {
-		return session.selectList("books.booksS_Category",b_category);
-	}
-
-	
 }

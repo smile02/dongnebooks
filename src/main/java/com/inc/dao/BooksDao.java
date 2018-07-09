@@ -1,12 +1,13 @@
 package com.inc.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.inc.domain.Books;
 
 public interface BooksDao {
 
-	public List<Books> booksList();
+	public List<Books> booksList(Map<String, Object> map);
 
 	public void booksAdd(Books books);
 
@@ -14,7 +15,6 @@ public interface BooksDao {
 
 	public void booksMod(Books books);
 
-	public List<String> booksB_Category();
+	public int getTotalCount(Map<String, Object> searchMap);
 
-	public List<Books> booksS_Category(String b_category);
 }
