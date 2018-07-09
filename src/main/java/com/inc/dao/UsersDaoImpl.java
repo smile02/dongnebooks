@@ -32,4 +32,19 @@ public class UsersDaoImpl implements UsersDao {
 		return session.selectOne("users.emailCheck", email) != null;
 	}
 
+	@Override
+	public String findID(String email) {
+		return session.selectOne("users.findID", email);
+	}
+
+	@Override
+	public void updatePwd(Users user) {
+		session.update("users.updatePwd", user);
+	}
+
+	@Override
+	public void update(Users user) {
+		session.update("users.update", user);
+	}
+
 }

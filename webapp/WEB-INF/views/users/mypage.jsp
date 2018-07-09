@@ -8,7 +8,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sign up</title>
+<title>MyPage</title>
 <link
 	href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/minty/bootstrap.min.css"
 	rel="stylesheet"
@@ -31,70 +31,51 @@
   </div>
 	<div class="row">
 		<div class="col-sm-9">
-		<h3 class="text-center">Sign Up</h3><br /><br />
-			<form:form action="/user/signup" method="post" modelAttribute="user">
+		<h3 class="text-center">MyPage</h3><br /><br />
+			<form:form action="/user/mypage" method="post" modelAttribute="user">
   <fieldset>
 	<div class="form-group row">
       <label for="id" class="col-sm-2">ID</label>
       <div class="col-sm-6">
-      	<form:input type="text" class="form-control" id="id" path="id" placeholder="Enter Id"/>
-      	<form:errors path="id" class="error"/>
+      	<form:input type="text" class="form-control" id="id" path="id" readonly="true"/>
       </div>
       <div class="col-sm-1">
-      	<button class="btn btn-outline-primary btn-sm" type="button" onclick="idCheck();">중복확인</button>
+      	<button class="btn btn-outline-primary btn-sm" type="button" onclick="enabled();">정보변경</button>
       </div>
-      <div class="col-sm-3 text-center" id="idCheck"></div>
     </div>
     <div class="form-group row">
       <label for="nickname" class="col-sm-2">Nick Name</label>
       <div class="col-sm-6">
-      	<form:input type="text" class="form-control" id="nickname" path="nickname" placeholder="Enter NickName"/>
+      	<form:input type="text" class="form-control" id="nickname" path="nickname" placeholder="Enter NickName" readonly="true"/>
       	<form:errors path="nickname" class="error"/>
       </div>
       <div class="col-sm-1">
-      	<button class="btn btn-outline-primary btn-sm" type="button" onclick="nickCheck();">중복확인</button>
+      	<button class="btn btn-outline-primary btn-sm" id="nickcheck" type="button" onclick="nickCheck();" disabled="disabled">중복확인</button>
       </div>
       <div class="col-sm-3 text-center" id="nickCheck"></div>
     </div>
     <div class="form-group row">
       <label for="email" class="col-sm-2">Email address</label>
 	  <div class="col-sm-6">
-	      <form:input type="text" class="form-control" id="email" path="email" aria-describedby="emailHelp" placeholder="Enter email"/>
-	      <small id="emailHelp" class="form-text text-muted">회원 가입 시 이메일 인증이 필요합니다.</small>
+	      <form:input type="text" class="form-control" id="email" path="email" readonly="true" aria-describedby="emailHelp" placeholder="Enter email"/>
 	      <form:errors path="email" class="error"/>
       </div>
       <div class="col-sm-1">
-      	<button type="button" class="btn btn-outline-primary btn-sm" onclick="certifyEmail(this);">인증</button>
+      	<button type="button" id="emailcheck" class="btn btn-outline-primary btn-sm" disabled="disabled" onclick="emailCheck();">중복확인</button>
       </div>
-      <div class="col-sm-1">
-      	<div id="loader"></div>
-      </div>
-    </div>
-    <div class="form-group row">
-    	<label for="emailcode" class="col-sm-2">Email 인증번호</label>
-		  <div class="col-sm-3">
-		  	<form:input type="text" class="form-control form-control-sm" id="emailcode" path="emailcode" placeholder="인증번호입력"/>
-      		<form:errors path="emailcode" class="error"/>
-	      </div>
-    </div>
-    <div class="form-group row">
-      <label for="password" class="col-sm-2">Password</label>
-      <div class="col-sm-6">
-      	 <form:password class="form-control" id="password" path="password" placeholder="Password"/>
-      	 <form:errors path="password" class="error"/>
+      <div class="col-sm-3 text-center" id="emailCheck">
       </div>
     </div>
     <div class="form-group row">
-      <label for="passwordConfirm" class="col-sm-2">Password 확인</label>
-      <div class="col-sm-6">
-      	 <form:password class="form-control" id="passwordConfirm" path="passwordConfirm" placeholder="Password Confirm"/>
-      	 <form:errors path="passwordConfirm" class="error"/>
-      </div>
+    	<label for="" class="col-sm-2">Password</label>
+    	<div class="col-sm-6">
+    		<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#changePwd">비밀번호 변경</button>
+    	</div>
     </div>
     <div class="form-group row">
       <label for="phone" class="col-sm-2">Phone</label>
       <div class="col-sm-6">
-      	<form:input type="text" class="form-control" id="phone" path="phone" placeholder="ex)010-1234-5678"/>
+      	<form:input type="text" class="form-control" id="phone" path="phone" placeholder="ex)010-1234-5678" readonly="true"/>
       	<small class="form-text text-muted">도서 거래 시 거래자와 직접 연락을 할 수 있습니다.</small>
       	<form:errors path="phone" class="error"/>
       </div>
@@ -103,25 +84,62 @@
     	<div class="row">
     	<label for="" class="col-sm-2">Address</label>
     	<!-- <input type="text" id="sample3_postcode" class="form-control" placeholder="postcode"> -->
-		<div class="col-sm-2"><input type="button" onclick="sample3_execDaumPostcode()" class="btn btn-primary btn-sm" value="우편번호"></div>
+		<div class="col-sm-2"><input type="button" onclick="sample3_execDaumPostcode()" class="btn btn-primary btn-sm" value="우편번호" id="postCode" disabled="disabled"></div>
 			<div id="wrap" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 0;position:relative">
 				<img src="//t1.daumcdn.net/localimg/localimages/07/postcode/320/close.png" id="btnFoldWrap" style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
 			</div>
 			<br />
 		</div>
 		<div class="col-sm-10">
-		<form:input type="text" id="sample3_address" path="address" class="d_form large form-control" placeholder="우편번호 버튼을 눌러 주소를 입력해주세요."/>
+		<form:input type="text" id="sample3_address" path="address" class="d_form large form-control" placeholder="우편번호 버튼을 눌러 주소를 입력해주세요." readonly="true"/>
 		<small class="form-text text-muted">택배 거래 시 배송지를 쉽게 입력할 수 있습니다.</small>
 		</div>
     </div>
     <div class="row">
     	<div class="col-sm-12 text-center">
-    		<button type="submit" class="btn btn-primary btn-sm">가입하기</button>
-    		<button type="reset" class="btn btn-primary btn-sm">재입력</button>
+    		<button type="submit" class="btn btn-primary btn-sm" id="submitBtn" disabled="disabled">수정완료</button>
     	</div>
     </div>
   </fieldset>
 </form:form>
+<!-- modal -->
+<div class="modal" id="changePwd">
+  <div class="modal-dialog" role="dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">비밀번호 변경</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="form-group row">
+      <label for="password" class="col-sm-4">Password</label>
+      <div class="col-sm-6">
+      	 <input type="password" class="form-control" id="password" name="password" placeholder="Password"/>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="passwordConfirm" class="col-sm-4">Password 확인</label>
+      <div class="col-sm-6">
+      	 <input type="password" class="form-control" id="passwordConfirm" name="passwordConfirm" placeholder="Password Confirm"/>
+      </div>
+      <div class="col-sm-2">
+      	<button type="button" class="btn btn-secondary btn-sm" onclick="updatePwd();">전송</button>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="" class="col-sm-4">변경결과 : </label>
+      <div class="col-sm-8" id="updatePwd">
+      </div>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 		</div>
 		<div class="col-sm-3">
 		<jsp:include page="../include/right.jsp"/>
@@ -134,35 +152,32 @@
 	<script	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <script>
-	//아이디 중복확인코드
-	function idCheck(){
-		var id = $("#id").val();
-		console.log(id);
-		$.ajax({
-			url:"/user/idCheck",
-			type:"post",
-			data:{id:id},
-			success:function(result){
-				console.log(result);
-				if(result == 'n'){
-					$("#idCheck").text("사용가능한 아이디");
-				}else if(result == 'y'){
-					$("#idCheck").text("중복되는 아이디");
-				}else{
-					$("#idCheck").text("잠시후 다시 시도해주세요.");
-				}
-			}
-		});
+	//원래 닉네임과 이메일 값을 변수에 저장.
+	var myNick = $("#nickname").val();
+	var myEmail = $("#email").val();
+	//정보변경 버튼 눌렀을 시 input창과 버튼 활성화
+	function enabled(){
+		$("#nickname").removeAttr("readonly");
+		$("#email").removeAttr("readonly");
+		$("#phone").removeAttr("readonly");
+		$("#sample3_address").removeAttr("readonly");
+		$("#nickcheck").removeAttr("disabled");
+		$("#emailcheck").removeAttr("disabled");
+		$("#postCode").removeAttr("disabled");
+		$("#submitBtn").removeAttr("disabled");
 	}
 	//닉네임 중복확인코드
 	function nickCheck(){
 		var nickname = $("#nickname").val();
+		if(myNick == nickname){
+			$("#nickCheck").text("변경하지 않은 닉네임입니다.");
+			return;
+		}
 		$.ajax({
 			url:"/user/nickCheck",
 			type:"post",
 			data:{nickname:nickname},
 			success:function(result){
-				console.log(result);
 				if(result == 'n'){
 					$("#nickCheck").text("사용가능한 닉네임");
 				}else if(result == 'y'){
@@ -173,28 +188,51 @@
 			}
 		});
 	}
-	
-	//이메일 인증요청코드
-	function certifyEmail(button){
-		$("#loader").addClass("loader");
-		$(button).attr("disabled", "disabled");
+	//이메일 중복확인코드
+	function emailCheck(){
+		var email = $("#email").val();
+		if(myEmail == email){
+			$("#emailCheck").text("변경하지 않은 이메일입니다.");
+			return;
+		}
 		$.ajax({
-			url:"/user/emailCertify",
+			url:"/user/emailCheck",
 			type:"post",
-			data:{email:$("#email").val()},
+			data:{email:email},
 			success:function(result){
-				$(button).removeAttr("disabled");
-				$("#loader").removeClass("loader");
-				if(result == 'success'){
-					alert("메일 발송완료");
+				if(result == 'n'){
+					$("#emailCheck").text("사용가능한 이메일");
+				}else if(result == 'y'){
+					$("#emailCheck").text("중복되는 이메일");
 				}else if(result == 'incorrect'){
-					alert("메일 형식에 맞지 않습니다.");
-				}else if(result == 'duplicated'){
-					alert('중복된 이메일 주소입니다.');
-				}else if(result == 'error'){
-					alert('서버 오류입니다.');
+					$("#emailCheck").text("형식에 맞지 않습니다.");
+				}else{
+					$("#emailCheck").text("잠시후 다시 시도해주세요.");
+				}
+			}
+		});
+	}
+	
+	//비밀번호 변경 코드
+	function updatePwd(){
+		var id = $("#id").val();
+		var password = $("#password").val();
+		var passwordConfirm = $("#passwordConfirm").val();
+		$.ajax({
+			url:"/user/updatePwd",
+			type:"post",
+			data:{id:id, password:password, passwordConfirm:passwordConfirm},
+			success:function(result){
+				if(result == 'incorrect'){
+					$("#updatePwd").text("영문자+숫자 4자 이상 20자 이하로 비밀번호를 입력해주세요.");
 				}else if(result == 'null'){
-					alert('이메일을 입력해 주세요.');
+					$("#updatePwd").text("변경할 비밀번호를 입력해주세요.");
+				}else if(result == 'notEqual'){
+					$("#updatePwd").text("두 비밀번호가 일치하지 않습니다.");
+				}else if(result == 'success'){
+					$("#updatePwd").text("비밀번호 변경에 성공했습니다.");
+				}else{
+					$("#updatePwd").text("서버 오류입니다.");
 				}
 			}
 		});

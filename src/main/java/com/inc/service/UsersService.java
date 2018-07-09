@@ -2,6 +2,8 @@ package com.inc.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import com.inc.domain.Users;
 
 public interface UsersService {
@@ -17,4 +19,12 @@ public interface UsersService {
 	public Users nickCheck(String nickname);
 	//이메일 중복체크
 	public boolean emailCheck(String email);
+	//아이디 찾기
+	public String findId(String email);
+	//임시비밀번호로 업데이트 후 받아오기
+	public String getTempPwd(String id);
+	//회원정보변경
+	public void update(Users user);
+	//비밀번호 변경
+	public void updatePwd(Users user);
 }
