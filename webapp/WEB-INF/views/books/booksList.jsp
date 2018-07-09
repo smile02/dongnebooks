@@ -481,7 +481,13 @@
 		 }
 			 //title:form.title.value,		  
 		 //내용 수정
-		  function mod(form){
+		  function mod(form){			
+			if(!/^[1-9][0-9]{1,9}$/.test(form.price.value)){
+					alert("가격을 입력해주세요.");
+					form.price.focus();
+					return;
+			}	
+				 
 			 $.ajax({
 				 url:"/books/mod",
 				 type:"post",
