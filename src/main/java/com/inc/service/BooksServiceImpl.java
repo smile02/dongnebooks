@@ -21,8 +21,8 @@ public class BooksServiceImpl implements BooksService{
 	
 	
 	@Override
-	public List<Books> booksList(int page) {
-		return booksDao.booksList(getSearchMap(page));
+	public List<Books> booksList(String tag, int page) {
+		return booksDao.booksList(getSearchMap(tag, page));
 	}
 
 	@Override
@@ -41,11 +41,11 @@ public class BooksServiceImpl implements BooksService{
 	}
 
 	@Override
-	public int getTotalCount(int page) {
-		return booksDao.getTotalCount(getSearchMap(page));
+	public int getTotalCount(String tag, int page) {
+		return booksDao.getTotalCount(getSearchMap(tag, page));
 	}
 	
-	private Map<String, Object> getSearchMap(int page){
+	private Map<String, Object> getSearchMap(String tag, int page){
 		
 		int start = (page -1)*numberOfList+1;
 		int end = start + numberOfList -1;
@@ -53,6 +53,7 @@ public class BooksServiceImpl implements BooksService{
 		Map<String, Object> searchMap = new HashMap<>();
 		searchMap.put("start", start);
 		searchMap.put("end", end);
+		searchMap.put("tag", tag);
 		
 		return searchMap;
 	}

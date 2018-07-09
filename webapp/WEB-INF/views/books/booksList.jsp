@@ -53,11 +53,14 @@
 	display:block;
 	text-align:center;
 }
-.pagination > li{
+.pagination > a> li{
 	float:none;
 }
 .left-btn{
 	margin-left:10px;
+}
+.paging a{
+	text-decoration: none;
 }
 </style>
 </head>
@@ -81,15 +84,17 @@
 		
 		<div class="row">
 				<button type="button" class="btn btn-outline-primary left-btn"
-				  name="it" onclick="tag(this);">IT</button>
+				  name="all" onclick="tag(this);">전체보기</button>
+				<button type="button" class="btn btn-outline-primary left-btn"
+				  name="IT" onclick="tag(this);">IT</button>
 				<button type="button" class="btn btn-outline-secondary left-btn"
-				  name="society" onclick="tag(this);">사회</button>
+				  name="사회" onclick="tag(this);">사회</button>
 				<button type="button" class="btn btn-outline-success left-btn"
-				 name="science" onclick="tag(this);">과학</button>
+				 name="과학" onclick="tag(this);">과학</button>
 				<button type="button" class="btn btn-outline-info left-btn"
-				 name="literature" onclick="tag(this);">문학</button>
+				 name="문학" onclick="tag(this);">문학</button>
 				<button type="button" class="btn btn-outline-warning left-btn"
-				 name="education" onclick="tag(this);">교육</button>
+				 name="교육" onclick="tag(this);">교육</button>
 		</div>
 					
 				<div class="row">
@@ -142,7 +147,7 @@
 					<div class="modal-dialog">
 						<div class="modal-content detail-modal">
 							<div class="modal-header text-center" id="title">
-								<label id="mod_title" class="control-label res_title"> </label>
+								제목 : <label id="mod_title" class="control-label res_title"> </label>
 								<button type="button" class="close btn-md" onclick="exit_btn()">&times;</button>
 							</div>
 							<div class="modal-body">
@@ -176,7 +181,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-xs-2 col-xs-offset-3">
-											<label class="control-label">가격 : </label>
+											<label for="mod_price" class="control-label">가격 : </label>
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_price"></p>
@@ -187,7 +192,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-xs-2 col-xs-offset-3">
-											<label class="control-label">책 상태 : </label>
+											<label for="mod_status" class="control-label">책 상태 : </label>
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_status"></p>
@@ -203,12 +208,12 @@
 									</div>
 									<div class="form-group">
 										<div class="col-xs-2 col-xs-offset-3">
-											<label class="control-label">거래유형 : </label>
+											<label for="mod_d_type" class="control-label">거래유형 : </label>
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_d_type"></p>
 											<select id="mod_d_type" name="d_type" class="form-control"
-												onchange="mod_deal();">
+												onchange="mod_dealtype();">
 												<option value="start">택배(선불)</option>
 												<option value="end">택배(착불)</option>												
 												<option value="direct">직거래</option>
@@ -217,7 +222,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-xs-2 col-xs-offset-3">
-											<label class="control-label">배송비 : </label>
+											<label for="mod_fee" class="control-label">배송비 : </label>
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_fee"></p>
@@ -228,7 +233,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-xs-2 col-xs-offset-3">
-											<label class="control-label">저자 : </label>
+											<label for="mod_author" class="control-label">저자 : </label>
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_author"></p>
@@ -239,7 +244,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-xs-2 col-xs-offset-3">
-											<label class="control-label">대분류 : </label>
+											<label for="mod_b_category" class="control-label">대분류 : </label>
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_b_category"></p>
@@ -256,7 +261,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-xs-2 col-xs-offset-3">
-											<label class="control-label">소분류 : </label>
+											<label for="mod_s_category" class="control-label">소분류 : </label>
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_s_category"></p>
@@ -268,7 +273,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-xs-2 col-xs-offset-3">
-											<label class="control-label">거래상태 : </label>
+											<label for="mod_deal" class="control-label">거래상태 : </label>
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_deal"></p>
@@ -279,7 +284,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-xs-2 col-xs-offset-3">
-											<label class="control-label">내용 : </label>
+											<label for="mod_comments" class="control-label">내용 : </label>
 										</div>
 										<div class="col-xs-5">
 											<div class="form-control res_comments"
@@ -489,14 +494,8 @@
 	function tag(t){
 		console.log(t.name);
 		var tag_name = t.name;
-		$.ajax({
-			url:"/books/tag",
-			type:"post",
-			data:{tag_name:tag_name},
-			success:function(data){
-				
-			}
-		});
+		
+		location.href =	"?tag="+tag_name;
 	}
 	
 	function regSCategory(){
@@ -560,7 +559,7 @@
 		 }
 		
 		//내용 수정시 거래유형 바뀔 때
-		 function mod_deal(){
+		 function mod_dealtype(){
 			 var $mod_d_type = $("#mod_d_type").val();
 			 
 			 if($mod_d_type=='start'){
@@ -721,10 +720,6 @@
 					url : "/books/view",
 					data : {idx:idx},
 					success:function(data){
-						console.log(data.book.nickname);
-						console.log(data.book.b_category);
-						console.log(data.book.s_category);
-						console.log(data.book.fee);
 						var nick = "<%=(String) session.getAttribute("nick")%>";
 						
 						if(data.book == null){
@@ -736,7 +731,7 @@
 								$("#mod_price").val(data.book.price);
 								$("#mod_fee").val(data.book.fee);
 								$("#mod_author").val(data.book.author);
-								$("#mod_b_category").val(data.book.b_category);								
+								$("#mod_b_category").val(data.book.b_category);
 								//$("#mod_s_category").val(data.book.s_category).html(data.book.s_category);
 								$("#mod_s_category").empty();
 								var $option = $("<option>").val(data.book.s_category).html(data.book.s_category);				
@@ -783,6 +778,14 @@
 								$(".res_regdate").html(data.book.regdate);
 								$(".res_price").html(data.book.price);
 								
+								if(data.book.author != null){
+									$(".res_author").html(data.book.author);
+								}else{
+									$(".res_author").html("　");
+								}
+								$(".res_b_category").html(data.book.b_category);
+								$(".res_s_category").html(data.book.s_category);
+								$(".res_deal").html(data.book.deal);
 								
 								$(".res_fee").html(data.book.fee);								
 								if(data.book.photo == null){
@@ -791,10 +794,7 @@
 									$(".res_photo").attr("src","/image/photo/"+data.book.photo);
 								}
 								
-								$(".res_author").html(data.book.author);			
-								$(".res_b_category").html(data.book.b_category);
-								$(".res_s_category").html(data.book.s_category);
-								$(".res_deal").html(data.book.deal);
+								
 								
 								switch(data.book.status){
 									case 'a': 
@@ -809,6 +809,8 @@
 										$(".res_status").html("중하"); 
 									case 'f': 
 										$(".res_status").html("하"); 
+									default:
+										$(".res_status").html("　");
 								}
 								switch(data.book.d_type){
 									case 'direct': 
@@ -816,7 +818,9 @@
 									case 'start': 
 										$(".res_d_type").html("택배(선불)"); 
 									case 'end': 
-										$(".res_d_type").html("택배(착불)"); 
+										$(".res_d_type").html("택배(착불)");
+									default:
+										$(".res_d_type").html("　");
 								}							
 								
 							}

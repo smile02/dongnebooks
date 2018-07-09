@@ -3,12 +3,29 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="books">
-	<select id="booksList" resultMap="booksMap" parameterType="int">
+	<select id="booksList" resultMap="booksMap" parameterType="map">
 		 select * 
 	    from (select rownum as rnum, a.* from 
 	    	(
 	    		select * from 
-	    			books	    			
+	    			books
+	    			<if test="tag != null and tag != 'all'">
+	    			where
+	    				<choose>
+	    					<when test="tag == 'IT'">
+	    						b_category = #{tag}		
+	    					</when>
+	    					<when test="tag == '사회'">
+	    						b_category = #{tag}
+	    					</when>
+	    					<when test="tag = '과학'">
+	    						b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '문학'">
+	    						b_category = #{tag}
+	    					</when>
+	    				</choose>	    				
+	    			</if>	    			
 	    			order by regdate desc	    		
 	    		) a
 	    	) 

@@ -2,7 +2,7 @@ package com.inc.util;
 
 public class Paging {
 	public String getPaging(String url, int nowPage, int totalCount,
-			int numberOfList, int numberOfPage) {
+			int numberOfList, int numberOfPage,String searchParam) {
 		/*
 		 nowPage : 현재 선택한 페이지의 수
 		 totalCount : 전체 게시글의 수
@@ -62,7 +62,7 @@ public class Paging {
 		// 이전페이지 작성
 		if (isPrevPage) {
 			sb.append("<li><a href='" + url + "?page=");
-			sb.append(nowPage - numberOfPage);
+			sb.append(nowPage - numberOfPage+searchParam);
 			sb.append("'><span>◀</span></a></li>");			
 		} else {
 			sb.append("<li class='disabled'><span>◁</span></li>");
@@ -73,7 +73,7 @@ public class Paging {
 				sb.append("<li class='active'><a href=''>"+i+"</a></li>");
 			}else {
 				sb.append("<li class='page-item '><a class='page-link' href='" + url + "?page=");
-				sb.append(i +"'>");
+				sb.append(i +searchParam+"'>");
 				sb.append(i + "</a></li>");				
 			}
 		}
@@ -87,6 +87,7 @@ public class Paging {
 			}else {
 				sb.append(nowPage + numberOfPage);
 			}
+			sb.append(searchParam);
 			sb.append("'><span>▶</span></a></li>");
 		} else {
 			sb.append("<li class='disabled'><span>▷</span></li>");

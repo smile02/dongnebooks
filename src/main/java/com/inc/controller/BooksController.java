@@ -45,16 +45,23 @@ public class BooksController {
 	//책의 목록을 보여주는 메서드
 	@RequestMapping(value = "/books/list", method=RequestMethod.GET)
 	public String booksList(Model model,HttpServletRequest request,
-			@RequestParam(defaultValue="1") int page) {
+			@RequestParam(defaultValue="1") int page,
+			@RequestParam(required=false) String tag) {
+		
+		String searchParam = "";
+		if(tag != null && !tag.equals("all")) { //전체검색 외에 다른 옵션을 선택 했다는 뜻
+			searchParam = "&option="+tag;
+		}
 				
-		model.addAttribute("booksList",booksService.booksList(page));
+		model.addAttribute("booksList",booksService.booksList(tag, page));
 		model.addAttribute("bigCategory",categoryService.bigCategoryList());
 		model.addAttribute("books",new Books());
 		model.addAttribute("paging", paging.getPaging("/books/list",
 				page,
-				booksService.getTotalCount(page),
+				booksService.getTotalCount(tag, page),
 				BooksServiceImpl.numberOfList,
-				BooksServiceImpl.numberOfPage));
+				BooksServiceImpl.numberOfPage,
+				searchParam));
 		
 		request.getSession().setAttribute("nick", "test");
 				
@@ -120,10 +127,7 @@ public class BooksController {
 		}
 		
 		return keyMap;
-	}
-	
-	//대분류와 같은 목록만 출력되도록
-	
+	}	
 	
 	//유효성검사를 진행하는 메서드
 	public Map<String,Map<String,String>> booksValid(@ModelAttribute @Valid Books books,
