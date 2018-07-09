@@ -122,6 +122,9 @@ public class BooksController {
 		return keyMap;
 	}
 	
+	//대분류와 같은 목록만 출력되도록
+	
+	
 	//유효성검사를 진행하는 메서드
 	public Map<String,Map<String,String>> booksValid(@ModelAttribute @Valid Books books,
 													BindingResult result){
@@ -144,21 +147,3 @@ public class BooksController {
 	}
 
 }
-
-/*
- @RequestMapping(value="/books/view", method=RequestMethod.POST)
-	@ResponseBody
-	public String booksView(@RequestParam int idx,
-							HttpServletRequest request){
-//		request.getSession().invalidate();
-		Books books = booksService.booksView(idx);
-		if(books != null) {
-//			request.getSession().setMaxInactiveInterval(1);
-			request.getSession().setAttribute("bk", books);
-			System.out.println(books.getTitle());
-			return "y";
-		}				
-		
-		return "n";
-	}
- */

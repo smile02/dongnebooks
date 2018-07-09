@@ -80,11 +80,16 @@
 		</div>		
 		
 		<div class="row">
-				<button type="button" class="btn btn-outline-primary left-btn" onclick="tag(this);">IT</button>
-				<button type="button" class="btn btn-outline-secondary left-btn" onclick="tag(this);">사회</button>
-				<button type="button" class="btn btn-outline-success left-btn" onclick="tag(this);">과학</button>
-				<button type="button" class="btn btn-outline-info left-btn" onclick="tag(this);">문학</button>
-				<button type="button" class="btn btn-outline-warning left-btn" onclick="tag(this);">교육</button>
+				<button type="button" class="btn btn-outline-primary left-btn"
+				  name="it" onclick="tag(this);">IT</button>
+				<button type="button" class="btn btn-outline-secondary left-btn"
+				  name="society" onclick="tag(this);">사회</button>
+				<button type="button" class="btn btn-outline-success left-btn"
+				 name="science" onclick="tag(this);">과학</button>
+				<button type="button" class="btn btn-outline-info left-btn"
+				 name="literature" onclick="tag(this);">문학</button>
+				<button type="button" class="btn btn-outline-warning left-btn"
+				 name="education" onclick="tag(this);">교육</button>
 		</div>
 					
 				<div class="row">
@@ -480,6 +485,19 @@
 
 
 	<script>
+	
+	function tag(t){
+		console.log(t.name);
+		var tag_name = t.name;
+		$.ajax({
+			url:"/books/tag",
+			type:"post",
+			data:{tag_name:tag_name},
+			success:function(data){
+				
+			}
+		});
+	}
 	
 	function regSCategory(){
 		var b_name = $(".reg_b_category").val(); //select태그 안에 있는 선택되어진 option태그
