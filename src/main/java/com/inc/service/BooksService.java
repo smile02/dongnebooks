@@ -16,6 +16,8 @@ public interface BooksService {
 	public void booksMod(Books books);
 
 	public int getTotalCount(String tag, int page);
+
+	public List<String> tagList();
 	
 	
 }

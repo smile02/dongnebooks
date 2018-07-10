@@ -40,4 +40,9 @@ public class BooksDaoImpl implements BooksDao{
 		return session.selectOne("books.getTotalCount",searchMap);
 	}
 
+	@Override
+	public List<String> tagList() {
+		return session.selectList("books.tagList");
+	}
+
 }

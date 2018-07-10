@@ -1,9 +1,12 @@
 package com.inc.domain;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 public class Books {
@@ -14,20 +17,21 @@ public class Books {
 	@Size(min=1, max=300, message="comments:내용 - 한글 1~300글자이내")
 	private String comments;
 	private String regdate;
+	@Range(min=1, max=9999999,message="price:가격 - 예)1000")
 	private int price;
 	@Pattern(regexp="[abcdef]", message="status:상태 - 잘못된 선택입니다.")
 	private String status;
+	@Range(min=0, max=9999999,message="fee:배송비- 예)1000")
 	private int fee;
 	private String photo;
 	private MultipartFile photo_file;
 	private String d_type;
 	@Pattern(regexp="[가-힣]{0,30}",message="author:저자 - 한글 1~30글자이내")
 	private String author;
-	@NotEmpty(message="잘못된 선택입니다.")
+	@NotNull(message="b_category: 대분류 -잘못된 선택입니다.")
 	private String b_category;
-	@NotEmpty(message="잘못된 선택입니다.")
+	@NotNull(message="s_category: 소분류 -잘못된 선택입니다.")
 	private String s_category;
-	@NotEmpty(message="잘못된 선택입니다.")
 	private String deal;
 	
 	public int getIdx() {

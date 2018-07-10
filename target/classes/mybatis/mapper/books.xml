@@ -18,7 +18,7 @@
 	    					<when test="tag == '사회'">
 	    						b_category = #{tag}
 	    					</when>
-	    					<when test="tag = '과학'">
+	    					<when test="tag == '과학'">
 	    						b_category = #{tag}
 	    					</when>
 	    					<when test="tag == '문학'">
@@ -40,7 +40,7 @@
 		insert into books
 			values(seq_books_idx.nextval,
 				   #{title},
-				   'test',
+				   #{nickname},
 				   #{comments},
 				   sysdate,
 				   #{price},
@@ -73,7 +73,28 @@
 	</update>
 	
 	<select id="getTotalCount" resultType="int" parameterType="map">
-		select count(*) from board			
+		select count(*) from books
+		<if test="tag != null and tag != 'all'">
+	    			where
+	    				<choose>
+	    					<when test="tag == 'IT'">
+	    						b_category = #{tag}		
+	    					</when>
+	    					<when test="tag == '사회'">
+	    						b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '과학'">
+	    						b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '문학'">
+	    						b_category = #{tag}
+	    					</when>
+	    				</choose>	    				
+	    			</if>		
+	</select>
+	
+	<select id="tagList" resultType="String">
+		select distinct b_category from books
 	</select>
 	
 </mapper>

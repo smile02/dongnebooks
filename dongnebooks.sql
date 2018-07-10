@@ -174,6 +174,32 @@ delete from books where idx != 1;
 
 --update books set s_category = '웹';
 
+update books set b_category='사회', s_category='근대사회'
+    where idx = 62;
 
 commit;
+
+ select * 
+	    from (select rownum as rnum, a.* from 
+	    	(
+	    		select * from 
+	    			books
+	    			
+	    			order by regdate desc	    		
+	    		) a
+	    	) 
+	    where rnum between 2 and 4;
+        
+select * from users;    
+select * from books;
+
+create or replace trigger trg_nick
+after update on users for each row
+begin
+    update books
+        set nickname = 'testsmile'
+            where nickname = 'smile';
+    end;
+
+
 

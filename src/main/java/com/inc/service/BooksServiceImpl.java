@@ -57,4 +57,9 @@ public class BooksServiceImpl implements BooksService{
 		
 		return searchMap;
 	}
+
+	@Override
+	public List<String> tagList() {
+		return booksDao.tagList();
+	}
 }
