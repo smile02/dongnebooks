@@ -12,6 +12,7 @@ create table users(
 desc users;
 alter table users add constraint uni_id unique(id);
 alter table users modify address varchar2(200);
+alter table users modify password varchar2(70);
 --name varchar2(30) not null
 
 -------------------------
@@ -86,8 +87,93 @@ insert into board
             
 commit;
 
+------------------------------------------
+--대분류
+create table big_category(
+    idx number,
+    b_name varchar2(30) primary key
+);
+
+create sequence seq_big_category_idx;
+drop sequence seq_big_category_idx;
+drop table big_category;
+
+
+desc big_category;
+
+---------------------------------------------
+--소분류
+create table small_category(
+    idx number primary key,
+    b_bname varchar2(30) references big_category(b_name),
+    s_name varchar2(50) not null
+);
+
+create sequence seq_small_category_idx;
+drop sequence seq_small_category_idx;
+drop table small_category;
+
+
+---------------------------------------------------
+--대분류
+insert into big_category
+    values(seq_big_category_idx.nextval,'IT');
+insert into big_category
+    values(seq_big_category_idx.nextval,'문학');
+insert into big_category
+    values(seq_big_category_idx.nextval,'과학');
+insert into big_category
+    values(seq_big_category_idx.nextval,'사회');
+insert into big_category
+    values(seq_big_category_idx.nextval,'정치');
+insert into big_category
+    values(seq_big_category_idx.nextval,'교육');
+insert into big_category
+    values(seq_big_category_idx.nextval,'기타');
+    
+    
+select * from big_category;
+-----------------------------------------------------
+--소분류
+
+insert into small_category
+    values(seq_small_category_idx.nextval,'IT','웹');
+insert into small_category
+    values(seq_small_category_idx.nextval,'IT','모바일');
+insert into small_category
+    values(seq_small_category_idx.nextval,'문학','시');
+insert into small_category
+    values(seq_small_category_idx.nextval,'문학','소설');
+insert into small_category
+    values(seq_small_category_idx.nextval,'과학','화학');
+insert into small_category
+    values(seq_small_category_idx.nextval,'과학','물리');
+insert into small_category
+    values(seq_small_category_idx.nextval,'사회','현대사회');
+insert into small_category
+    values(seq_small_category_idx.nextval,'사회','근대사회');
+
+commit;
+-----------------------------------------------------
+    
 select * from users;
 select * from books;
 select * from cart;
 select * from board;
+select * from big_category;
+select * from small_category;
+delete from users ;
+
+
+update users set
+    password='989099e0edc9f04a2a06e3c5e4b5b56d04aed5e23973513d83068ee0cc76e0a9', email='dongnebooks21@gmail.com'
+        where id='admin';
+commit;
+
+delete from books where idx != 1;
+
+--update books set s_category = '웹';
+
+
+commit;
 

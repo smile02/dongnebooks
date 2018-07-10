@@ -13,7 +13,7 @@
         <a class="nav-link" href="#">DongneBooks? <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Books</a>
+        <a class="nav-link" href="/books/list">Books</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Community</a>
