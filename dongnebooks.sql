@@ -174,6 +174,37 @@ delete from books where idx != 1;
 
 --update books set s_category = '웹';
 
+update books set b_category='사회', s_category='근대사회'
+    where idx = 62;
 
 commit;
+
+select * from users;   
+select * from books;
+
+drop trigger board_nickname_trg;
+
+--pk기준으로 fk업데이트 트리거
+create or replace trigger nickname_trg
+ after update of nickname on users for each row
+begin
+   update books
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update board
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update cart
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+end;
+
+select * from cart;
+select * from users;
+select * from board;
+select * from books;
+update users set nickname = '관리자' where nickname = 'admin';
+
+
+
 

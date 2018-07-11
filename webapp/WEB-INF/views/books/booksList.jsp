@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,21 +47,21 @@
 .err_color {
 	color: red;
 }
-.btn-reg{
-	margin-top:15px;
-}
-.pagination{
-	display:block;
-	text-align:center;
-}
-.pagination > a> li{
-	float:none;
-}
 .left-btn{
 	margin-left:10px;
 }
-.paging a{
-	text-decoration: none;
+.regBtn{
+	margin-right:10px;
+} 
+.sold_out{
+	opacity: 0.6;
+    filter: alpha(opacity=40)
+}
+.paging{
+	display:inline-block;
+}
+.pagination{
+	margin-top:15px;
 }
 </style>
 </head>
@@ -80,32 +81,42 @@
 						content out within the larger container.</p>
 				</div>
 			</div>			
-		</div>		
-		
-		<div class="row">
-				<button type="button" class="btn btn-outline-primary left-btn"
-				  name="all" onclick="tag(this);">전체보기</button>
-				<button type="button" class="btn btn-outline-primary left-btn"
-				  name="IT" onclick="tag(this);">IT</button>
-				<button type="button" class="btn btn-outline-secondary left-btn"
-				  name="사회" onclick="tag(this);">사회</button>
-				<button type="button" class="btn btn-outline-success left-btn"
-				 name="과학" onclick="tag(this);">과학</button>
-				<button type="button" class="btn btn-outline-info left-btn"
-				 name="문학" onclick="tag(this);">문학</button>
-				<button type="button" class="btn btn-outline-warning left-btn"
-				 name="교육" onclick="tag(this);">교육</button>
 		</div>
-					
-				<div class="row">
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="btn-group" role="group" aria-label="Basic example">
+					<button type="button" class="btn btn-outline-primary left-btn"
+						name="all" onclick="tag(this);">전체보기</button>
+					<c:forEach var="tag" items="${tagList }">
+						<button type="button" class="btn btn-outline-secondary left-btn"
+							name="${tag }" onclick="tag(this);">${tag }</button>
+					</c:forEach>
+				</div>
+				<c:if test="${not empty user.nickname}">
+					<button id="modal" type="button"
+						class="btn btn-outline-info regBtn" data-toggle="modal"
+						data-target="#booksList" style="position: absolute; right: 0;">도서
+						등록</button>
+				</c:if>
+				<c:if test="${empty user.nickname}">
+					<button type="button" class="btn btn-outline-info regBtn"
+						onclick="login();" style="position: absolute; right: 0;">도서
+						등록</button>
+				</c:if>
+			</div>
+		</div>
+
+		<div class="row">
 					<c:forEach var="books" items="${booksList }">
+					<c:if test="${books.deal ne 'complete' }">
 						<div class="col-md-3 col-xs-6">
 							<div class="thumbnail">
 								<div class="img-container">
-									<c:if test="${books.photo ne null}">
+									<c:if test="${books.photo ne 'no_file' && books.photo != null}">
 										<img src="/image/photo/${books.photo }" />
-									</c:if>
-									<c:if test="${books.photo == null}">
+									</c:if>									
+									<c:if test="${books.photo == 'no_file' || books.photo == null}">
 										<img src="/image/photo/noimage.png" />
 									</c:if>
 
@@ -132,16 +143,50 @@
 									<span>
 
 										<button id="detail" type="button"
-											class="btn btn-primary btn-xs"
+											class="btn btn-primary btn-xs detail_btn"
 											onclick="detail(${books.idx});">자세히 보기</button>
 									</span>
 								</div>
 							</div>
 						</div>
+					</c:if>
+					<c:if test="${books.deal eq 'complete' }">										
+						<div class="col-md-3 col-xs-6">
+							<div class="thumbnail">
+								<div class="img-container sold_out">									
+										<img src="/image/photo/SoldOut.jpg" />
+								</div>
+								<div class="caption">
+									<h4>작성자 : ${books.nickname }</h4>
+									<p>제목 : ${books.title }</p>
+									<p>
+										게시일 :
+										<f:parseDate var="date" value="${books.regdate }"
+											pattern="yyyy-MM-dddd HH:mm:ss" />
+										<f:formatDate value="${date }" pattern="yy년 MM월 dd일" />
+									</p>
+									<p>가격 : ${books.price }</p>
+									<p>
+										책 상태 :
+										<c:if test="${books.status == 'a'}">최상</c:if>
+										<c:if test="${books.status == 'b'}">상</c:if>
+										<c:if test="${books.status == 'c'}">중상</c:if>
+										<c:if test="${books.status == 'd'}">중</c:if>
+										<c:if test="${books.status == 'e'}">중하</c:if>
+										<c:if test="${books.status == 'f'}">하</c:if>
+									</p>
+									<span>
+
+										<button id="detail" type="button"
+											class="btn btn-primary btn-xs detail_btn"
+											disabled="disabled">자세히 보기</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</c:if>
 					</c:forEach>					
 				</div>
-					
-
 				<div class="modal" id="detailModal" role="dialog"
 					data-backdrop="static">
 					<div class="modal-dialog">
@@ -186,8 +231,8 @@
 										<div class="col-xs-5">
 											<p class="form-control res_price"></p>
 											<input id="mod_price" name="price" type="text"
-												class="form-control" /> <br /> <span
-												class="error error_price err_color"></span>
+												class="form-control" />
+											<span class="error error_price err_color"></span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -203,7 +248,7 @@
 												<option value="d">중</option>
 												<option value="e">중하</option>
 												<option value="f">하</option>
-											</select> <br /> <span class="error error_status err_color"></span>
+											</select><span class="error error_status err_color"></span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -217,7 +262,7 @@
 												<option value="start">택배(선불)</option>
 												<option value="end">택배(착불)</option>												
 												<option value="direct">직거래</option>
-											</select> <br /> <span class="error error_d_type err_color"></span>
+											</select><span class="error error_d_type err_color"></span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -227,8 +272,8 @@
 										<div class="col-xs-5">
 											<p class="form-control res_fee"></p>
 											<input id="mod_fee" type="text" name="fee"
-												class="form-control" /> <br /> <span
-												class="error error_fee err_color"></span>
+												class="form-control" />
+											<span class="error error_fee err_color"></span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -238,8 +283,8 @@
 										<div class="col-xs-5">
 											<p class="form-control res_author"></p>
 											<input id="mod_author" type="text" name="author"
-												class="form-control" /> <br /> <span
-												class="error error_author err_color"></span>
+												class="form-control" />
+												 <span class="error error_author err_color"></span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -256,7 +301,7 @@
 												<c:forEach var="bcate" items="${bigCategory}">
 													<option value="${bcate.b_name }">${bcate.b_name }</option>
 												</c:forEach>
-											</select> <br /> <span class="error error_b_category err_color"></span>
+											</select><span class="error error_b_category err_color"></span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -268,7 +313,7 @@
 											<select name="s_category" id="mod_s_category"
 												class="form-control view_s_category">
 												<option value="">::선택::</option>
-											</select> <br /> <span class="error error_s_category err_color"></span>
+											</select><span class="error error_s_category err_color"></span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -276,10 +321,8 @@
 											<label for="mod_deal" class="control-label">거래상태 : </label>
 										</div>
 										<div class="col-xs-5">
-											<p class="form-control res_deal"></p>
-											<input id="mod_deal" type="text" name="deal"
-												class="form-control" /> <br /> <span
-												class="error error_deal err_color"></span>
+											<p class="form-control res_deal"></p>											
+											<span class="error error_deal err_color"></span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -309,16 +352,17 @@
 				</div>
 
 				<!--    -->
-				<button id="modal" type="button" class="btn btn-info btn-md btn-reg"
-					data-toggle="modal" data-target="#booksList">도서 등록</button>
-					
-			<div class="paging text_center">
-				<ul class="pagination">
-					${paging }
-				</ul>								
+			
 			</div>
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<div class="paging">
+						<ul class="pagination">
+							${paging }
+						</ul>								
+					</div>
 				</div>
-
+			</div>
 			<!-- Modal   -->
 			<div id="booksList" class="modal fade" role="dialog"
 				data-backdrop="static">
@@ -339,7 +383,7 @@
 									</div>
 									<div class="col-xs-5">
 										<input id="title" name="title" class="form-control"
-											placeholder="책 제목을 입력해주세요." /> 
+											placeholder="책 제목을 입력해주세요." />
 											<span class="error error_title err_color"></span>
 									</div>
 								</div>
@@ -360,8 +404,8 @@
 										<label for="price" class="control-label">가격 : </label>
 									</div>
 									<div class="col-xs-5">
-										<input type="text" id="price" name="price"
-											class="form-control" placeholder="가격을 입력해주세요." />
+										<input type="text" id="price" name="price" value="0"
+											class="form-control reg_price" placeholder="가격을 입력해주세요." />
 										<span class="error error_price err_color"></span>
 									</div>
 								</div>
@@ -378,7 +422,7 @@
 											<option value="d">중</option>
 											<option value="e">중하</option>
 											<option value="f">하</option>
-										</select><br /> <span class="error error_status err_color"></span>
+										</select><span class="error error_status err_color"></span>
 									</div>
 								</div>
 
@@ -392,7 +436,7 @@
 											<option value="start">택배(선불)</option>
 											<option value="end">택배(착불)</option>											
 											<option value="direct">직거래</option>
-										</select><br /> <span class="error error_d_type err_color"></span>
+										</select><span class="error error_d_type err_color"></span>
 									</div>
 								</div>
 
@@ -401,8 +445,9 @@
 										<label for="fee" class="control-label">배송비 : </label>
 									</div>
 									<div class="col-xs-5">
-										<input type="text" id="fee" name="fee" class="form-control"
-											placeholder="배송비를 입력해주세요." />
+										<input type="text" id="fee" name="fee" class="form-control reg_fee"
+											placeholder="배송비를 입력해주세요."/>
+										<span class="error error_fee err_color"></span>
 									</div>
 								</div>
 
@@ -491,8 +536,19 @@
 
 	<script>
 	
+	function soldOut(){
+		$(".detail_btn").attr("disabled","disabled");
+	}
+	
+	function login(){
+		var answer = confirm("로그인 후 이용가능합니다.\n로그인 페이지로 이동하시겠습니까?");
+		console.log(answer);
+		if(answer){
+			location.href='/main';
+		}
+	}
+	
 	function tag(t){
-		console.log(t.name);
 		var tag_name = t.name;
 		
 		location.href =	"?tag="+tag_name;
@@ -505,7 +561,6 @@
 			type:"post",
 			data:{b_name:b_name},
 			success:function(smallCategoryList){
-	//			console.log(smallCategoryList);
 				$(".reg_s_category").empty();
 				$(".reg_s_category").append("<option val=''>::선택::</option>");
 				for(var scate of smallCategoryList){
@@ -524,7 +579,6 @@
 			type:"post",
 			data:{b_name:b_name},
 			success:function(smallCategoryList){
-	//			console.log(smallCategoryList);
 				$(".view_s_category").empty();
 				$(".view_s_category").append("<option val=''>::선택::</option>");
 				for(var scate of smallCategoryList){
@@ -536,7 +590,7 @@
 	}
 	
 	function buy(idx){		
-		location.href=""+idx;
+		location.href="/cart/add/"+idx;
 		alert("구매 버튼이 눌렸습니다.");
 	}
 	
@@ -571,17 +625,16 @@
 			 }
 		 }
 		
+			  //var reg_price = parseInt($(".reg_price").val());
+			  //var reg_fee = parseInt($(".reg_fee").val());
+			  
 		  //도서등록
 		   function reg(){
-			if(!/^[1-9][0-9]{1,9}$/.test(form.price.value)){
-				$(".error_price").html("가격을 입력해주세요.");
-				return;
-				//form.price.focus();
-				//return;
-			}else{
-				$(".error.price").html("");
-			}			
 			 var formData = new FormData($("#form")[0]);
+			 if(formData.get("d_type") == 'start' && (formData.get("fee") == '' || formData.get("fee")==0)){
+				 alert("배송비를 입력해주세요.");
+				 return;
+			 }
 			 $.ajax({
 				 url:"/books/add",
 				 enctype:"multipart/form-data",
@@ -622,32 +675,43 @@
 						if(data.error.b_category != undefined){
 							$(".error_b_category").html(data.error.b_category);	
 						}else{
-							$(".error_title").html("");
+							$(".error_b_category").html("");
 						}
 						if(data.error.s_category != undefined){
 							$(".error_s_category").html(data.error.s_category);	
 						}else{
-							$(".error_title").html("");
+							$(".error_s_category").html("");
 						}
 						if(data.error.deal != undefined){
-							$(".error.deal").html(data.error.deal);	
+							$(".error_deal").html(data.error.deal);	
 						}else{
 							$(".error_deal").html("");
-						}				 		
+						}
+						if(data.error.price != undefined){
+							$(".error_price").html(data.error.price);
+						}else{
+							$(".error_price").html("");
+						}
+						if(data.error.fee != undefined){
+							$(".error_fee").html(data.error.fee);
+						}else{
+							$(".error_fee").html("");
+						}
 				 		return;
 					}
 				 });
 		 }
 			 //title:form.title.value,		  
 		 //내용 수정
-		  function mod(form){			
-			  if(!/^[1-9][0-9]{1,9}$/.test(form.price.value)){
-					$(".error_price").html("가격을 입력해주세요.");
-					return;
-				}else{
-					$(".error.price").html("");
-				}
-				 
+		  function mod(form){
+			if(form.d_type.value == 'start' && (form.fee.value == 0 || form.fee.value == '')){
+				alert("배송비를 입력해주세요.");
+				return;
+			}
+			if(form.price.value == ''){
+				alert("가격을 입력해주세요.");
+				return;
+			}
 			 $.ajax({
 				 url:"/books/mod",
 				 type:"post",
@@ -658,14 +722,14 @@
 					 author:form.author.value,
 					 b_category:form.b_category.value,
 					 s_category:form.s_category.value,
-					 deal:form.deal.value
+					 deal:form.deal.value,
+					 price:form.price.value,
+					 fee:form.fee.value
 				 },
 				 success:function(data){
 					 if(data.error == null){
-					 	location.reload();
+					 	location.href='/books/list';
 					 }else{
-						 console.log(data.error.author);
-						 console.log(data.error.comments);
 						 if(data.error.title != undefined){
 								$(".error_title").html(data.error.title);	
 							}else{
@@ -694,24 +758,44 @@
 							if(data.error.b_category != undefined){
 								$(".error_b_category").html(data.error.b_category);	
 							}else{
-								$(".error_title").html("");
+								$(".error_b_category").html("");
 							}
 							if(data.error.s_category != undefined){
 								$(".error_s_category").html(data.error.s_category);	
 							}else{
-								$(".error_title").html("");
+								$(".error_s_category").html("");
 							}
 							if(data.error.deal != undefined){
 								$(".error.deal").html(data.error.deal);	
 							}else{
 								$(".error_deal").html("");
-							}	
+							}
+							if(data.error.price != undefined){
+								$(".error_price").html(data.error.price);
+							}else{
+								$(".error_price").html("");
+							}
+							if(data.error.fee != undefined){
+								$(".error_fee").html(data.error.fee);
+							}else{
+								$(".error_fee").html("");
+							}
 						 return;
 					 }
 				 }				 
 			 });	 
 		 } 
-		 
+		  function getFormatDate(date){
+
+				var year = date.getFullYear()+"";
+				var sub_year = year.substring(2,4);				
+				var month = (1 + date.getMonth());//M
+				month = month >= 10 ? month : '0' + month;// month 두자리로 저장
+				var day = date.getDate();  //d
+				day = day >= 10 ? day : '0' + day; //day 두자리로 저장
+				return  sub_year + '년' + month + '월' + day+ '일';
+
+			}
 		 
 		   //자세히 보기
 		   function detail(idx){
@@ -719,32 +803,44 @@
 					type:"post",
 					url : "/books/view",
 					data : {idx:idx},
-					success:function(data){
-						var nick = "<%=(String) session.getAttribute("nick")%>";
-						
+					success:function(data){						
+						var nick = "${user.nickname}";						
+						console.log(nick);
+						var regdate = new Date(data.book.regdate);						
+						regdate=getFormatDate(regdate);
 						if(data.book == null){
 							alert("서버에 문제가 발생했습니다.\n 잠시후에 시도해주세요.");
 							return;
 						}else{
+							console.log(data.book.nickname);
 							if(nick == data.book.nickname){
 								$("#buy_btn").remove();
 								$("#mod_price").val(data.book.price);
+								
 								$("#mod_fee").val(data.book.fee);
+								if(data.book.d_type != 'start'){
+									$("#mod_fee").attr("disabled","disabled");
+								}
 								$("#mod_author").val(data.book.author);
 								$("#mod_b_category").val(data.book.b_category);
-								//$("#mod_s_category").val(data.book.s_category).html(data.book.s_category);
 								$("#mod_s_category").empty();
 								var $option = $("<option>").val(data.book.s_category).html(data.book.s_category);				
 								$("#mod_s_category").append($option);
 								
-								$("#mod_deal").val(data.book.deal);
+								switch(data.book.deal){
+									case "sale": $(".res_deal").html('판매 중'); break;
+									case "deal": $(".res_deal").html('거래 중'); break;
+									case "complete": $(".res_deal").html('거래 완료'); break;
+								}
+								
 								$("#mod_comments").html(data.book.comments);
 								if(data.book.photo == null){
 									$("#mod_photo").attr("src","/image/photo/noimage.png");
 								}else{
 									$("#mod_photo").attr("src","/image/photo/"+data.book.photo);
 								}
-								$("#mod_regdate").html(data.book.regdate);
+								$("#mod_regdate").html(regdate);
+								
 								$("#mod_title").html(data.book.title); //아직은 수정안되게		
 								$("#mod_nickname").html(data.book.nickname); //수정안되게
 								$("#mod_d_type").val(data.book.d_type);
@@ -756,7 +852,6 @@
 								$(".res_author").remove();
 								$(".res_b_category").remove();
 								$(".res_s_category").remove();
-								$(".res_deal").remove();
 								$(".res_comments").remove();
 								
 								
@@ -775,7 +870,7 @@
 								$(".res_title").html(data.book.title); //아직은 수정안되게		
 								$(".res_nickname").html(data.book.nickname); //수정안되게
 								$(".res_comments").html(data.book.comments);							
-								$(".res_regdate").html(data.book.regdate);
+								$(".res_regdate").html(regdate);
 								$(".res_price").html(data.book.price);
 								
 								if(data.book.author != null){
@@ -785,7 +880,11 @@
 								}
 								$(".res_b_category").html(data.book.b_category);
 								$(".res_s_category").html(data.book.s_category);
-								$(".res_deal").html(data.book.deal);
+								switch(data.book.deal){
+									case "sale": $(".res_deal").html('판매 중'); break;
+									case "deal": $(".res_deal").html('거래 중'); break;
+									case "complete": $(".res_deal").html('거래 완료'); break;
+								}
 								
 								$(".res_fee").html(data.book.fee);								
 								if(data.book.photo == null){
@@ -793,32 +892,29 @@
 								}else{
 									$(".res_photo").attr("src","/image/photo/"+data.book.photo);
 								}
-								
-								
-								
 								switch(data.book.status){
 									case 'a': 
-										$(".res_status").html("최상"); 
+										$(".res_status").html("최상"); break;
 									case 'b': 
-										$(".res_status").html("상");
+										$(".res_status").html("상"); break;
 									case 'c':
-										$(".res_status").html("중상"); 
+										$(".res_status").html("중상"); break;
 									case 'd':
-										$(".res_status").html("중"); 
+										$(".res_status").html("중"); break;
 									case 'e': 
-										$(".res_status").html("중하"); 
+										$(".res_status").html("중하"); break;
 									case 'f': 
-										$(".res_status").html("하"); 
+										$(".res_status").html("하"); break;
 									default:
 										$(".res_status").html("　");
 								}
 								switch(data.book.d_type){
 									case 'direct': 
-										$(".res_d_type").html("직거래"); 
+										$(".res_d_type").html("직거래"); break;
 									case 'start': 
-										$(".res_d_type").html("택배(선불)"); 
+										$(".res_d_type").html("택배(선불)"); break;
 									case 'end': 
-										$(".res_d_type").html("택배(착불)");
+										$(".res_d_type").html("택배(착불)");break;
 									default:
 										$(".res_d_type").html("　");
 								}							

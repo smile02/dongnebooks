@@ -17,4 +17,8 @@ public interface BooksDao {
 
 	public int getTotalCount(Map<String, Object> searchMap);
 
+	public List<String> tagList();
+
+	public void dealChange(Map<String, Object> dealMap);
+
 }
