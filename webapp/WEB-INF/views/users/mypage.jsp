@@ -31,8 +31,8 @@
   </div>
 	<div class="row">
 		<div class="col-sm-9">
-		<h3 class="text-center">MyPage</h3><br /><br />
-			<form:form action="/user/mypage" method="post" modelAttribute="user">
+		<h3 class="text-center">정보 확인/변경</h3><br /><br />
+			<form:form action="/user/mypage" method="post" modelAttribute="user" style="font-size:10pt;">
   <fieldset>
 	<div class="form-group row">
       <label for="id" class="col-sm-2">ID</label>
@@ -102,6 +102,153 @@
     </div>
   </fieldset>
 </form:form>
+	<div class="row">
+		<div class="col-sm-12">
+			<br />
+			<hr />
+			<br />
+			<h3 class="text-center">내 구매목록</h3>
+			<br />
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<table class="table table-hover" style="font-size:10pt;">
+  <thead>
+    <tr class="table-primary">
+      <th scope="col" width="20%">구매정보</th>
+      <th scope="col" width="40%">도서정보</th>
+      <th scope="col" width="20%">구매상태</th>
+      <th scope="col" width="20%">상태변경</th>
+    </tr>
+  </thead>
+  <tbody>
+  	<c:if test="${empty cartList}">
+    <tr class="table-active">
+      <td colspan="3">구매한 도서가 없습니다.</td>
+    </tr>
+    </c:if>
+    <c:forEach var="cart" items="${cartList }">
+    <tr class="table-default">
+      <td>
+      	<button type="button" class='btn btn-secondary btn-sm' data-toggle="modal" data-target="#cartView${cart.num}">신청내역</button>
+      </td>
+      <td>
+      	<button type="button" class="btn btn-link" data-toggle="modal" data-target="#bookView${cart.num}">${cart.book.title }</button>
+      	<br />
+      	판매가: ${cart.book.price} + 배송비: ${cart.book.fee } = 총 금액 ${cart.book.price + cart.book.fee }원
+      </td>
+      <td>
+      	<c:if test="${cart.status == 'request'}">신청중</c:if>
+      	<c:if test="${cart.status == 'deal'}">거래중</c:if>
+      	<c:if test="${cart.status == 'complete'}">거래완료</c:if>
+      	<c:if test="${cart.status == 'cancel'}">구매취소</c:if>
+      </td>
+      <td>
+      	<c:if test="${cart.status == 'request' || cart.status == 'deal'}">
+      	<button type="button" class='btn btn-secondary btn-sm' id="change${cart.num}" onclick="change(${cart.num}, '${cart.status}');">
+      		<c:if test="${cart.status == 'request'}">구매취소</c:if>
+      		<c:if test="${cart.status == 'deal'}">거래완료</c:if>
+      	</button>
+      	</c:if>
+      </td>
+    </tr>
+<div class="modal" id="cartView${cart.num}">
+  <div class="modal-dialog" role="dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">구매신청서</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+        	<div class="col-sm-3">닉네임</div>
+        	<div class="col-sm-9">${cart.nickname}</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3">수령자성명</div>
+        	<div class="col-sm-9">${cart.name}</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3">주소</div>
+        	<div class="col-sm-9">${cart.address}</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3">거래유형</div>
+        	<div class="col-sm-9">
+        		<c:if test="${cart.d_type == 'start'}">택배(선불)</c:if>
+		      	<c:if test="${cart.d_type == 'direct'}">직거래</c:if>
+		      	<c:if test="${cart.d_type == 'end'}">택배(후불)</c:if>
+        	</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3">요청사항</div>
+        	<div class="col-sm-9">${cart.request}</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal" id="bookView${cart.num}">
+  <div class="modal-dialog" role="dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">도서정보</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+        	<div class="col-sm-3">제목</div>
+        	<div class="col-sm-9">${cart.book.title}</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3">판매자</div>
+        	<div class="col-sm-9">${cart.book.nickname}</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3">등록일</div>
+        	<div class="col-sm-9">${cart.status}</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3">책상태</div>
+        	<div class="col-sm-9">${cart.book.status}</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3">저자</div>
+        	<div class="col-sm-9">${cart.book.author}</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3">분류</div>
+        	<div class="col-sm-9">${cart.book.b_category}/${cart.book.s_category }</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+    </c:forEach>
+  </tbody>
+</table> 
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12" style="text-align:center !important;">
+			<div class="paging">
+				<ul class="pagination pagination-sm">
+					${paging }
+				</ul>
+			</div>
+		</div>
+	</div>
 <!-- modal -->
 <div class="modal" id="changePwd">
   <div class="modal-dialog" role="dialog">
@@ -152,6 +299,25 @@
 	<script	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <script>
+	//구매취소 버튼 눌렀을 시 구매상태를 취소로 바꿔주고 취소버튼에 disabled속성 추가.
+	function change(num, status){
+		if(confirm('상태를 변경하시겠습니까?')){
+			$.ajax({
+				url:"/cart/statusChange",
+				type:"post",
+				data:{num:num, status:status},
+				success:function(result){
+					if(result=='success'){
+						alert('정상 처리되었습니다.');
+						location.href="/user/mypage";
+					}else{
+						alert('서버 오류입니다.');
+					}
+				}
+			});
+		}
+	}
+	
 	//원래 닉네임과 이메일 값을 변수에 저장.
 	var myNick = $("#nickname").val();
 	var myEmail = $("#email").val();

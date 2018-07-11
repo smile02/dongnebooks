@@ -1,5 +1,6 @@
 package com.inc.controller;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,14 +18,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.inc.domain.Cart;
 import com.inc.domain.Users;
+import com.inc.service.CartService;
+import com.inc.service.CartServiceImpl;
 import com.inc.service.UsersService;
+import com.inc.util.Paging;
 import com.inc.util.SHA256Encryptor;
 
 @Controller
 public class UsersController {
 	@Autowired
 	private UsersService usersService;
+	
+	@Autowired
+	private CartService cartService;
+	
+	@Autowired
+	private Paging paging;
 	
 	@RequestMapping("/main")
 	public String mainPage() {
@@ -306,9 +317,16 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/user/mypage", method=RequestMethod.GET)
-	public String myPage(Model model, HttpSession session) {
+	public String myPage(@RequestParam(defaultValue="1") int page, Model model, HttpSession session) {
 		Users user = (Users)session.getAttribute("user");
 		model.addAttribute("user", user);
+		
+		//회원닉네임으로 구매요청 목록 찾아서 가져오기
+		List<Cart> cartList = cartService.getCartList(user.getNickname(), page);
+		model.addAttribute("cartList", cartList);
+		int totalCount = cartService.getTotalCount(user.getNickname());
+		model.addAttribute("paging", paging.getPaging("/user/mypage", page, totalCount, CartServiceImpl.numberOfList, CartServiceImpl.numberOfPage, null));
+		
 		return "/users/mypage.jsp";
 	}
 	

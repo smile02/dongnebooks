@@ -36,8 +36,15 @@
 		<div class="row">
 			<div class="col-sm-9">
 				<h3 class="text-center">Cart</h3><br />
-				<form:form action="/cart/add" method="post" modelAttribute="cart">
+				<form:form action="/cart/add/${idx}" method="post" modelAttribute="cart">
   <fieldset>
+  	<div class="form-group row">
+      <label for="title" class="col-sm-2">구매도서</label>
+      <div class="col-sm-6">
+      	<form:input type="hidden" class="form-control" id="idx" path="idx" value="${idx}"/>
+      	<b>${title}</b>
+      </div>
+    </div>
     <div class="form-group row">
       <label for="nickname" class="col-sm-2">Nick Name</label>
       <div class="col-sm-6">
@@ -66,6 +73,7 @@
 				      <label class="custom-control-label" for="myAddress">내 주소 가져오기</label>
 				</div>
 				<small class="form-text text-muted">직거래 시 가능 장소를, 택배 거래 시 수령할 주소를 정확히 입력해 주세요.</small>
+				<form:errors path="address" class="error"/>
 			</div>
 		</div>
     </div>

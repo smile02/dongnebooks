@@ -590,7 +590,7 @@
 	}
 	
 	function buy(idx){		
-		location.href="/cart/add/?idx="+idx;
+		location.href="/cart/add/"+idx;
 		alert("구매 버튼이 눌렸습니다.");
 	}
 	

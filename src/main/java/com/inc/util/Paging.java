@@ -71,7 +71,7 @@ public class Paging {
 		// 페이지 목록
 		for (int i = startPage; i <= endPage; i++) {
 			if(i == nowPage) { //선택한 페이지와 i의 값이 일치할 때에는 a태그 적용 x
-				sb.append("<li class='active page-item'><a class='page-link' href=''>"+i+"</a></li>");
+				sb.append("<li class='active page-item'><a class='page-link'>"+i+"</a></li>");
 			}else {
 				sb.append("<li class='page-item'><a class='page-link' href='" + url + "?page=");
 				sb.append(i +searchParam+ "'>");
