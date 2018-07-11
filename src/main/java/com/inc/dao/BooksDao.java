@@ -19,4 +19,6 @@ public interface BooksDao {
 
 	public List<String> tagList();
 
+	public void dealChange(Map<String, Object> dealMap);
+
 }

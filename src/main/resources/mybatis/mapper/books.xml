@@ -3,26 +3,25 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="books">
-	<select id="booksList" resultMap="booksMap" parameterType="map">
+	<select id="booksList" resultType="books" parameterType="map">
 		 select * 
 	    from (select rownum as rnum, a.* from 
 	    	(
 	    		select * from 
-	    			books
+	    			books where deal != 'deal'
 	    			<if test="tag != null and tag != 'all'">
-	    			where
 	    				<choose>
 	    					<when test="tag == 'IT'">
-	    						b_category = #{tag}		
+	    						and b_category = #{tag}		
 	    					</when>
 	    					<when test="tag == '사회'">
-	    						b_category = #{tag}
+	    						and b_category = #{tag}
 	    					</when>
 	    					<when test="tag == '과학'">
-	    						b_category = #{tag}
+	    						and b_category = #{tag}
 	    					</when>
 	    					<when test="tag == '문학'">
-	    						b_category = #{tag}
+	    						and b_category = #{tag}
 	    					</when>
 	    				</choose>	    				
 	    			</if>	    			
@@ -30,11 +29,7 @@
 	    		) a
 	    	) 
 	    where rnum between #{start} and #{end}
-	</select>
-	
-	<resultMap type="books" id="booksMap">
-		
-	</resultMap>
+	</select>	
 	
 	<insert id="booksAdd" parameterType="books">
 		insert into books
@@ -74,20 +69,20 @@
 	
 	<select id="getTotalCount" resultType="int" parameterType="map">
 		select count(*) from books
-		<if test="tag != null and tag != 'all'">
-	    			where
+			where deal != 'deal' 
+					<if test="tag != null and tag != 'all'">	    			
 	    				<choose>
 	    					<when test="tag == 'IT'">
-	    						b_category = #{tag}		
+	    						and b_category = #{tag}		
 	    					</when>
 	    					<when test="tag == '사회'">
-	    						b_category = #{tag}
+	    						and b_category = #{tag}
 	    					</when>
 	    					<when test="tag == '과학'">
-	    						b_category = #{tag}
+	    						and b_category = #{tag}
 	    					</when>
 	    					<when test="tag == '문학'">
-	    						b_category = #{tag}
+	    						and b_category = #{tag}
 	    					</when>
 	    				</choose>	    				
 	    			</if>		
@@ -96,5 +91,23 @@
 	<select id="tagList" resultType="String">
 		select distinct b_category from books
 	</select>
+	
+	<update id="dealChange" parameterType="map">
+		update books
+			<if test="status != null">
+				<choose>
+					<when test="status == 'deal'">
+						deal = 'deal'
+					</when>
+					<when test="status == 'complete'">
+						deal = 'complete'
+					</when>
+					<when test="status == 'cancel'">
+						deal = 'sale'
+					</when>
+				</choose>
+			</if>			
+		where idx = #{idx}
+	</update>
 	
 </mapper>

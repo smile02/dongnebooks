@@ -160,6 +160,7 @@ public class BooksController {
 		if(result.hasErrors()) {
 			for(ObjectError error : result.getAllErrors()) {
 				System.out.println(error.getCode()+":"+error.getDefaultMessage());
+				
 				//Books에서 message에 jsp의 name값:으로 메세지를 지정해서 그걸 기준으로 error라는 키에 저장
 				String err_code = error.getDefaultMessage().substring(0, error.getDefaultMessage().indexOf(":"));
 				String err=error.getDefaultMessage().substring(error.getDefaultMessage().indexOf(":")+1, error.getDefaultMessage().length());

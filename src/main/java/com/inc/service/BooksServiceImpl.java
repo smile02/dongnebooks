@@ -62,4 +62,9 @@ public class BooksServiceImpl implements BooksService{
 	public List<String> tagList() {
 		return booksDao.tagList();
 	}
+
+	@Override
+	public void dealChange(Map<String, Object> dealMap) {
+		booksDao.dealChange(dealMap);
+	}
 }

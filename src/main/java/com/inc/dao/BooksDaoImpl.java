@@ -45,4 +45,10 @@ public class BooksDaoImpl implements BooksDao{
 		return session.selectList("books.tagList");
 	}
 
+	@Override
+	public void dealChange(Map<String, Object> dealMap) {
+		session.update("books.dealChange",dealMap);
+	}
+
+	
 }

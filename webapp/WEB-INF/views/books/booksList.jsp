@@ -50,12 +50,18 @@
 .left-btn{
 	margin-left:10px;
 }
-.pagination{
-	margin-top:15px;
+.regBtn{
+	margin-right:10px;
+} 
+.sold_out{
+	opacity: 0.6;
+    filter: alpha(opacity=40)
+}
+.paging{
 	display:inline-block;
 }
-.regBtn{
-	margin-left:675px;
+.pagination{
+	margin-top:15px;
 }
 </style>
 </head>
@@ -75,45 +81,42 @@
 						content out within the larger container.</p>
 				</div>
 			</div>			
-		</div>		
-		
+		</div>
+
 		<div class="row">
-				<button type="button" class="btn btn-outline-primary left-btn"
-				  name="all" onclick="tag(this);">전체보기</button>
-				 <c:forEach var="tag" items="${tagList }">
-				 	<button type="button" class="btn btn-outline-secondary left-btn"
-				 		name="${tag }" onclick="tag(this);">${tag }</button>
-				 </c:forEach>
-				<!--   
-				<button type="button" class="btn btn-outline-primary left-btn"
-				  name="IT" onclick="tag(this);">IT</button>
-				<button type="button" class="btn btn-outline-secondary left-btn"
-				  name="사회" onclick="tag(this);">사회</button>
-				<button type="button" class="btn btn-outline-success left-btn"
-				 name="과학" onclick="tag(this);">과학</button>
-				<button type="button" class="btn btn-outline-info left-btn"
-				 name="문학" onclick="tag(this);">문학</button>
-				<button type="button" class="btn btn-outline-warning left-btn"
-				 name="교육" onclick="tag(this);">교육</button> -->
-				 <c:if test="${not empty user.nickname}">
-				 	<button id="modal" type="button" class="btn btn-outline-info regBtn"
-						data-toggle="modal" data-target="#booksList">도서 등록</button>
+			<div class="col-md-12">
+				<div class="btn-group" role="group" aria-label="Basic example">
+					<button type="button" class="btn btn-outline-primary left-btn"
+						name="all" onclick="tag(this);">전체보기</button>
+					<c:forEach var="tag" items="${tagList }">
+						<button type="button" class="btn btn-outline-secondary left-btn"
+							name="${tag }" onclick="tag(this);">${tag }</button>
+					</c:forEach>
+				</div>
+				<c:if test="${not empty user.nickname}">
+					<button id="modal" type="button"
+						class="btn btn-outline-info regBtn" data-toggle="modal"
+						data-target="#booksList" style="position: absolute; right: 0;">도서
+						등록</button>
 				</c:if>
 				<c:if test="${empty user.nickname}">
-				 	<button type="button" class="btn btn-outline-info regBtn"
-				 		onclick="login();">도서 등록</button>
+					<button type="button" class="btn btn-outline-info regBtn"
+						onclick="login();" style="position: absolute; right: 0;">도서
+						등록</button>
 				</c:if>
+			</div>
 		</div>
-					
-				<div class="row">
+
+		<div class="row">
 					<c:forEach var="books" items="${booksList }">
+					<c:if test="${books.deal ne 'complete' }">
 						<div class="col-md-3 col-xs-6">
 							<div class="thumbnail">
 								<div class="img-container">
-									<c:if test="${books.photo ne null}">
+									<c:if test="${books.photo ne 'no_file' && books.photo != null}">
 										<img src="/image/photo/${books.photo }" />
-									</c:if>
-									<c:if test="${books.photo == null}">
+									</c:if>									
+									<c:if test="${books.photo == 'no_file' || books.photo == null}">
 										<img src="/image/photo/noimage.png" />
 									</c:if>
 
@@ -140,16 +143,50 @@
 									<span>
 
 										<button id="detail" type="button"
-											class="btn btn-primary btn-xs"
+											class="btn btn-primary btn-xs detail_btn"
 											onclick="detail(${books.idx});">자세히 보기</button>
 									</span>
 								</div>
 							</div>
 						</div>
+					</c:if>
+					<c:if test="${books.deal eq 'complete' }">										
+						<div class="col-md-3 col-xs-6">
+							<div class="thumbnail">
+								<div class="img-container sold_out">									
+										<img src="/image/photo/SoldOut.jpg" />
+								</div>
+								<div class="caption">
+									<h4>작성자 : ${books.nickname }</h4>
+									<p>제목 : ${books.title }</p>
+									<p>
+										게시일 :
+										<f:parseDate var="date" value="${books.regdate }"
+											pattern="yyyy-MM-dddd HH:mm:ss" />
+										<f:formatDate value="${date }" pattern="yy년 MM월 dd일" />
+									</p>
+									<p>가격 : ${books.price }</p>
+									<p>
+										책 상태 :
+										<c:if test="${books.status == 'a'}">최상</c:if>
+										<c:if test="${books.status == 'b'}">상</c:if>
+										<c:if test="${books.status == 'c'}">중상</c:if>
+										<c:if test="${books.status == 'd'}">중</c:if>
+										<c:if test="${books.status == 'e'}">중하</c:if>
+										<c:if test="${books.status == 'f'}">하</c:if>
+									</p>
+									<span>
+
+										<button id="detail" type="button"
+											class="btn btn-primary btn-xs detail_btn"
+											disabled="disabled">자세히 보기</button>
+									</span>
+								</div>
+							</div>
+						</div>
+					</c:if>
 					</c:forEach>					
 				</div>
-					
-
 				<div class="modal" id="detailModal" role="dialog"
 					data-backdrop="static">
 					<div class="modal-dialog">
@@ -284,10 +321,8 @@
 											<label for="mod_deal" class="control-label">거래상태 : </label>
 										</div>
 										<div class="col-xs-5">
-											<p class="form-control res_deal"></p>
-											<input id="mod_deal" type="text" name="deal"
-												class="form-control" /> <br /> <span
-												class="error error_deal err_color"></span>
+											<p class="form-control res_deal"></p>											
+											<span class="error error_deal err_color"></span>
 										</div>
 									</div>
 									<div class="form-group">
@@ -319,11 +354,13 @@
 				<!--    -->
 			
 			</div>
-			<div class="col-xs-12 text-center">
-				<div class="paging">
-					<ul class="pagination">
-						${paging }
-					</ul>								
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<div class="paging">
+						<ul class="pagination">
+							${paging }
+						</ul>								
+					</div>
 				</div>
 			</div>
 			<!-- Modal   -->
@@ -498,6 +535,11 @@
 
 
 	<script>
+	
+	function soldOut(){
+		$(".detail_btn").attr("disabled","disabled");
+	}
+	
 	function login(){
 		var answer = confirm("로그인 후 이용가능합니다.\n로그인 페이지로 이동하시겠습니까?");
 		console.log(answer);
@@ -686,7 +728,7 @@
 				 },
 				 success:function(data){
 					 if(data.error == null){
-					 	location.reload();
+					 	location.href='/books/list';
 					 }else{
 						 if(data.error.title != undefined){
 								$(".error_title").html(data.error.title);	
@@ -781,12 +823,16 @@
 								}
 								$("#mod_author").val(data.book.author);
 								$("#mod_b_category").val(data.book.b_category);
-								//$("#mod_s_category").val(data.book.s_category).html(data.book.s_category);
 								$("#mod_s_category").empty();
 								var $option = $("<option>").val(data.book.s_category).html(data.book.s_category);				
 								$("#mod_s_category").append($option);
 								
-								$("#mod_deal").val(data.book.deal);
+								switch(data.book.deal){
+									case "sale": $(".res_deal").html('판매 중'); break;
+									case "deal": $(".res_deal").html('거래 중'); break;
+									case "complete": $(".res_deal").html('거래 완료'); break;
+								}
+								
 								$("#mod_comments").html(data.book.comments);
 								if(data.book.photo == null){
 									$("#mod_photo").attr("src","/image/photo/noimage.png");
@@ -806,7 +852,6 @@
 								$(".res_author").remove();
 								$(".res_b_category").remove();
 								$(".res_s_category").remove();
-								$(".res_deal").remove();
 								$(".res_comments").remove();
 								
 								
@@ -835,7 +880,11 @@
 								}
 								$(".res_b_category").html(data.book.b_category);
 								$(".res_s_category").html(data.book.s_category);
-								$(".res_deal").html(data.book.deal);
+								switch(data.book.deal){
+									case "sale": $(".res_deal").html('판매 중'); break;
+									case "deal": $(".res_deal").html('거래 중'); break;
+									case "complete": $(".res_deal").html('거래 완료'); break;
+								}
 								
 								$(".res_fee").html(data.book.fee);								
 								if(data.book.photo == null){

@@ -179,27 +179,32 @@ update books set b_category='사회', s_category='근대사회'
 
 commit;
 
- select * 
-	    from (select rownum as rnum, a.* from 
-	    	(
-	    		select * from 
-	    			books
-	    			
-	    			order by regdate desc	    		
-	    		) a
-	    	) 
-	    where rnum between 2 and 4;
-        
-select * from users;    
+select * from users;   
 select * from books;
 
-create or replace trigger trg_nick
-after update on users for each row
+drop trigger board_nickname_trg;
+
+--pk기준으로 fk업데이트 트리거
+create or replace trigger nickname_trg
+ after update of nickname on users for each row
 begin
-    update books
-        set nickname = 'testsmile'
-            where nickname = 'smile';
-    end;
+   update books
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update board
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update cart
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+end;
+
+select * from cart;
+select * from users;
+select * from board;
+select * from books;
+update users set nickname = '관리자' where nickname = 'admin';
+
 
 
 

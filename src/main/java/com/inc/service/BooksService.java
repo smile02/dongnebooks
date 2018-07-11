@@ -1,6 +1,7 @@
 package com.inc.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.inc.domain.Books;
 
@@ -18,6 +19,8 @@ public interface BooksService {
 	public int getTotalCount(String tag, int page);
 
 	public List<String> tagList();
+	
+	public void dealChange(Map<String, Object> dealMap);
 	
 	
 }
