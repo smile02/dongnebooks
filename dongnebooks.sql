@@ -62,8 +62,9 @@ create table cart(
     name varchar2(30) --거래자이름
 );
 
+desc cart;
 create sequence seq_cart_num;
-
+alter table cart add regdate date;
 ------------------------------------
 insert into cart
     values (seq_cart_num.nextval,'관리자','서울시','택배선불','배송 중',1,'','');
@@ -81,6 +82,7 @@ create table board(
 );
 
 create sequence seq_board_idx;
+drop sequence seq_board_idx;
 
 ----------------------------------------
 insert into board
@@ -164,8 +166,11 @@ select * from cart;
 select * from board;
 select * from big_category;
 select * from small_category;
+<<<<<<< HEAD
 select * from reply;
 select * from comments;
+=======
+>>>>>>> 0782dc62fdb84521f65d29a813a5cb6b4c3203bb
 delete from users ;
 
 
@@ -178,6 +183,57 @@ delete from books where idx != 1;
 
 --update books set s_category = '웹';
 
+<<<<<<< HEAD
 
 commit;
+=======
+update books set b_category='사회', s_category='근대사회'
+    where idx = 62;
+
+commit;
+
+select * from users;   
+select * from books;
+
+drop trigger board_nickname_trg;
+
+--pk기준으로 fk업데이트 트리거
+create or replace trigger nickname_trg
+ after update of nickname on users for each row
+begin
+   update books
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update board
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update cart
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+end;
+
+select * from cart;
+select * from users;
+select * from board;
+select * from books;
+update users set nickname = '관리자' where nickname = 'admin';
+
+update books set deal = 'sale'
+    where idx = 81;
+commit;
+
+
+update cart set status='deal' where num=23;
+
+select * from 
+    cart c, (select idx, title from books where nickname='test') b 
+        where c.idx = b.idx;
+
+delete from board;
+
+select * from board;
+
+commit;
+
+>>>>>>> 0782dc62fdb84521f65d29a813a5cb6b4c3203bb
 

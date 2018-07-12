@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-                                            
+                                                
+    
     
     
     
@@ -10,8 +11,10 @@
     
     
     <wb-module deploy-name="default">
+                
         <wb-resource deploy-path="/WEB-INF/web.xml" source-path="/webapp/WEB-INF/web.xml"/>
-                                                                                        
+                                                                                                
+        
         
         
         
@@ -22,7 +25,8 @@
         
         
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
-                                                                                        
+                                                                                                
+        
         
         
         
@@ -33,7 +37,8 @@
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
-                                                                                        
+                                                                                                
+        
         
         
         
@@ -44,26 +49,6 @@
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
-                                                                                
-        
-        
-        
-        
-        
-        
-        
-        
-        <wb-resource deploy-path="/" source-path="/webapp"/>
-                                                                                
-        
-        
-        
-        
-        
-        
-        
-        
-        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
                                                                                         
         
         
@@ -74,8 +59,32 @@
         
         
         
+        <wb-resource deploy-path="/" source-path="/webapp"/>
+                                                                                        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                                                                                                
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         <property name="java-output-path" value="/ch07_Maven_D_guestbook/target/classes"/>
-                                                                        
+                                                                                
+        
         
         
         
@@ -84,7 +93,8 @@
         
         
         <property name="context-root" value="default"/>
-                                                                                    
+                                                                                            
+    
     
     
     
@@ -95,7 +105,8 @@
     
     
     </wb-module>
-                                        
+                                            
+
 
 
 

@@ -21,7 +21,7 @@ public class CategoryController {
 	@RequestMapping(value="/categorys/scate", method=RequestMethod.POST)
 	@ResponseBody
 	public List<SmallCategory> sCategory(@RequestParam String b_name) {
-		
+		//사용자가 대분류를 클릭했을 때 대분류와 같은 값에 대한 소분류 구하기
 		List<SmallCategory> smallCategoryList = categoryServie.smallCategoryList(b_name);
 		
 		return smallCategoryList;

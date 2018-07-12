@@ -1,6 +1,6 @@
 package com.inc.domain;
 
-public class Comment {
+public class Comments {
 	private int rno;
 	private int idx;
 	private String nickname;
