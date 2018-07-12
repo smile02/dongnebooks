@@ -85,25 +85,42 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<div class="btn-group" role="group" aria-label="Basic example">
-					<button type="button" class="btn btn-outline-primary left-btn"
-						name="all" onclick="tag(this);">전체보기</button>
-					<c:forEach var="tag" items="${tagList }">
-						<button type="button" class="btn btn-outline-secondary left-btn"
-							name="${tag }" onclick="tag(this);">${tag }</button>
-					</c:forEach>
-				</div>
-				<c:if test="${not empty user.nickname}">
+				<nav class="navbar navbar-expand-lg navbar-dark bg-primary">								
+			  <a class="navbar-brand" href="/books/list?tag=all">전체보기</a>
+			 	<!-- <button type="button" class="navbar-brand" name="all" onclick="tag(t);">전체보기</button> -->
+			 	 
+			 	 <button class="navbar-toggler" type="button" 
+			 	 	data-toggle="collapse" data-target="#navbarColor02" 
+			 	 aria-controls="navbarColor02" aria-expanded="false" 
+			 	 aria-label="Toggle navigation" style="" name="all">
+			    <span class="navbar-toggler-icon"></span>
+			  </button>
+			
+			  <div class="collapse navbar-collapse" id="navbarColor02">
+			    <ul class="navbar-nav mr-auto">
+			    <c:forEach var="tag" items="${tagList }">
+			      <li class="nav-item active">
+			        <a class="nav-link" href="/books/list?tag=${tag }">${tag} <span class="sr-only">(current)</span></a>
+			        <%-- <button type="button" class="nav-link" name=${tag }>${tag }</button> --%>
+			      </li>
+			    </c:forEach>
+			      
+    		</ul>
+			    <form class="form-inline my-2 my-lg-0">
+			      	<c:if test="${not empty user.nickname}">
 					<button id="modal" type="button"
-						class="btn btn-outline-info regBtn" data-toggle="modal"
-						data-target="#booksList" style="position: absolute; right: 0;">도서
-						등록</button>
-				</c:if>
-				<c:if test="${empty user.nickname}">
-					<button type="button" class="btn btn-outline-info regBtn"
-						onclick="login();" style="position: absolute; right: 0;">도서
-						등록</button>
-				</c:if>
+						class="btn btn-outline-secondary regBtn my-2 my-sm-0" data-toggle="modal"
+									data-target="#booksList" style="position: absolute; right: 0;">
+						도서 등록</button>
+					</c:if>
+					<c:if test="${empty user.nickname}">
+						<button type="button" class="btn btn-outline-danger  regBtn my-2 my-sm-0"
+							onclick="login();" style="position: absolute; right: 0;">도서
+							등록</button>
+					</c:if>
+			    </form>
+			  </div>
+			</nav>
 			</div>
 		</div>
 
@@ -338,7 +355,8 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-										<button id="buy_btn" type="button" class="btn btn-warning"
+									<button type="button" class="btn btn-danger" onclick="reply(${cookie.idx.value});">댓글 </button>
+									<button id="buy_btn" type="button" class="btn btn-warning"
 											onclick="buy(${cookie.idx.value});">구매하기</button>
 										<button id="mod_btn" type="button" class="btn btn-warning"
 											onclick="mod(this.form);">수정하기</button>
@@ -536,10 +554,24 @@
 
 	<script>
 	
-	function soldOut(){
-		$(".detail_btn").attr("disabled","disabled");
+	//각 태그 클릭했을 때 같은 대분류만 보이도록
+	function tag(t){
+		var tag_name = t.name;
+		
+		location.href =	"?tag="+tag_name;
 	}
 	
+	function reply(idx) {
+		var nickname = "${user.nickname}";
+		console.log(nickname);
+		if(nickname != ''){
+			window.open("/comments/list/"+idx+"/"+nickname, "a", "width=400, height=300, left=100, top=50");
+		}else{
+			location.href="/comments/list";
+		}
+	}
+	
+	//로그인을 안하게 되면 도서등록이 안되도록
 	function login(){
 		var answer = confirm("로그인 후 이용가능합니다.\n로그인 페이지로 이동하시겠습니까?");
 		console.log(answer);
@@ -548,12 +580,7 @@
 		}
 	}
 	
-	function tag(t){
-		var tag_name = t.name;
-		
-		location.href =	"?tag="+tag_name;
-	}
-	
+	//도서 등록시 소분류를 불러오는 함수
 	function regSCategory(){
 		var b_name = $(".reg_b_category").val(); //select태그 안에 있는 선택되어진 option태그
 		$.ajax({
@@ -570,7 +597,7 @@
 			}			
 		});
 	}
-	
+	//수정화면에서 소분류를 불러오는 함수
 	function getSCategory(){
 		var b_name = $(".view_b_category").val();
 		
@@ -589,11 +616,13 @@
 		});
 	}
 	
+	//구매버튼 클릭 시 구매화면으로 이동
 	function buy(idx){		
 		location.href="/cart/add/"+idx;
 		alert("구매 버튼이 눌렸습니다.");
 	}
 	
+	//나가기나 닫기 버튼 눌렀을 시 닫은다음 페이지 리로드
 	function exit_btn(){
 		$("#detailModal").modal("hide");
 		location.reload();
@@ -712,6 +741,7 @@
 				alert("가격을 입력해주세요.");
 				return;
 			}
+			var deal = $(".res_deal").html();
 			 $.ajax({
 				 url:"/books/mod",
 				 type:"post",
@@ -722,8 +752,8 @@
 					 author:form.author.value,
 					 b_category:form.b_category.value,
 					 s_category:form.s_category.value,
-					 deal:form.deal.value,
 					 price:form.price.value,
+					 deal:deal,
 					 fee:form.fee.value
 				 },
 				 success:function(data){
@@ -785,6 +815,7 @@
 				 }				 
 			 });	 
 		 } 
+		 //제이쿼리에서 등록일을 포맷변경하는 함수
 		  function getFormatDate(date){
 
 				var year = date.getFullYear()+"";
@@ -805,14 +836,12 @@
 					data : {idx:idx},
 					success:function(data){						
 						var nick = "${user.nickname}";						
-						console.log(nick);
 						var regdate = new Date(data.book.regdate);						
 						regdate=getFormatDate(regdate);
 						if(data.book == null){
 							alert("서버에 문제가 발생했습니다.\n 잠시후에 시도해주세요.");
 							return;
 						}else{
-							console.log(data.book.nickname);
 							if(nick == data.book.nickname){
 								$("#buy_btn").remove();
 								$("#mod_price").val(data.book.price);
@@ -926,14 +955,15 @@
 					//서버 통신시 오류가 있을 때
 				});
 		   }
-		   //파일 확장자 검사
+		   //사진 등록시 파일 확장자 검사
 		  function fileCheck(file){
 				var point = file.value.lastIndexOf("."); //뒤에있는 .의 위치
 				var extension = file.value.substring(point+1, file.value.length); //.다음부터 끝까지의 확장자
 				
 				if(extension != "jpg" && extension != "JPG"
 					&& extension != "png" && extension != "PNG"
-					&& extension != "gif" && extension != "GIF"	){
+					&& extension != "gif" && extension != "GIF"
+					&& extension != "jpeg" && extension != "JPEG"){
 					alert("이미지 이외의 파일은 업로드 할 수 없습니다.");
 					
 					var parent = file.parentNode;			
