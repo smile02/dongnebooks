@@ -9,31 +9,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sign up</title>
-<link rel="stylesheet" href="https://bootswatch.com/4/minty/bootstrap.min.css">
+<link
+	href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/minty/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-4eGtnTOp6je5m6l1Zcp2WUGR9Y7kJZuAiD3Pk2GAW3uNRgHQSIqcrcAxBipzlbWP"
+	crossorigin="anonymous">
+<link rel="stylesheet" href="/css/style.css" />
 </head>
-<style>
-	.error{
-		font-size:9pt;
-		color:red;
-	}
-	#idCheck, #nickCheck{
-		font-size:9pt;
-	}
-	.loader {
-	    border: 2px solid #f3f3f3; /* Light grey */
-	    border-top: 2px solid #3498db; /* Blue */
-	    border-radius: 50%;
-	    width: 30px;
-	    height: 30px;
-	    animation: spin 2s linear infinite;
-	    display:inline-block;
-	}
-
-	@keyframes spin {
-	    0% { transform: rotate(0deg); }
-	    100% { transform: rotate(360deg); }
-}
-</style>
 <body>
 <jsp:include page="../include/header.jsp"/>
 <div class="container">
@@ -148,8 +130,9 @@
 </div>
 <jsp:include page="../include/footer.jsp"/>
 <!-- script library -->
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <script>
 	//아이디 중복확인코드
 	function idCheck(){

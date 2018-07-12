@@ -11,5 +11,11 @@ public interface UsersDao {
 	public void signup(Users user);
 	//이메일 중복체크
 	public boolean emailCheck(String email);
+	//아이디 찾기
+	public String findID(String email);
+	//비밀번호 변경
+	public void updatePwd(Users user);
+	//회원정보 변경
+	public void update(Users user);
 
 }

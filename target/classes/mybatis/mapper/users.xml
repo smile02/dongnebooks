@@ -18,4 +18,13 @@
 	<insert id="signup" parameterType="users">
 		insert into users values(#{nickname}, #{id}, #{password}, #{email}, #{phone}, #{address})
 	</insert>
+	<select id="findID" parameterType="string" resultType="string">
+		select id from users where email = #{value}
+	</select>
+	<update id="updatePwd" parameterType="users">
+		update users set password = #{password} where id = #{id}
+	</update>
+	<update id="update" parameterType="users">
+		update users set nickname=#{nickname}, email=#{email}, phone=#{phone}, address=#{address} where id=#{id}
+	</update>
 </mapper>

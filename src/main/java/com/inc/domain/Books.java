@@ -1,19 +1,33 @@
 package com.inc.domain;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class Books {
 	private int idx;
+	@Size(min=1, max=10, message="title:제목 - 한글 1~10글자이내")
 	private String title;
 	private String nickname;
+	@Size(min=1, max=300, message="comments:내용 - 한글 1~300글자이내")
 	private String comments;
 	private String regdate;
 	private int price;
+	@Pattern(regexp="[abcdef]", message="status:상태 - 잘못된 선택입니다.")
 	private String status;
 	private int fee;
 	private String photo;
+	private MultipartFile photo_file;
 	private String d_type;
+	@Pattern(regexp="[가-힣]{0,30}",message="author:저자 - 한글 1~30글자이내")
 	private String author;
+	@NotEmpty(message="잘못된 선택입니다.")
 	private String b_category;
+	@NotEmpty(message="잘못된 선택입니다.")
 	private String s_category;
+	@NotEmpty(message="잘못된 선택입니다.")
 	private String deal;
 	
 	public int getIdx() {
@@ -99,6 +113,12 @@ public class Books {
 	}
 	public void setDeal(String deal) {
 		this.deal = deal;
+	}
+	public MultipartFile getPhoto_file() {
+		return photo_file;
+	}
+	public void setPhoto_file(MultipartFile photo_file) {
+		this.photo_file = photo_file;
 	}
 	
 	

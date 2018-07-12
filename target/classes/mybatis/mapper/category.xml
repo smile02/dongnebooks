@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="category">
+	<select id="bigCategoryList" resultType="bigCategory">
+		select * from big_category
+	</select>
+	
+	<select id="smallCategoryList" parameterType="String" resultType="smallCategory">
+		select * from small_category where b_bname = #{value}
+	</select>
+	
+</mapper>

@@ -10,7 +10,9 @@
 	<context:property-placeholder 
 		location="classpath:mybatis/config/db.properties"/>
 	
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<bean id="paging" class="com.inc.util.Paging"/>
+	
+	<bean id="session" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory"/>	
 	</bean>
 	
