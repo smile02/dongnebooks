@@ -804,15 +804,13 @@
 					url : "/books/view",
 					data : {idx:idx},
 					success:function(data){						
-						var nick = "${user.nickname}";						
-						console.log(nick);
+						var nick = "${user.nickname}";					
 						var regdate = new Date(data.book.regdate);						
 						regdate=getFormatDate(regdate);
 						if(data.book == null){
 							alert("서버에 문제가 발생했습니다.\n 잠시후에 시도해주세요.");
 							return;
 						}else{
-							console.log(data.book.nickname);
 							if(nick == data.book.nickname){
 								$("#buy_btn").remove();
 								$("#mod_price").val(data.book.price);

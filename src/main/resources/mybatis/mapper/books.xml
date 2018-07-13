@@ -46,7 +46,7 @@
 				   #{author},
 				   #{b_category},
 				   #{s_category},
-				   '판매 중')
+				   'sale')
 	</insert>
 	
 	<select id="booksView" parameterType="int" resultType="books">
@@ -95,6 +95,7 @@
 	<update id="dealChange" parameterType="map">
 		update books
 			<if test="status != null">
+				set
 				<choose>
 					<when test="status == 'deal'">
 						deal = 'deal'
@@ -107,7 +108,7 @@
 					</when>
 				</choose>
 			</if>			
-		where idx = #{idx}
+		where idx = #{num}
 	</update>
 	
 </mapper>
