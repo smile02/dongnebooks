@@ -1,5 +1,7 @@
 package com.inc.domain;
 
+import java.util.List;
+
 public class Board {
 	private int idx;
 	private String title;
@@ -8,7 +10,14 @@ public class Board {
 	private int cnt;
 	private String regdate;
 	private int code;
+	private List<Reply> replyList;
 	
+	public List<Reply> getReplyList() {
+		return replyList;
+	}
+	public void setReplyList(List<Reply> replyList) {
+		this.replyList = replyList;
+	}
 	public int getIdx() {
 		return idx;
 	}

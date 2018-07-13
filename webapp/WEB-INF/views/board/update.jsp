@@ -132,7 +132,7 @@
 				data:{idx:idx,
 					title:title,
 					comments:comments},
-				success:function(data){
+					success:function(data){
 					if(data=='y'){
 						alert("수정완료");
 						location.href='${pageContext.request.contextPath}/board/view?idx='+idx;

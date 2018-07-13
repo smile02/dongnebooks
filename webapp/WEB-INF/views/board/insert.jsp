@@ -21,7 +21,7 @@
 	<div class="container">
 		<form:form action="${pageContext.request.contextPath}/board/insert"
 			method="post">
-			<input type="hidden" name="nickname" value="${sessionScope.user.nickname }" />
+			<input type="text" name="nickname" value="${sessionScope.user.nickname }" />
 			<fieldset>
 				<div class="row">
 					<div class="col-sm-12">
@@ -87,6 +87,7 @@
 	<script>
 		function check(form) {
 			//제목,내용 유효성 검사
+			
 			if(form.code.value==""){
 				alert("게시글의유형을선택해주세요.")
 				form.code.focus();

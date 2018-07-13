@@ -42,9 +42,9 @@
 	</select>
 	
 	<resultMap type="board" id="boardMap">
-		<id property="id" column="id"/>
-		<collection select="reply.selectList"
-					column="id"
+		<id property="idx" column="idx"/>
+		<collection select="reply.replyList"
+					column="idx"
 					ofType="reply"
 					property="replyList"/>
 	</resultMap>

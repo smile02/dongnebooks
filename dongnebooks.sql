@@ -1,5 +1,3 @@
-create user smile02 identified by 11111111;
-grant dba to smile02;
 --users
 ------------------------------------
 create table users(
@@ -166,11 +164,7 @@ select * from cart;
 select * from board;
 select * from big_category;
 select * from small_category;
-<<<<<<< HEAD
 select * from reply;
-select * from comments;
-=======
->>>>>>> 0782dc62fdb84521f65d29a813a5cb6b4c3203bb
 delete from users ;
 
 
@@ -183,10 +177,6 @@ delete from books where idx != 1;
 
 --update books set s_category = '웹';
 
-<<<<<<< HEAD
-
-commit;
-=======
 update books set b_category='사회', s_category='근대사회'
     where idx = 62;
 
@@ -234,6 +224,4 @@ delete from board;
 select * from board;
 
 commit;
-
->>>>>>> 0782dc62fdb84521f65d29a813a5cb6b4c3203bb
 
