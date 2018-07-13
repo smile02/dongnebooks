@@ -92,7 +92,7 @@
 		select distinct b_category from books
 	</select>
 	
-	<update id="dealChange" parameterType="map">
+	<!-- <update id="dealChange" parameterType="map">
 		update books
 			<if test="status != null">
 				set
@@ -109,6 +109,6 @@
 				</choose>
 			</if>			
 		where idx = #{num}
-	</update>
+	</update> -->
 	
 </mapper>

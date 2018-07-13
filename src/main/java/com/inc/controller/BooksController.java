@@ -71,6 +71,12 @@ public class BooksController {
 		return "/books/booksList.jsp";
 	}
 	
+	@RequestMapping(value="/books/add", method=RequestMethod.GET)
+	public String booksAdd() {
+		System.out.println("여기로 옴");
+		return "redirect:/books/list";
+	}
+	
 	//도서를 판매할 사람이 "도서 등록"버튼을 클릭 했을 때
 	@RequestMapping(value ="/books/add", method= RequestMethod.POST)
 	@ResponseBody
@@ -118,13 +124,17 @@ public class BooksController {
 			resMap.put("book", books);
 			//Cookie로 가져온 정보에 대한 idx값을 넣어준다.
 			response.addCookie(new Cookie("idx",books.getIdx()+""));
-			System.out.println(books.getNickname());
-			System.out.println(books.getIdx());
 			return resMap;
 		}				
 		
 		return resMap;
 	}
+	
+	@RequestMapping(value="/books/mod", method=RequestMethod.GET)
+	public String booksMod() {
+		
+		return "redirect:/books/list";
+	}	
 	
 	//판매자 본인일 경우에만 수정이 가능하도록
 	@RequestMapping(value="/books/mod", method=RequestMethod.POST)
