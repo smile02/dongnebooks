@@ -164,6 +164,7 @@ select * from cart;
 select * from board;
 select * from big_category;
 select * from small_category;
+select * from reply;
 delete from users ;
 
 
@@ -223,5 +224,4 @@ delete from board;
 select * from board;
 
 commit;
-
 

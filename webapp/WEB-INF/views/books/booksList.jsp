@@ -20,30 +20,24 @@
 .thumbnail {
 	height: 450px;
 }
-
 .img-container {
 	height: 220px;
 	margin-top:15px;
 }
-
 .thumbnail img {
 	width: 100%;
 	height: 100% !important;
 }
-
 .detail-modal {
 	height: auto;
 }
-
 .photo {
 	height: 220px;
 }
-
 .photo-hei {
 	width: 100%;
 	height: 200px !important;
 }
-
 .err_color {
 	color: red;
 }
@@ -817,7 +811,6 @@
 		 } 
 		 //제이쿼리에서 등록일을 포맷변경하는 함수
 		  function getFormatDate(date){
-
 				var year = date.getFullYear()+"";
 				var sub_year = year.substring(2,4);				
 				var month = (1 + date.getMonth());//M
@@ -825,7 +818,6 @@
 				var day = date.getDate();  //d
 				day = day >= 10 ? day : '0' + day; //day 두자리로 저장
 				return  sub_year + '년' + month + '월' + day+ '일';
-
 			}
 		 
 		   //자세히 보기
