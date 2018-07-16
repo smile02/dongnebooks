@@ -60,8 +60,9 @@ create table cart(
     name varchar2(30) --거래자이름
 );
 
+desc cart;
 create sequence seq_cart_num;
-
+alter table cart add regdate date;
 ------------------------------------
 insert into cart
     values (seq_cart_num.nextval,'관리자','서울시','택배선불','배송 중',1,'','');
@@ -79,6 +80,7 @@ create table board(
 );
 
 create sequence seq_board_idx;
+drop sequence seq_board_idx;
 
 ----------------------------------------
 insert into board
@@ -162,6 +164,7 @@ select * from cart;
 select * from board;
 select * from big_category;
 select * from small_category;
+select * from reply;
 delete from users ;
 
 
@@ -205,6 +208,20 @@ select * from board;
 select * from books;
 update users set nickname = '관리자' where nickname = 'admin';
 
+update books set deal = 'sale'
+    where idx = 81;
+commit;
 
 
+update cart set status='deal' where num=23;
+
+select * from 
+    cart c, (select idx, title from books where nickname='test') b 
+        where c.idx = b.idx;
+
+delete from board;
+
+select * from board;
+
+commit;
 

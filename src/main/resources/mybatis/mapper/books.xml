@@ -46,7 +46,7 @@
 				   #{author},
 				   #{b_category},
 				   #{s_category},
-				   '판매 중')
+				   'sale')
 	</insert>
 	
 	<select id="booksView" parameterType="int" resultType="books">
@@ -92,7 +92,7 @@
 		select distinct b_category from books
 	</select>
 	
-	<update id="dealChange" parameterType="map">
+	<!-- <update id="dealChange" parameterType="map">
 		update books
 			<if test="status != null">
 				<choose>
@@ -108,6 +108,6 @@
 				</choose>
 			</if>			
 		where idx = #{idx}
-	</update>
+	</update> -->
 	
 </mapper>
