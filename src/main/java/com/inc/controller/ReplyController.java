@@ -23,19 +23,12 @@ public class ReplyController {
 	@Autowired
 	private ReplyService replyService;
 	
-	/*@RequestMapping(value="/reply/list", method=RequestMethod.GET)
-	public String replyList(@PathVariable int idx, @PathVariable String nickname ,Model model) throws Exception {
-		model.addAttribute("replyList",replyService.replyList(idx));
-		System.out.println(replyList(idx, nickname, model));
-		return "/board/list.jsp";
-	}*/
-	
 	@RequestMapping(value="/reply/insert", method=RequestMethod.POST)
 	public String insert(@ModelAttribute @Valid Reply reply, BindingResult result, HttpSession session,HttpServletRequest req) throws Exception {
-		System.out.println(reply.getComments());
-		System.out.println(reply.getIdx());
+		//System.out.println(reply.getComments());
+		//System.out.println(reply.getIdx());
 		if(result.hasErrors()) {
-			
+			System.out.println("몰라임마");
 		}
 		Users user = (Users) req.getSession().getAttribute("user");
 		reply.setNickname(user.getNickname());

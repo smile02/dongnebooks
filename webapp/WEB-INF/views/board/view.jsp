@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,7 +83,7 @@
 			<div class="input-group">
 			<c:if test="${!empty sessionScope.user.nickname }">
 				<input type="hidden" name="idx" value="${board.idx }" />
-				<form:input type="text" class="form-control" id="comments" name="comments"
+				<form:input type="text" class="form-control" path="comments"
 					placeholder="댓글 내용을 재빠르게 입력하세요."/>
 				<form:errors path="comments" class="error"/> 
 				<span class="input-group-btn">
