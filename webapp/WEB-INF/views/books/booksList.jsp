@@ -349,7 +349,7 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-									<button type="button" class="btn btn-danger" onclick="reply();">댓글 </button>
+									<button id="replyBtn" type="button" class="btn btn-danger" onclick="reply();">댓글 </button>
 									<button id="buy_btn" type="button" class="btn btn-warning"
 											onclick="buy(${cookie.idx.value});">구매하기</button>
 										<button id="mod_btn" type="button" class="btn btn-warning"
@@ -357,9 +357,13 @@
 										<button type="button" class="btn" onclick="exit_btn();">나가기</button>
 									</div>
 								</form>
-								<div style="display:none">
-									<textarea name="" id="" cols="30" class="form-control w-100"></textarea>
-								</div>
+									<form style="display:none" id="formTag" class="form-control">
+										<jsp:include page="../comments/list.jsp"/>
+										<ul id="replies">
+											
+										</ul>
+									</form>
+
 							</div>
 						</div>
 					</div>
@@ -549,6 +553,11 @@
 
 
 	<script>
+	$(function(){
+		$("#replyBtn").on("click", function(){
+			$("#formTag").css("display","block").animate({"left":"250Px"});
+		});		
+	});
 	
 	//각 태그 클릭했을 때 같은 대분류만 보이도록
 	function tag(t){
@@ -557,17 +566,23 @@
 		location.href =	"?tag="+tag_name;
 	}
 	
-	function reply() {
+	 function reply() {
 		var nickname = "${sessionScope.user.nickname}";
 		var idx = $("#getIdx").val();
-		console.log(nickname);
+		var out = "";
 		console.log("idx : "+idx);
 		if(nickname != ''){
-			window.open("/comments/list/"+idx, "a", "width=400, height=300, left=200, top=50");			
+			$.getJSON("/comments/list/"+idx, function(data){				
+				$(data.commentsList).each(function(){
+					out += "<li data-rno'"+this.rno+"' class='comments'>"+
+						this.rno+":"+this.comments+"</li>";					
+				});
+				$("#replies").html(out);
+			});			
 		}else{
 			login();
 		}
-	}
+	} 
 	
 	//로그인을 안하게 되면 도서등록이 안되도록
 	function login(){

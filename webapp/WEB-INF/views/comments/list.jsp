@@ -103,13 +103,7 @@
 		<div class="row">
 		<fieldset>
 			<legend>댓글목록</legend>
-			<c:forEach var="comments" items="${commentsList }">
-				${comments.rno } <br />
-				${comments.idx } <br />
-				${comments.nickname } <br />
-				${comments.comments } <br />
-				${comments.regdate } <br />
-			</c:forEach>
+			
 		</fieldset>
 		</div>		
 	</div>
@@ -128,11 +122,5 @@
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
 
-	<script>
-
-		$.getJSON("/comments/list"+81, function(data){
-			console.log(data.length);
-		})
-	</script>
 </body>
 </html>

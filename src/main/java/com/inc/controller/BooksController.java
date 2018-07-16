@@ -1,6 +1,7 @@
 package com.inc.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -21,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.domain.Books;
+import com.inc.domain.Comments;
 import com.inc.domain.Users;
 import com.inc.service.BooksService;
 import com.inc.service.BooksServiceImpl;
 import com.inc.service.CategoryService;
+import com.inc.service.CommentsService;
 import com.inc.service.FileService;
 import com.inc.util.Paging;
 
@@ -42,6 +45,9 @@ public class BooksController {
 	
 	@Autowired
 	private Paging paging;
+	
+	@Autowired
+	private CommentsService commentsService;
 
 	//책의 목록을 보여주는 메서드
 	@RequestMapping(value = "/books/list", method=RequestMethod.GET)
@@ -54,6 +60,7 @@ public class BooksController {
 		if(tag != null && !tag.equals("all")) { //전체검색 외에 다른 옵션을 선택 했다는 뜻
 			searchParam = "&tag="+tag;
 		}
+		
 		//현재 등록되어져 있는 태그들의 목록을 불러온다.
 		model.addAttribute("tagList",booksService.tagList());
 		//전체 도서목록을 불러온다.
@@ -116,7 +123,7 @@ public class BooksController {
 							HttpServletRequest request){
 		//전체 도서목록 중 사용자가 "자세히 보기"를 클릭한 도서에 대한 정보면 가져온다.
 		Books books = booksService.booksView(idx);
-		
+				
 		Map<String, Books> resMap = new HashMap<>();		
 		//위에서 정보를 제대로 가져왔다면
 		if(books != null) {
