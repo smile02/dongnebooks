@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reply">
+	<select id="replyList" parameterType="reply" resultType="reply">
+		<!-- select * from reply order by regdate desc -->
+		select * from reply where idx = #{value} order by regdate desc
+	</select>
+	
+	<insert id="insert" parameterType="reply">
+		insert into reply values (seq_reply_rno.nextval,
+								#{idx},
+								'관리자',
+								#{comments},
+								sysdate)
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		delete from reply where rno = #{rno}
+	</delete>
+	
+	<update id="update" parameterType="reply">
+		update reply set comments = #{comments}
+		where rno = #{rno}
+	</update>
+	
+</mapper>

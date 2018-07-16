@@ -95,6 +95,7 @@
 	<!-- <update id="dealChange" parameterType="map">
 		update books
 			<if test="status != null">
+				set
 				<choose>
 					<when test="status == 'deal'">
 						deal = 'deal'
@@ -107,7 +108,7 @@
 					</when>
 				</choose>
 			</if>			
-		where idx = #{idx}
+		where idx = #{num}
 	</update> -->
 	
 </mapper>
