@@ -96,8 +96,6 @@ public class Paging {
 
 		return sb.toString();
 	}
-<<<<<<< HEAD
-	
 	public String getPaging(String url, int nowPage, int totalCount,
 			int numberOfList, int numberOfPage) {
 		//MyPage용 별도 Paging
@@ -185,6 +183,3 @@ public class Paging {
 		return sb.toString();
 	}
 }
-=======
-}
->>>>>>> deb98af554f50bf78e34498010734c665a8c6163
