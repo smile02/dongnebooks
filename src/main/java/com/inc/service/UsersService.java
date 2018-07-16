@@ -15,7 +15,7 @@ public interface UsersService {
 	public void signup(Users user);
 	//인증 이메일 발송
 	public String sendCertifyEmail(String email);
-	//회원가입&회원정보 수정시 닉네임 중복체크
+	//회원가입&회원정보 수정시 닉네임 중복체크 / 구매목록 테이블에서 판매자 정보 찾아오기.
 	public Users nickCheck(String nickname);
 	//이메일 중복체크
 	public boolean emailCheck(String email);

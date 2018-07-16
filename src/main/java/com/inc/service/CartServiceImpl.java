@@ -52,4 +52,15 @@ public class CartServiceImpl implements CartService {
 		return cartDao.getTotalCount(nickname);
 	}
 
+	@Override
+	public List<Cart> getSaleList(String nickname, int page) {
+		Map<String, Object> cartMap = getCartMap(nickname, page);
+		return cartDao.getSaleList(cartMap);
+	}
+
+	@Override
+	public int getSaleTotal(String nickname) {
+		return cartDao.getSaleTotal(nickname);
+	}
+
 }

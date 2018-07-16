@@ -79,7 +79,7 @@
     </div>
     <div class="form-group row">
       <label for="d_type" class="col-sm-2">거래유형</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8">
       	<form:select path="d_type" class="custom-select">
 	      <form:option value="" selected="">거래방법 선택(필수)</form:option>
 	      <form:option value="direct">직거래</form:option>
@@ -87,11 +87,12 @@
 	      <form:option value="end">택배(착불)</form:option>
 	    </form:select>
 	    <form:errors path="d_type" class="error"/>
+	    <small class="form-text text-muted">만약 판매자의 판매방식과 다른 거래방법을 원하실 경우, 판매자와 직접 협의하세요.</small>
       </div>
     </div>
     <div class="form-group row">
       <label for="request" class="col-sm-2">요청사항</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8">
       	<form:textarea class="form-control" id="request" path="request" rows="3" ></form:textarea>
       	<form:errors path="request" class="error"/>
       	<button type="button" class="btn btn-primary btn-sm" onclick="addPhone();">폰번호 전달</button>
@@ -99,7 +100,7 @@
     </div>
     <div class="form-group row">
       <label for="name" class="col-sm-2">Name</label>
-      <div class="col-sm-6">
+      <div class="col-sm-8">
       	<form:input type="text" class="form-control" id="name" path="name"/>
       	<form:errors path="name" class="error"/>
       	<small class="form-text text-muted">수령인이 다르거나 택배거래일 경우 수령자 성명을 입력해주세요.</small>
