@@ -15,6 +15,14 @@
 	integrity="sha384-4eGtnTOp6je5m6l1Zcp2WUGR9Y7kJZuAiD3Pk2GAW3uNRgHQSIqcrcAxBipzlbWP"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="/css/style.css" />
+<style>
+.paging{
+	display:inline-block;
+}
+#salePaging{
+	display:inline-block;
+}
+</style>
 </head>
 <body>
 <jsp:include page="../include/header.jsp"/>
@@ -282,11 +290,13 @@
 			  </tbody>
 			 </table>
 		</div>
-		<div class="col-sm-12" >
-			<div class="paging text-center">
-				<ul class="pagination pagination-sm" id="salePaging">
-					<!-- saleList 페이징 -->
-				</ul>
+		<div class="row">
+			<div class="col-sm-12" >
+				<div class="paging text-center">
+					<ul class="pagination pagination-sm text-center" id="salePaging">
+						<!-- saleList 페이징 -->
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
