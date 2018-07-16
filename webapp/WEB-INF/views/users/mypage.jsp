@@ -116,10 +116,10 @@
 			<table class="table table-hover" style="font-size:10pt;">
   <thead>
     <tr class="table-primary">
-      <th scope="col" width="20%">구매정보</th>
-      <th scope="col" width="40%">도서정보</th>
-      <th scope="col" width="20%">구매상태</th>
-      <th scope="col" width="20%">상태변경</th>
+      <th scope="col" width="20%" class="text-center">구매정보</th>
+      <th scope="col" width="40%" class="text-center">도서정보</th>
+      <th scope="col" width="20%" class="text-center">구매상태</th>
+      <th scope="col" width="20%" class="text-center">상태변경</th>
     </tr>
   </thead>
   <tbody>
@@ -130,7 +130,7 @@
     </c:if>
     <c:forEach var="cart" items="${cartList }">
     <tr class="table-default">
-      <td>
+      <td class="text-center">
       	<button type="button" class='btn btn-secondary btn-sm' data-toggle="modal" data-target="#cartView${cart.num}">신청내역</button>
       </td>
       <td>
@@ -138,13 +138,13 @@
       	<br />
       	판매가: ${cart.book.price} + 배송비: ${cart.book.fee } = 총 금액 ${cart.book.price + cart.book.fee }원
       </td>
-      <td>
+      <td class="text-center">
       	<c:if test="${cart.status == 'request'}">신청중</c:if>
       	<c:if test="${cart.status == 'deal'}">거래중</c:if>
       	<c:if test="${cart.status == 'complete'}">거래완료</c:if>
       	<c:if test="${cart.status == 'cancel'}">구매취소</c:if>
       </td>
-      <td>
+      <td class="text-center">
       	<c:if test="${cart.status == 'request' || cart.status == 'deal'}">
       	<button type="button" class='btn btn-secondary btn-sm' id="change${cart.num}" onclick="change(${cart.num}, '${cart.status}');">
       		<c:if test="${cart.status == 'request'}">구매취소</c:if>
@@ -187,6 +187,10 @@
         	<div class="col-sm-3">요청사항</div>
         	<div class="col-sm-9">${cart.request}</div>
         </div>
+        <div class="row">
+        	<div class="col-sm-3">신청일자</div>
+        	<div class="col-sm-9">${cart.regdate}</div>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -210,11 +214,18 @@
         </div>
         <div class="row">
         	<div class="col-sm-3">판매자</div>
-        	<div class="col-sm-9">${cart.book.nickname}</div>
+        	<div class="col-sm-4">${cart.book.nickname}</div>
+        	<div class="col-sm-5">
+        		<button type="button" class="btn btn-outline-info btn-sm" onclick="getSeller('${cart.book.nickname}', ${cart.num })">Info</button>
+        	</div>
+        </div>
+        <div class="row">
+        	<div class="col-sm-3"></div>
+        	<div class="col-sm-9" id="${cart.num}"></div>
         </div>
         <div class="row">
         	<div class="col-sm-3">등록일</div>
-        	<div class="col-sm-9">${cart.status}</div>
+        	<div class="col-sm-9">${cart.book.regdate}</div>
         </div>
         <div class="row">
         	<div class="col-sm-3">책상태</div>
@@ -241,14 +252,50 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-12" style="text-align:center !important;">
+		<div class="col-sm-12 text-center">
 			<div class="paging">
-				<ul class="pagination pagination-sm">
+				<ul class="pagination pagination-sm text-center">
 					${paging }
 				</ul>
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<br />
+			<hr />
+			<br />
+			<h3 class="text-center">내 판매목록</h3>
+			<br />
+		</div>
+		<div class="col-sm-12">
+			<table class="table table-hover" style="font-size:10pt;">
+			  <thead>
+			    <tr class="table-primary">
+			      <th scope="col" width="20%" class="text-center">도서명</th>
+			      <th scope="col" width="40%" class="text-center">신청정보</th>
+			      <th scope="col" width="20%" class="text-center">판매상태</th>
+			      <th scope="col" width="20%" class="text-center">상태변경</th>
+			    </tr>
+			  </thead>
+			  <tbody id="saleList">
+			  </tbody>
+			 </table>
+		</div>
+		<div class="col-sm-12" >
+			<div class="paging text-center">
+				<ul class="pagination pagination-sm" id="salePaging">
+					<!-- saleList 페이징 -->
+				</ul>
+			</div>
+		</div>
+	</div>
+		</div>
+		<div class="col-sm-3">
+		<jsp:include page="../include/right.jsp"/>
+		</div>
+	</div>
+</div>
 <!-- modal -->
 <div class="modal" id="changePwd">
   <div class="modal-dialog" role="dialog">
@@ -287,19 +334,122 @@
     </div>
   </div>
 </div>
-		</div>
-		<div class="col-sm-3">
-		<jsp:include page="../include/right.jsp"/>
-		</div>
-	</div>
-</div>
 <jsp:include page="../include/footer.jsp"/>
 <!-- script library -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 	<script	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 <script>
-	//구매취소 버튼 눌렀을 시 구매상태를 취소로 바꿔주고 취소버튼에 disabled속성 추가.
+	
+	$(function(){
+		//판매목록출력
+		
+		var salePage = "/cart/sale/"+1;
+		printPage(salePage);
+		
+	});
+	
+	function printPage(salePage){
+		var str = "";
+		$.getJSON(salePage, function(data){
+			if(data.saleList.length == 0){
+				//받아온 데이터가 없으면.
+				str = "<tr class='table-secondary'><td colspan='4'>판매 요청된 도서가 없습니다.</td></tr>";
+			}else{
+				$(data.saleList).each(function(){
+					var type ="";
+
+					switch (this.d_type){
+					case 'start' : type="택배(선불)"; break;
+					case 'end' : type="택배(후불)" ;break;
+					case 'direct' :type="직거래";break;
+					default : type=this.d_type;
+					}
+					var order = "닉네임 : " + this.nickname + "<br/>" + 
+								"수령자 : " + this.name + "<br/>" + 
+								"주소 : " + this.address + "<br/>" +
+								"거래유형 : " + type + "<br/>" + 
+								"요청사항 : " + this.request + "<br/>" +
+								"신청일자 : " + this.regdate;
+					
+					//거래상태 - 요청(request), 거래중(deal), 완료(complete), 취소(cancel)
+					//select태그 생성
+					var select = "<select class='custom-select' id='status" + this.num + "'>"+
+								"<option value='request'" + (this.status == 'request' ? "selected" : "") +">거래요청</option>" + 
+								"<option value='deal'" + (this.status == 'deal' ? "selected" : "") +">거래중</option>" +
+								"<option value='cancel'" + (this.status == 'cancel' ? "selected" : "") +">거래취소</option>" +
+								"</select>";
+					var button = "<button type='button' class='btn btn-secondary btn-sm' onclick='accept("+ this.num +")'>변경</button>";
+					var status = "";
+					if(this.status == 'complete'){
+						//거래 완료가 되면 거래완료 표시만 하고, select박스를 없앤다.
+						status = "거래완료";
+						select="";
+						button="";
+					}
+					str += "<tr class='table-secondary text-center'>" +
+						  	"<td>" + this.book.title + "</td>" + 
+						  	"<td class='text-left'>" + order + "</td>" +
+						  	"<td>" + status + select + "</td>" +
+						  	"<td>" + button + "</td>" +
+				  		  "</tr>";
+				});
+			}
+			
+			$("#saleList").html(str);
+			//console.log(data.paging);
+			$("#salePaging").html(data.paging);
+		});
+	}
+	
+	$("#salePaging").on("click", "li a", function(event){
+		event.preventDefault();
+		salePage = $(this).attr("href");
+		printPage(salePage);
+	});
+	
+	function accept(num){
+		var id = "#status" + num;
+		
+		$.ajax({
+			url:"/cart/dealAccept",
+			type:"post",
+			data:{num:num, status:$(id).val()},
+			success:function(result){
+				if(result=="success"){
+					alert("정상 처리되었습니다.");
+					location.href("/user/mypage");
+				}else{
+					alert("서버 오류입니다.");
+				}
+			}
+		});
+	}
+	//판매자 정보 보기
+	function getSeller(nickname, cartnum){
+		$.ajax({
+			url:"/cart/getSeller",
+			type:"post",
+			data:{nickname:nickname},
+			success:function(user){
+				var id= "#" + cartnum;
+				if(user == null){
+					$(id).text("판매자의 정보를 찾지 못했습니다.");
+				}else{
+
+					var info = "아이디: " + user.id + "<br>" +
+								"전화번호: " + user.phone + "<br/>" + 
+								"주소: " + user.address + "<br/>" + 
+								"이메일: " + user.email + "<br/>" + 
+								"** 주소나 전화번호가 없는 판매자와는 거래하지 마세요. **";
+					$(id).html(info);
+				}
+			}
+		});
+	}
+
+	//구매취소 버튼 눌렀을 시 구매상태를 취소로 바꿔준다.
+	//거래중 상태에서는 구매완료로 바뀌며, 버튼을 누르면 구매상태를 거래완료로 바꿔준다.
 	function change(num, status){
 		if(confirm('상태를 변경하시겠습니까?')){
 			$.ajax({

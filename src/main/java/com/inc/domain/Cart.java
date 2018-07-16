@@ -17,6 +17,7 @@ public class Cart {
 	@Size(min=0, max=65, message="요청사항은 최대 65자 이하로 입력가능합니다.")
 	private String request;
 	private String name;
+	private String regdate;
 	private Books book;
 	
 	public int getNum() {
@@ -72,6 +73,12 @@ public class Cart {
 	}
 	public void setBook(Books book) {
 		this.book = book;
+	}
+	public String getRegdate() {
+		return regdate;
+	}
+	public void setRegdate(String regdate) {
+		this.regdate = regdate;
 	}
 	
 }

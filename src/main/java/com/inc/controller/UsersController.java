@@ -325,7 +325,7 @@ public class UsersController {
 		List<Cart> cartList = cartService.getCartList(user.getNickname(), page);
 		model.addAttribute("cartList", cartList);
 		int totalCount = cartService.getTotalCount(user.getNickname());
-		model.addAttribute("paging", paging.getPaging("/user/mypage", page, totalCount, CartServiceImpl.numberOfList, CartServiceImpl.numberOfPage, null));
+		model.addAttribute("paging", paging.getPaging("/user/mypage", page, totalCount, CartServiceImpl.numberOfList, CartServiceImpl.numberOfPage, ""));
 		
 		return "/users/mypage.jsp";
 	}
