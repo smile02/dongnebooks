@@ -18,6 +18,11 @@ public class CommentsServiceImpl implements CommentsService{
 	@Override
 	public List<Comments> commentsList(int idx) {
 		return commentsDao.commentsList(idx);
+	}
+
+	@Override
+	public void commentsAdd(Comments comments) {
+		commentsDao.commentsAdd(comments);
 	}	
 
 }

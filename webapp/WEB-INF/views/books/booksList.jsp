@@ -103,12 +103,12 @@
 			    <form class="form-inline my-2 my-lg-0">
 			      	<c:if test="${not empty user.nickname}">
 					<button id="modal" type="button"
-						class="btn btn-outline-secondary regBtn my-2 my-sm-0" data-toggle="modal"
+						class="btn btn-secondary regBtn my-2 my-sm-0" data-toggle="modal"
 									data-target="#booksList" style="position: absolute; right: 0;">
 						도서 등록</button>
 					</c:if>
 					<c:if test="${empty user.nickname}">
-						<button type="button" class="btn btn-outline-danger  regBtn my-2 my-sm-0"
+						<button type="button" class="btn btn-danger  regBtn my-2 my-sm-0"
 							onclick="login();" style="position: absolute; right: 0;">도서
 							등록</button>
 					</c:if>
@@ -349,7 +349,7 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-									<button type="button" class="btn btn-danger" onclick="reply(${cookie.idx.value});">댓글 </button>
+									<button type="button" class="btn btn-danger" onclick="reply();">댓글 </button>
 									<button id="buy_btn" type="button" class="btn btn-warning"
 											onclick="buy(${cookie.idx.value});">구매하기</button>
 										<button id="mod_btn" type="button" class="btn btn-warning"
@@ -357,7 +357,9 @@
 										<button type="button" class="btn" onclick="exit_btn();">나가기</button>
 									</div>
 								</form>
-
+								<div style="display:none">
+									<textarea name="" id="" cols="30" class="form-control w-100"></textarea>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -525,7 +527,7 @@
 					</div>
 				</div>
 			</div>
-	
+	<input type="hidden" id="getIdx" />
 		<%-- <div class="row">
 			<div class="col-sm-9">
 			
@@ -555,13 +557,15 @@
 		location.href =	"?tag="+tag_name;
 	}
 	
-	function reply(idx) {
-		var nickname = "${user.nickname}";
+	function reply() {
+		var nickname = "${sessionScope.user.nickname}";
+		var idx = $("#getIdx").val();
 		console.log(nickname);
+		console.log("idx : "+idx);
 		if(nickname != ''){
-			window.open("/comments/list/"+idx+"/"+nickname, "a", "width=400, height=300, left=100, top=50");
+			window.open("/comments/list/"+idx, "a", "width=400, height=300, left=200, top=50");			
 		}else{
-			location.href="/comments/list";
+			login();
 		}
 	}
 	
@@ -611,8 +615,10 @@
 	}
 	
 	//구매버튼 클릭 시 구매화면으로 이동
-	function buy(idx){		
-		location.href="/cart/add/"+idx;
+	function buy(){
+		var getIdx = $("#getIdx").val();		
+		console.log("getIdx : "+getIdx);
+		location.href="/cart/add/"+getIdx;
 		alert("구매 버튼이 눌렸습니다.");
 	}
 	
@@ -826,7 +832,9 @@
 					type:"post",
 					url : "/books/view",
 					data : {idx:idx},
-					success:function(data){				
+					success:function(data){
+						console.log("자세히보기 idx : "+data.book.idx);
+						$("#getIdx").val(data.book.idx);
 						var nick = "${user.nickname}";		
 						var regdate = new Date(data.book.regdate);						
 						regdate=getFormatDate(regdate);

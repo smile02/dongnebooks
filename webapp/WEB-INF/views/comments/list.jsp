@@ -74,38 +74,35 @@
 	<%-- <jsp:include page="../include/header.jsp" />
 	 --%>
 	<div class="container">
-		<div class="row">
-			<form>
+			<form action="/comments/add" method="post">
+			<input type="hidden" name="idx" value="${idx }" />
 				<fieldset>
-					<legend>Legend</legend>
-					<div class="form-group row">
-						<label for="nickname" class="col-sm-2 col-form-label">작성자
-							: </label>
-						<div class="col-sm-10">
+					<legend>댓글작성</legend>
+					<div class="form-group row">					
+						<label for="nickname" class="col-form-label col-sm-2">작성자: </label>
+						
+						<div class="col-sm-3">
 							<input type="text" readonly="readonly"
 								class="form-control-plaintext" id="nickname"
-								value="${sessionScope.user.nickname}">
+								name="nickname" value="${sessionScope.user.nickname}">
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">댓글</label> <input type="email"
-							class="form-control" id="exampleInputEmail1"
-							aria-describedby="emailHelp" placeholder="댓글 작성 칸입니다."> <small
-							id="emailHelp" class="form-text text-muted">댓글을 작성해 주세요!</small>
+						<label for="exampleInputComments">댓글</label> 
+						<input type="text" name="comments"
+							class="form-control" id="exampleInputComments"
+							aria-describedby="commentsHelp" placeholder="댓글 작성 칸입니다."> 
+						<small id="commentsHelp" class="form-text text-muted">댓글을 작성해 주세요!</small>
 					</div>
-					<div class="form-group">
-						<label for="exampleInputPassword1">Password</label> <input
-							type="password" class="form-control" id="exampleInputPassword1"
-							placeholder="Password">
-					</div>
-					<button type="submit" class="btn btn-primary">Submit</button>
+					
+					<button type="submit" class="btn btn-primary">댓글 등록</button>
 				</fieldset>
 			</form>
 
-		</div>
 
 		<div class="row">
-			z
+		<fieldset>
+			<legend>댓글목록</legend>
 			<c:forEach var="comments" items="${commentsList }">
 				${comments.rno } <br />
 				${comments.idx } <br />
@@ -113,9 +110,8 @@
 				${comments.comments } <br />
 				${comments.regdate } <br />
 			</c:forEach>
-		</div>
-
-
+		</fieldset>
+		</div>		
 	</div>
 
 
@@ -133,7 +129,10 @@
 
 
 	<script>
-		
+
+		$.getJSON("/comments/list"+81, function(data){
+			console.log(data.length);
+		})
 	</script>
 </body>
 </html>
