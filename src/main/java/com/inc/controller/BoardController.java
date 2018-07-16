@@ -1,5 +1,7 @@
 package com.inc.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,7 +73,8 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/board/insert",method=RequestMethod.POST)
-	public String insert(@ModelAttribute Board board) throws Exception{
+	public String insert(@ModelAttribute Board board, HttpSession session) throws Exception{
+		System.out.println(board.getNickname());
 		boardService.insert(board);
 		return "redirect:/board/list";
 	}

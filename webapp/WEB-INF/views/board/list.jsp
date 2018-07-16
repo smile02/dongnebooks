@@ -44,6 +44,7 @@ th {
 				</div>
 			</div>
 		</div>
+		<input type="text" name="nickname" value="${sessionScope.user.nickname }" />
 		<h2 class="text-center"> 게 시 판 </h2>
 		<table class="table">
 			<thead>
@@ -146,7 +147,7 @@ th {
  		
  		location.href = "?option="+option+"&text="+text;
  	}
- 	
+ 
  	$(function(){
 		$("#search_text").val("${param.text}");
 		for(var option of $("#search_option").children()){
@@ -157,6 +158,7 @@ th {
 		
 		lock();
 	});
+ 	
 	</script>
 		<script
 			src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
