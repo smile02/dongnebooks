@@ -124,6 +124,7 @@ public class BooksController {
 			resMap.put("book", books);
 			//Cookie로 가져온 정보에 대한 idx값을 넣어준다.
 			response.addCookie(new Cookie("idx",books.getIdx()+""));
+			System.out.println(books.getIdx());
 			return resMap;
 		}				
 		
