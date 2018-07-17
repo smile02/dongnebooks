@@ -34,4 +34,7 @@
         a) 
 	where rnum between #{start} and #{end}
 	</select>
+	<select id="getIdx" parameterType="int" resultType="int">
+		select idx from cart where num = #{value}
+	</select>
 </mapper>

@@ -21,6 +21,8 @@ public interface BooksService {
 	public List<String> tagList();
 	
 	public void dealChange(Map<String, Object> dealMap);
+
+	public List<Books> newBooks(int bookCount);
 	
 	
 }

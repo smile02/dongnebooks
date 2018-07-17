@@ -19,4 +19,6 @@ public interface CartDao {
 
 	public int getSaleTotal(String nickname);
 
+	public int getIdx(int i);
+
 }

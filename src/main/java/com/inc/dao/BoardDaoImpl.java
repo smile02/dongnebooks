@@ -51,4 +51,9 @@ public class BoardDaoImpl implements BoardDao{
 		return session.selectList("board.selectList", searchMap);
 	}
 
+	@Override
+	public List<Board> getNoticeList(int noticeCount) {
+		return session.selectList("board.noticeList", noticeCount);
+	}
+
 }

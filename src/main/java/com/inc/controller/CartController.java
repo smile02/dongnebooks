@@ -65,7 +65,14 @@ public class CartController {
 			model.addAttribute("cart", cart);
 			return "/cart/add.jsp";
 		}
-		cartService.cartAdd(cart);
+		
+		try {
+			cartService.cartAdd(cart);
+		}catch(RuntimeException e) {
+			model.addAttribute("msg", "서버 오류");
+			model.addAttribute("url", "/cart/add/"+idx);
+			return "/error.jsp";
+		}
 		return "redirect:/user/mypage";
 	}
 	
