@@ -12,4 +12,6 @@ public interface CommentsService {
 
 	void commentsMod(Comments comments);
 
+	void commentsDel(int rno);
+
 }

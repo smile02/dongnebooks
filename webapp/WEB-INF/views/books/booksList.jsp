@@ -361,7 +361,7 @@
 										<jsp:include page="../comments/list.jsp"/>																
 									</form>
 									<div style="display:none" class="row" id="listDiv">									
-										<h4>댓글목록</h4>
+										<br /><h4 class="text-center text-muted">댓글목록</h4>
 										<ul class="list-group" id="replies">
 										
 										</ul>
@@ -568,15 +568,20 @@
 		location.href =	"?tag="+tag_name;
 	}
 	function commentsMod(){
-		var btn = $("#mod_commentsBtn").html();
+		var rno = $("#getRno").val();
+		var comments = $("#mod_area").val();
+		var btn = $("."+rno+"").html();
+		console.log("btn : "+btn);
+		console.log("rno : " +rno);
 		if(btn=='변경'){
 			alert("변경 눌림");
 			$("#mod_area").removeAttr("readonly");
-			$("#mod_commentsBtn").html('수정');
+			$("."+rno+"").html('수정');
+			console.log("btn : "+btn);
+			console.log("rno : " +rno);
 			return;
 		}else{
-			var rno = $("#getRno").val();
-			var comments = $("#mod_area").val();
+			
 		$.ajax({
 			url:"/comments/mod/"+rno,
 			type:"patch",
@@ -591,7 +596,7 @@
 			success:function(result){
 				if(result == 'SUCCESS'){
 					alert("수정 완료");
-					$("#mod_commentsBtn").html('변경');
+					$("."+rno+"").html('변경');
 					$("#mod_area").attr("readonly","readonly");
 				}
 			}				
@@ -600,7 +605,23 @@
 	}
 	
 	function commentsDel(){
-		alert("삭제 눌림");		
+		alert("삭제 눌림");
+		var rno = $("#getRno").val();
+		console.log("rno : "+rno);
+		$.ajax({
+			url:"/comments/del/"+rno,
+			type:"delete",
+			headers:{
+				"Content-Type":"application/json",
+				"X-HTTP-Method-Override":"DELETE"
+			},
+			dataType:"text",
+			success:function(result){
+				if(result=='SUCCESS'){
+					alert("삭제완료");
+				}
+			}
+		});
 	}
 	
 	 function reply() {
@@ -611,9 +632,9 @@
 		if(nickname != ''){
 			$.getJSON("/comments/list/"+idx, function(data){				
 				$(data.commentsList).each(function(){
-					out += "<li class='list-group-item'>"+"작성자 : "+this.nickname
-					+ "&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
-					+ "<button id='mod_commentsBtn' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod();'>"
+					out += "<li class='list-group-item list-group-item-action'>"+"작성자 : "+this.nickname
+					+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
+					+ "<button type='button' class='btn btn-secondary btn-sm "+this.rno+"' onclick='commentsMod();'>"
 					+ "변경"+ "</button>"+"&nbsp;"
 					+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel();'>"
 					+ "삭제"+ "</button>"+"</br>"+"내용 : "

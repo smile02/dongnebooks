@@ -12,4 +12,6 @@ public interface CommentsDao {
 
 	void commentsMod(Comments comments);
 
+	void commentsDel(int rno);
+
 }

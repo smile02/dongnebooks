@@ -27,6 +27,11 @@ public class CommentsServiceImpl implements CommentsService{
 	@Override
 	public void commentsMod(Comments comments) {
 		commentsDao.commentsMod(comments);
+	}
+
+	@Override
+	public void commentsDel(int rno) { 
+		commentsDao.commentsDel(rno);
 	}	
 
 }

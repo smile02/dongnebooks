@@ -155,13 +155,15 @@
 						$.getJSON("/comments/list/"+result, function(data){				
 							$(data.commentsList).each(function(){
 								out += "<li class='list-group-item'>"+"작성자 : "+this.nickname
-								+ "&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
-								+ "<button type='button' class='btn btn-secondary btn-sm' onclick='commentsMod();'>"
-								+ "수정"+ "</button>"+"&nbsp;"
+								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
+								+ "<button id='mod_commentsBtn' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod();'>"
+								+ "변경"+ "</button>"+"&nbsp;"
 								+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel();'>"
 								+ "삭제"+ "</button>"+"</br>"+"내용 : "
 								+"<textarea class='form-control' rows='3' readonly='readonly' id='mod_area'>"
-								+ this.comments +"</textarea>"+"</li>";
+								+ this.comments +"</textarea>"
+								+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
+								+"</li>";
 							});
 							$("#replies").empty();
 							$("#replies").append(out);
