@@ -10,4 +10,6 @@ public interface CommentsService {
 
 	void commentsAdd(Comments comments);
 
+	void commentsMod(Comments comments);
+
 }

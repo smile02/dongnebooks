@@ -10,4 +10,6 @@ public interface CommentsDao {
 
 	void commentsAdd(Comments comments);
 
+	void commentsMod(Comments comments);
+
 }

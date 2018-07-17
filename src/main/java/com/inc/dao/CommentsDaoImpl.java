@@ -24,5 +24,10 @@ public class CommentsDaoImpl implements CommentsDao{
 		session.insert("comments.commentsAdd",comments);
 	}
 
+	@Override
+	public void commentsMod(Comments comments) {
+		session.update("comments.commentsMod",comments);
+	}
+
 
 }

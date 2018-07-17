@@ -6,7 +6,7 @@ public class Reply {
 	private String nickname;
 	private String comments;
 	private String regdate;
-
+	
 	public int getRno() {
 		return rno;
 	}
