@@ -1,5 +1,7 @@
 package com.inc.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.domain.Board;
+import com.inc.domain.Reply;
 import com.inc.service.BoardService;
 import com.inc.service.BoardServiceImpl;
+import com.inc.service.ReplyService;
 import com.inc.util.Paging;
 
 @Controller
@@ -20,9 +24,13 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
+	/*@Autowired
+	private ReplyService replyService;*/
+	
 	@Autowired
 	private Paging paging;
 	
+	//게시글 리스트
 	@RequestMapping(value="/board/list", method=RequestMethod.GET)
 	public String boardList(@RequestParam(required = false) String option, @RequestParam(required = false) String text,
 			@RequestParam(defaultValue = "1") int page, Model model) throws Exception {
@@ -34,15 +42,20 @@ public class BoardController {
 			model.addAttribute("paging", paging.getPaging
 					("/board/list", page, boardService.getTotalCount(option,text,page), 
 							BoardServiceImpl.numberOfList, BoardServiceImpl.numberOfPage,searchParam));
+			
 		return "/board/list.jsp";
 	}
 	
+	//게시글 눌렀을 때 보여지는 화면 댓글도 뿌려짐
 	@RequestMapping(value="/board/view", method=RequestMethod.GET)
 	public String view(@RequestParam int idx,Model model) throws Exception{
 		model.addAttribute("board",boardService.selectOne(idx));
+		//댓글추가
+		model.addAttribute("reply", new Reply());
 	return "/board/view.jsp";
 	}
 	
+	//게시글 수정
 	@RequestMapping(value="/board/update", method=RequestMethod.GET)
 	public String update(@RequestParam int idx, Model model) throws Exception{
 		Board board = boardService.selectOne(idx);
@@ -50,6 +63,7 @@ public class BoardController {
 		return "/board/update.jsp";
 	}
 	
+	//게시글 수정
 	@RequestMapping(value="/board/update", method=RequestMethod.POST)
 	@ResponseBody
 	public String update(@ModelAttribute Board board) throws Exception{
@@ -57,6 +71,7 @@ public class BoardController {
 		return "y";
 	}
 	
+	//게시글 삭제
 	@RequestMapping(value="/board/delete", method=RequestMethod.POST)
 	@ResponseBody
 	public String delete(@RequestParam int idx) throws Exception{
@@ -64,14 +79,17 @@ public class BoardController {
 		return "y";
 	}
 	
+	//게시글 추가
 	@RequestMapping(value="/board/insert",method=RequestMethod.GET)
 	public String insert(Model model) throws Exception{
 		model.addAttribute("board", new Board());
 		return "/board/insert.jsp";
 	}
 	
+	//게시글 추가
 	@RequestMapping(value="/board/insert",method=RequestMethod.POST)
-	public String insert(@ModelAttribute Board board) throws Exception{
+	public String insert(@ModelAttribute Board board, HttpSession session) throws Exception{
+		System.out.println(board.getNickname());
 		boardService.insert(board);
 		return "redirect:/board/list";
 	}
