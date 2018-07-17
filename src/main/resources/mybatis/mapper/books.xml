@@ -95,7 +95,6 @@
 	<update id="dealChange" parameterType="map">
 		update books set
 			<if test="status != null">
-				set
 				<choose>
 					<when test="status == 'deal'">
 						deal = 'deal'
@@ -108,8 +107,9 @@
 					</when>
 				</choose>
 			</if>		
-		where idx = #{num}
+		where idx = #{idx}
 	</update>
+	
 	<select id="newBooks" parameterType="int" resultType="books">
 	select rownum, a.* from (select * from books where deal='sale' order by regdate desc) a where rownum between 1 and #{value}
 	</select>
