@@ -34,7 +34,73 @@
 
 		<div class="row">
 			<div class="col-sm-9">
-				메인페이지
+				<div class="row">
+					<div class="col-sm-12">
+						<h4>공지사항</h4>
+						<p class="text-right"><a href="/board/list"><span class="badge badge-primary badge-pill">more..</span></a></p>
+<table class="table table-hover">
+<caption class="text-right"></caption>
+  <thead>
+    <tr class="table-secondary text-center">
+      <th scope="col" width="60%">제목</th>
+      <th scope="col" width="20%">날짜</th>
+      <th scope="col" width="20%">작성자</th>
+    </tr>
+  </thead>
+  <tbody>
+    <c:if test="${empty noticeList}">
+		<tr>
+			<td colspan="4">등록된 공지사항이 없습니다.</td>
+		</tr>						
+	</c:if>
+	<c:forEach var="notice" items="${noticeList}">
+		<tr class="table-light">
+			<td>
+				<a href="/board/view?idx=${notice.idx}">${notice.title}</a></td>
+			<td class="text-center">
+				<f:parseDate var="date" value="${notice.regdate}" pattern="yyyy-MM-dd"/>
+				<f:formatDate value="${date}" pattern="yyyy/MM/dd" />
+			</td>
+			<td class="text-center">${notice.nickname}</td>
+		</tr>
+	</c:forEach>
+  </tbody>
+</table> 
+						<hr />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12">
+						<h4>최근 등록도서</h4>
+						<p class="text-right"><a href="/books/list"><span class="badge badge-primary badge-pill">more..</span></a></p>
+					</div>
+				</div>
+				<div class="row">
+					<c:if test="${ empty newBooks }">
+					<div class="col-sm-12 text-center">
+						최근 등록된 도서가 없습니다.
+					</div>
+					</c:if>
+					<c:forEach var="book" items="${newBooks}">
+					<div class="col-sm-6">
+					<div class="media">
+					  <div class="media-left media-middle">
+					    <c:if test="${book.photo ne 'no_file' && book.photo != null}">
+							<img class="img-circle media-object" src="/image/photo/${book.photo }" />
+						</c:if>									
+						<c:if test="${book.photo == 'no_file' || book.photo == null}">
+							<img class="img-circle media-object" src="/image/photo/noimage.png" />
+						</c:if>
+					  </div>
+					  <div class="media-body">
+					    <h5 class="media-heading">${book.title}</h5>
+					   	${book.price}원<br />
+					   	${book.b_category}/${book.s_category}
+					  </div>
+					</div>
+					</div>
+					</c:forEach>
+				</div>
 			</div>
 			<div class="col-sm-3">
 				<jsp:include page="include/right.jsp" />

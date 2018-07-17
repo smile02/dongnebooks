@@ -21,4 +21,6 @@ public interface BoardDao {
 
 	public List<Board> selectList(Map<String, Object> searchMap) throws Exception;
 
+	public List<Board> getNoticeList(int noticeCount);
+
 }

@@ -18,5 +18,7 @@ public interface BoardService {
 
 	int getTotalCount(String option, String text, int page) throws Exception;
 
+	List<Board> getNoticeList(int noticeCount);
+
 
 }
