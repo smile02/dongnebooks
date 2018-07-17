@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.domain.Reply;
 import com.inc.domain.Users;
+import com.inc.service.BoardService;
 import com.inc.service.ReplyService;
 
 @Controller
@@ -23,20 +25,24 @@ public class ReplyController {
 	@Autowired
 	private ReplyService replyService;
 	
+	@Autowired
+	private BoardService boardService;
+	
+	//댓글입력
 	@RequestMapping(value="/reply/insert", method=RequestMethod.POST)
-	public String insert(@ModelAttribute @Valid Reply reply, BindingResult result, HttpSession session,HttpServletRequest req) throws Exception {
-		//System.out.println(reply.getComments());
-		//System.out.println(reply.getIdx());
-		/*if(result.hasErrors()) {
-			System.out.println("몰라");
-		}*/
+	public String insert(@ModelAttribute @Valid Reply reply, BindingResult result, HttpSession session,HttpServletRequest req, Model model) throws Exception {
+		//에러있으면 
+		if(result.hasErrors()) {
+			model.addAttribute("board", boardService.selectOne(reply.getIdx()));
+			return "/board/view.jsp";
+		}
 		Users user = (Users) req.getSession().getAttribute("user");
 		reply.setNickname(user.getNickname());
-		System.out.println(reply.getNickname());
 		replyService.insert(reply);
 		return "redirect:/board/view?idx="+reply.getIdx();
 	}
 	
+	//댓글삭제
 	@RequestMapping(value="/reply/delete/{rno}", method=RequestMethod.POST)
 	@ResponseBody
 	public String delete(@RequestParam int rno) throws Exception{
@@ -44,6 +50,7 @@ public class ReplyController {
 		return "y";
 	}
 	
+	//댓글수정
 	@RequestMapping(value="/reply/update", method=RequestMethod.POST)
 	@ResponseBody
 	public String update(@ModelAttribute Reply reply) throws Exception{

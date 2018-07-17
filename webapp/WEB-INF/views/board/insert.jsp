@@ -44,11 +44,12 @@
 							<label for="code" class="col-sm-1">분 류</label>
 							<div class="col-sm-3">
 								<select name="code" id="code" class="custom-select">
+								<!-- 관리자만 공지 선택할 수 있게 -->
 									<option value="">【유형선택】</option>
 									<c:if test="${sessionScope.user.nickname == '관리자' }">
 										<option value="1">공지</option>
 									</c:if>
-									<option value="2">일반</option>
+										<option value="2">일반</option>
 								</select>
 							</div>
 							<label for="title" class="col-sm-1">제 목</label>
@@ -95,8 +96,6 @@
 				form.code.focus();
 				return;
 			} 
-			
-			/* if(form.code.value=="1") */
 			
 			if (!/^.{5,30}$/.test(form.title.value)) {
 				alert("제목 5글자이상 30이하로 작성하시오.")

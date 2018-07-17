@@ -32,34 +32,38 @@
 				</div>
 			</div>
 		</div>
-		<form action="${pageContext.request.contextPath}/board/insert"
-			method="post">
-			<input type="text" name="nickname" value="${sessionScope.user.nickname }" />
-			<input type="hidden" name="idx" value="${board.idx }" />
-			<div class="row text-center">
-				<table class="table">
+		<div class="row col-lg-12">
+			<form action="${pageContext.request.contextPath}/board/insert" 
+			 	  method="post">
+			<div class="col-sm-12">
+				<input class="form-control col-3 d-inline" type="text" name="nickname" value="${sessionScope.user.nickname }" />
+				<input type="hidden" name="idx" value="${board.idx }" />
+			</div>
+			<div class="row text-center col-md-12">
+				<table class="table table-hover">
 					<tr>
 						<th width="10%">분류</th>
-						<td width="10%"><c:if test="${board.code == 1 }">
+						<td width="10%">
+							<c:if test="${board.code == 1 }">
 								<td>[공지]</td>
-							</c:if> <c:if test="${board.code == 2 }">
+							</c:if> 
+							<c:if test="${board.code == 2 }">
 								<td>[일반]</td>
 							</c:if></td>
 						<th>작성자</th>
 						<td>${board.nickname }</td>
 						<th>작성시간</th>
 						<td>${board.regdate }</td>
-
 						<th>조회수</th>
 						<td>${board.cnt }</td>
 					</tr>
 					<tr>
 						<th>제목</th>
-						<td>${board.title }</td>
+						<td colspan="7">${board.title }</td>
 					</tr>
 					<tr>
 						<th>내용</th>
-						<td colspan="3">${board.comments }</td>
+						<td colspan="8">${board.comments }</td>
 					</tr>
 				</table>
 			</div>
@@ -74,24 +78,23 @@
 			</div>
 		</form>
 	</div>
+	</div>
 	<br />
 	<!--  댓글  -->
 	<div class="container">
+	
 		<label for="content">댓 글</label>
 		<form:form action="/reply/insert" method="post" modelAttribute="reply">
-		<fieldset>
-			<div class="input-group">
-			<c:if test="${!empty sessionScope.user.nickname }">
-				<input type="hidden" name="idx" value="${board.idx }" />
-				<form:input type="text" class="form-control" path="comments"
-					placeholder="댓글 내용을 재빠르게 입력하세요."/>
-				<form:errors path="comments" class="error"/> 
-				<span class="input-group-btn">
-					<button class="btn btn-primary btn-sm" type="submit">등록</button>
-				</span>
-			</c:if>
-			</div>
-			</fieldset>
+		<!-- 로그인 했을 때만 댓글 작성할 수 있는 input태그 추가 -->
+		<c:if test="${!empty sessionScope.user.nickname }">
+			<input type="hidden" name="idx" value="${board.idx }" />
+			<form:input class="form-control col-6 d-inline" type="text" path="comments" id="comments"
+				        placeholder="댓글 내용을 재빠르게 입력하세요."/>
+			<span class="input-group-btn">
+				<button class="btn btn-primary btn-sm" type="submit">등록</button>
+			</span>
+			<form:errors path="comments" class="error"/>
+		</c:if>
 		</form:form>
 		<div class="container">
 			<form>
@@ -111,6 +114,7 @@
 						<td>${reply.nickname }</td>
 						<td id="td_${reply.rno }">${reply.comments }</td>
 						<td>${reply.regdate }
+							<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
 							<c:if test="${sessionScope.user.nickname == reply.nickname }">
 								<button class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
 								<button class="btn btn-primary btn-sm" type="button" onclick="del(${reply.rno})">삭제</button>

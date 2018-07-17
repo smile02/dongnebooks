@@ -38,10 +38,14 @@ public class UsersController {
 	private Paging paging;
 	
 	@RequestMapping("/main")
-	public String mainPage() {
+	public String mainPage(HttpSession session) {
 		//1. 로그인 기능 OK
 		//2. 책 목록 최근 10개정도.
 		//3. 공지사항 최근게시물 출력
+		Users fakeUser = new Users();
+		fakeUser.setId("admin");
+		fakeUser.setNickname("관리자");
+		session.setAttribute("user", fakeUser);
 		return "/main.jsp";
 	}
 	

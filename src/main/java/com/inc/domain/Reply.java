@@ -1,15 +1,25 @@
 package com.inc.domain;
 
-import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class Reply {
 	private int rno;
 	private int idx;
 	private String nickname;
-	@Size(min=1, max=300, message="1글자 이상 300글자 미만으로 댓글을 작성해주세요.")
+	@NotEmpty(message="한글자라도 입력해주세요")
 	private String comments;
 	private String regdate;
+	
+	private Board board;
 
+	
+	public Board getBoard() {
+		return board;
+	}
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+	
 	public int getRno() {
 		return rno;
 	}

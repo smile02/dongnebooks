@@ -5,34 +5,30 @@
  <mapper namespace="board">
 	<select id="selectList" resultType="board" parameterType="map">
 		select *
-	    from (select rownum as rnum, a.* 
-	    from (select * from board
-		    <if test="option != null and option != 'all'">
-				where
-				  <choose>
-				     <when test="option == 'nickname'">
-				       	nickname like '%'||#{text}||'%'	
-				     </when>
-				     <when test="option == 'title'">
-				       	title like '%'||#{text}||'%'	
-				     </when>
-				     <when test="option == 'comments'">
-				       	comments like '%'||#{text}||'%'	
-				     </when>
-				     <when test="option == 'title_name'">
-				       	title like '%'||#{text}||'%' or
-				       	nickname like '%'||#{text}||'%'	
-				     </when>
-				  </choose>
-			</if>	    			
+	    	from (select rownum as rnum, a.* 
+	    	from (select * from board
+			    <if test="option != null and option != 'all'">
+					where
+					  <choose>
+					     <when test="option == 'nickname'">
+					       	nickname like '%'||#{text}||'%'	
+					     </when>
+					     <when test="option == 'title'">
+					       	title like '%'||#{text}||'%'	
+					     </when>
+					     <when test="option == 'comments'">
+					       	comments like '%'||#{text}||'%'	
+					     </when>
+					     <when test="option == 'title_name'">
+					       	title like '%'||#{text}||'%' or
+					       	nickname like '%'||#{text}||'%'	
+					     </when>
+					  </choose>
+				</if>	    			
 	    			order by code asc, regdate desc	    		
 	    		) a
 	    	) 
 	    where rnum between #{start} and #{end}
-	</select>
-	
-	<select id="boardList" parameterType="board" resultType="board">
-		select * from board order by regdate desc
 	</select>
 	
 	<select id="selectOne" resultMap="boardMap" parameterType="int">
