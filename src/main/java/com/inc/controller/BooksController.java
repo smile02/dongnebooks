@@ -1,7 +1,6 @@
 package com.inc.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.domain.Books;
-import com.inc.domain.Comments;
 import com.inc.domain.Users;
 import com.inc.service.BooksService;
 import com.inc.service.BooksServiceImpl;
