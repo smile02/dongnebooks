@@ -44,8 +44,9 @@ th {
 				</div>
 			</div>
 		</div>
+		<input type="text" name="nickname" value="${sessionScope.user.nickname }" />
 		<h2 class="text-center"> 게 시 판 </h2>
-		<table class="table">
+		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th width="10%" class="text-center">분 류</th>
@@ -57,26 +58,38 @@ th {
 				</tr>
 				<c:if test="${empty boardList }">
 				<tr>
+					<!-- 게시물이 존재하지않을때 -->
 					<td colspan="10">게시물이 존재하지 않습니다.</td>
 				</tr>
 				</c:if>
 			</thead>
+			<!-- 리스트 뿌리는 것 -->
 			<c:forEach var="bvo" items="${boardList }">
 				<tbody>
 					<tr class="table-light">
 						<c:if test="${bvo.code == 1 }">
-						<th>[공지]</th>
+							<th>
+							<span class="badge badge-pill badge-warning">공지</span>
+							</th>
 						</c:if>
 						<c:if test="${bvo.code == 2 }">
-						<th>[일반]</th>
+							<th>
+								<span class="badge badge-pill badge-secondary">일반</span>
+							</th>
 						</c:if>
 						<th>${bvo.idx }</th>
-						<th><a
-							href="${pageContext.request.contextPath }/board/view?idx=${bvo.idx}">${bvo.title }</a></th>
+						<th>
+							<a href="${pageContext.request.contextPath }/board/view?idx=${bvo.idx}">
+							${bvo.title }
+							<span class="badge badge-danger">Info</span>
+							</a>
+						</th>
 						<th>${bvo.nickname }</th>
-						<th><f:parseDate var="date" value="${bvo.regdate }"
-								pattern="yyyy-MM-dddd HH:mm:ss" /> <f:formatDate
-								value="${date }" pattern="yyyy/MM/dd" /></th>
+						<th>
+							<f:parseDate var="date" value="${bvo.regdate }"
+								pattern="yyyy-MM-dddd HH:mm:ss" /> 
+							<f:formatDate value="${date }" pattern="yyyy/MM/dd" />
+						</th>
 						<th>${bvo.cnt }</th>
 					</tr>
 				</tbody>
@@ -89,9 +102,6 @@ th {
 			</div>
 
 			<div class="row col-sm-12">
-				<div class="col-sm-4">
-					
-				</div>
 				<div class="col-sm-4">
 					<div class="form-group">
 						<select class="custom-select text-right" id="search_option" onchange="lock()">
@@ -107,7 +117,7 @@ th {
 							<input
 								id="search_text" type="text" placeholder="검색"
 								class="form-control is-valid" id="inputValid">
-							<div class="valid-feedback">무엇을 검색할랭?</div>
+							<div class="valid-feedback">무엇을 검색?</div>
 							<button class="btn btn-primary btn-sm" type="button"
 								onclick="search()">검색</button>
 						</div>
@@ -122,7 +132,6 @@ th {
 						</div>
 					</div>
 				</div>
-		</div>
 		</div>
 		<jsp:include page="../include/footer.jsp" />
 		<script>
@@ -146,7 +155,7 @@ th {
  		
  		location.href = "?option="+option+"&text="+text;
  	}
- 	
+ 
  	$(function(){
 		$("#search_text").val("${param.text}");
 		for(var option of $("#search_option").children()){
@@ -157,6 +166,7 @@ th {
 		
 		lock();
 	});
+ 	
 	</script>
 		<script
 			src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

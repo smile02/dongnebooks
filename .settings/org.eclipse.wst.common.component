@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+<<<<<<< HEAD
                                                                 
     
     
+=======
+                                                        
+>>>>>>> choi
     
     
     
@@ -16,9 +20,13 @@
     
     <wb-module deploy-name="default">
         <wb-resource deploy-path="/WEB-INF/web.xml" source-path="/webapp/WEB-INF/web.xml"/>
+<<<<<<< HEAD
                                                                                                                                 
         
         
+=======
+                                                                                                                
+>>>>>>> choi
         
         
         
@@ -32,9 +40,13 @@
         
         
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+<<<<<<< HEAD
                                                                                                                                 
         
         
+=======
+                                                                                                                
+>>>>>>> choi
         
         
         
@@ -48,9 +60,13 @@
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+<<<<<<< HEAD
                                                                                                                                 
         
         
+=======
+                                                                                                                
+>>>>>>> choi
         
         
         
@@ -64,9 +80,13 @@
         
         
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+<<<<<<< HEAD
                                                                                                                         
         
         
+=======
+                                                                                                        
+>>>>>>> choi
         
         
         
@@ -79,9 +99,13 @@
         
         
         <wb-resource deploy-path="/" source-path="/webapp"/>
+<<<<<<< HEAD
                                                                                                                         
         
         
+=======
+                                                                                                        
+>>>>>>> choi
         
         
         
@@ -94,9 +118,13 @@
         
         
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+<<<<<<< HEAD
                                                                                                                                 
         
         
+=======
+                                                                                                                
+>>>>>>> choi
         
         
         
@@ -110,9 +138,13 @@
         
         
         <property name="java-output-path" value="/ch07_Maven_D_guestbook/target/classes"/>
+<<<<<<< HEAD
                                                                                                                 
         
         
+=======
+                                                                                                
+>>>>>>> choi
         
         
         
@@ -124,9 +156,13 @@
         
         
         <property name="context-root" value="default"/>
+<<<<<<< HEAD
                                                                                                                             
     
     
+=======
+                                                                                                            
+>>>>>>> choi
     
     
     
@@ -140,9 +176,13 @@
     
     
     </wb-module>
+<<<<<<< HEAD
                                                             
 
 
+=======
+                                                    
+>>>>>>> choi
 
 
 

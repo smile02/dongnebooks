@@ -1,12 +1,25 @@
 package com.inc.domain;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class Reply {
 	private int rno;
 	private int idx;
 	private String nickname;
+	@NotEmpty(message="한글자라도 입력해주세요")
 	private String comments;
 	private String regdate;
+	
+	private Board board;
 
+	
+	public Board getBoard() {
+		return board;
+	}
+	public void setBoard(Board board) {
+		this.board = board;
+	}
+	
 	public int getRno() {
 		return rno;
 	}

@@ -16,7 +16,7 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDao boardDao;
 	
-	public static final int numberOfList = 3;
+	public static final int numberOfList = 5;
 	public static final int numberOfPage = 3;
 
 	@Override

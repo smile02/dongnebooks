@@ -349,7 +349,7 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-									<button type="button" class="btn btn-danger" onclick="reply(${cookie.idx.value});">댓글 </button>
+									<button type="button" class="btn btn-danger" onclick="reply(${cookie.idx.value});">` </button>
 									<button id="buy_btn" type="button" class="btn btn-warning"
 											onclick="buy(${cookie.idx.value});">구매하기</button>
 										<button id="mod_btn" type="button" class="btn btn-warning"
