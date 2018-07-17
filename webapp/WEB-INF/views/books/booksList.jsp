@@ -103,12 +103,12 @@
 			    <form class="form-inline my-2 my-lg-0">
 			      	<c:if test="${not empty user.nickname}">
 					<button id="modal" type="button"
-						class="btn btn-outline-secondary regBtn my-2 my-sm-0" data-toggle="modal"
+						class="btn btn-secondary regBtn my-2 my-sm-0" data-toggle="modal"
 									data-target="#booksList" style="position: absolute; right: 0;">
 						도서 등록</button>
 					</c:if>
 					<c:if test="${empty user.nickname}">
-						<button type="button" class="btn btn-outline-danger  regBtn my-2 my-sm-0"
+						<button type="button" class="btn btn-danger  regBtn my-2 my-sm-0"
 							onclick="login();" style="position: absolute; right: 0;">도서
 							등록</button>
 					</c:if>
@@ -349,7 +349,7 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-									<button type="button" class="btn btn-danger" onclick="reply(${cookie.idx.value});">` </button>
+									<button id="replyBtn" type="button" class="btn btn-danger" onclick="reply();">댓글 작성</button>
 									<button id="buy_btn" type="button" class="btn btn-warning"
 											onclick="buy(${cookie.idx.value});">구매하기</button>
 										<button id="mod_btn" type="button" class="btn btn-warning"
@@ -357,11 +357,19 @@
 										<button type="button" class="btn" onclick="exit_btn();">나가기</button>
 									</div>
 								</form>
-
-							</div>
+									<form style="display:none" id="addForm" class="form-control">
+										<jsp:include page="../comments/list.jsp"/>																
+									</form>
+									<div style="display:none" class="row" id="listDiv">									
+										<h4>댓글목록</h4>
+										<ul class="list-group" id="replies">
+										
+										</ul>
+									</div>						
 						</div>
 					</div>
 				</div>
+			</div>
 
 				<!--    -->
 			
@@ -525,7 +533,7 @@
 					</div>
 				</div>
 			</div>
-	
+	<input type="hidden" id="getIdx" />
 		<%-- <div class="row">
 			<div class="col-sm-9">
 			
@@ -535,7 +543,6 @@
 			<jsp:include page="../include/right.jsp" />
 		</div>	 --%>
 <jsp:include page="../include/footer.jsp" />
-
 	<!--스크립트 라이브러리 -->
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script
@@ -547,6 +554,12 @@
 
 
 	<script>
+	$(function(){
+		$("#replyBtn").on("click", function(){
+			$("#addForm").css("display","block");
+			$("#listDiv").css("display","block");
+		});
+	});
 	
 	//각 태그 클릭했을 때 같은 대분류만 보이도록
 	function tag(t){
@@ -554,16 +567,67 @@
 		
 		location.href =	"?tag="+tag_name;
 	}
-	
-	function reply(idx) {
-		var nickname = "${user.nickname}";
-		console.log(nickname);
-		if(nickname != ''){
-			window.open("/comments/list/"+idx+"/"+nickname, "a", "width=400, height=300, left=100, top=50");
+	function commentsMod(){
+		var btn = $("#mod_commentsBtn").html();
+		if(btn=='변경'){
+			alert("변경 눌림");
+			$("#mod_area").removeAttr("readonly");
+			$("#mod_commentsBtn").html('수정');
+			return;
 		}else{
-			location.href="/comments/list";
+			var rno = $("#getRno").val();
+			var comments = $("#mod_area").val();
+		$.ajax({
+			url:"/comments/mod/"+rno,
+			type:"patch",
+			headers:{
+				"Content-Type":"application/json",
+				"X-HTTP-Method-Override":"PATCH"
+			},
+			dataType:"text",
+			data:JSON.stringify({
+				comments:comments
+			}),
+			success:function(result){
+				if(result == 'SUCCESS'){
+					alert("수정 완료");
+					$("#mod_commentsBtn").html('변경');
+					$("#mod_area").attr("readonly","readonly");
+				}
+			}				
+		});
 		}
 	}
+	
+	function commentsDel(){
+		alert("삭제 눌림");		
+	}
+	
+	 function reply() {
+		var nickname = "${sessionScope.user.nickname}";
+		var idx = $("#getIdx").val();
+		var out = "";
+		console.log("idx : "+idx);
+		if(nickname != ''){
+			$.getJSON("/comments/list/"+idx, function(data){				
+				$(data.commentsList).each(function(){
+					out += "<li class='list-group-item'>"+"작성자 : "+this.nickname
+					+ "&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
+					+ "<button id='mod_commentsBtn' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod();'>"
+					+ "변경"+ "</button>"+"&nbsp;"
+					+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel();'>"
+					+ "삭제"+ "</button>"+"</br>"+"내용 : "
+					+"<textarea class='form-control' rows='3' readonly='readonly' id='mod_area'>"
+					+ this.comments +"</textarea>"
+					+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
+					+"</li>";
+				});
+				$("#replies").append(out);
+			});			
+		}else{
+			login();
+		}
+	} 
 	
 	//로그인을 안하게 되면 도서등록이 안되도록
 	function login(){
@@ -611,8 +675,10 @@
 	}
 	
 	//구매버튼 클릭 시 구매화면으로 이동
-	function buy(idx){		
-		location.href="/cart/add/"+idx;
+	function buy(){
+		var getIdx = $("#getIdx").val();		
+		console.log("getIdx : "+getIdx);
+		location.href="/cart/add/"+getIdx;
 		alert("구매 버튼이 눌렸습니다.");
 	}
 	
@@ -826,8 +892,10 @@
 					type:"post",
 					url : "/books/view",
 					data : {idx:idx},
-					success:function(data){						
-						var nick = "${user.nickname}";						
+					success:function(data){
+						console.log("자세히보기 idx : "+data.book.idx);
+						$("#getIdx").val(data.book.idx);
+						var nick = "${user.nickname}";		
 						var regdate = new Date(data.book.regdate);						
 						regdate=getFormatDate(regdate);
 						if(data.book == null){
@@ -969,7 +1037,3 @@
 					return;
 				}
 			}
-	
-	</script>
-</body>
-</html>

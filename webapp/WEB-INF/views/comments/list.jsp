@@ -74,52 +74,48 @@
 	<%-- <jsp:include page="../include/header.jsp" />
 	 --%>
 	<div class="container">
-		<div class="row">
-			<form>
+		<form>
+			<input type="hidden" id="idx" value="${cookie.idx.value }" />
 				<fieldset>
-					<legend>Legend</legend>
-					<div class="form-group row">
-						<label for="nickname" class="col-sm-2 col-form-label">작성자
-							: </label>
-						<div class="col-sm-10">
+					<legend>댓글작성</legend>
+					<div class="form-group row">					
+						<label for="nickname" class="col-form-label col-sm-2">작성자: </label>						
+						<div class="col-sm-3">
 							<input type="text" readonly="readonly"
 								class="form-control-plaintext" id="nickname"
 								value="${sessionScope.user.nickname}">
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">댓글</label> <input type="email"
-							class="form-control" id="exampleInputEmail1"
-							aria-describedby="emailHelp" placeholder="댓글 작성 칸입니다."> <small
-							id="emailHelp" class="form-text text-muted">댓글을 작성해 주세요!</small>
+						<label for="exampleInputComments">댓글</label> 
+						<input type="text"
+							class="form-control" id="comments"
+							aria-describedby="commentsHelp" placeholder="댓글 작성 칸입니다."> 
+						<small id="commentsHelp" class="form-text text-muted">댓글을 작성해 주세요!</small>
 					</div>
-					<div class="form-group">
-						<label for="exampleInputPassword1">Password</label> <input
-							type="password" class="form-control" id="exampleInputPassword1"
-							placeholder="Password">
-					</div>
-					<button type="submit" class="btn btn-primary">Submit</button>
+					
+					<button id="reg_Btn" type="button" class="btn btn-primary">댓글 등록</button>
 				</fieldset>
 			</form>
-
-		</div>
-
-		<div class="row">
-			z
-			<c:forEach var="comments" items="${commentsList }">
-				${comments.rno } <br />
-				${comments.idx } <br />
-				${comments.nickname } <br />
-				${comments.comments } <br />
-				${comments.regdate } <br />
-			</c:forEach>
-		</div>
-
-
 	</div>
+	<!-- 
 
-
-
+	<table class="table table-hover text-center">																					
+											<thead>
+												<tr>
+										<th scope="col"
+										class="col-xs-3"><small class="text-muted">작성자</small></th>
+										<th scope="col"
+										class="col-xs-6"><small class="text-muted">내용</small></th>													
+										<th scope="col"
+										class="col-xs-3"><small class="text-muted">기타</small></th>
+												</tr>
+											</thead>
+											<tbody id="replies" >
+											
+											</tbody>
+										</table>
+ -->
 	<%-- <jsp:include page="../include/footer.jsp" /> --%>
 
 	<!--스크립트 라이브러리 -->
@@ -130,10 +126,53 @@
 		src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
-
-
 	<script>
 		
+		$("#reg_Btn").on("click", function(){
+			
+			var out = "";
+			var nickname = $("#nickname").val();
+			var comments = $("#comments").val();
+			console.log("등록 : "+nickname);
+			console.log("등록 : "+comments);
+			console.log("등록 : "+idx);
+			$.ajax({
+				url:"/comments/add",
+				type:"post",
+				headers:{
+					"Content-Type":"application/json",
+					"X-HTTP-Method-Override":"POST"
+				},
+				dataType:"text",
+				data:JSON.stringify({
+					nickname:nickname,
+					comments:comments
+				}),
+				success:function(result){
+					if(result != ''){
+						console.log("result : "+result);
+						alert("등록 완료");						
+						$.getJSON("/comments/list/"+result, function(data){				
+							$(data.commentsList).each(function(){
+								out += "<li class='list-group-item'>"+"작성자 : "+this.nickname
+								+ "&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
+								+ "<button type='button' class='btn btn-secondary btn-sm' onclick='commentsMod();'>"
+								+ "수정"+ "</button>"+"&nbsp;"
+								+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel();'>"
+								+ "삭제"+ "</button>"+"</br>"+"내용 : "
+								+"<textarea class='form-control' rows='3' readonly='readonly' id='mod_area'>"
+								+ this.comments +"</textarea>"+"</li>";
+							});
+							$("#replies").empty();
+							$("#replies").append(out);
+						});		
+					}
+				}
+			});
+			
+		});		
+		
 	</script>
+
 </body>
 </html>
