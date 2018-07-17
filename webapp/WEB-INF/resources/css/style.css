@@ -24,3 +24,16 @@
 .paging{
 	display:inline-block;
 }
+.media{
+	font-size:10pt;
+	padding:10px;
+}
+.media-left{
+	width:30%;
+}
+.media-object{
+	width:100%;
+}
+.media-body{
+	padding-left:10px;
+}
