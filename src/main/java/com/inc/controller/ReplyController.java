@@ -27,9 +27,9 @@ public class ReplyController {
 	public String insert(@ModelAttribute @Valid Reply reply, BindingResult result, HttpSession session,HttpServletRequest req) throws Exception {
 		//System.out.println(reply.getComments());
 		//System.out.println(reply.getIdx());
-		if(result.hasErrors()) {
-			System.out.println("몰라임마");
-		}
+		/*if(result.hasErrors()) {
+			System.out.println("몰라");
+		}*/
 		Users user = (Users) req.getSession().getAttribute("user");
 		reply.setNickname(user.getNickname());
 		System.out.println(reply.getNickname());

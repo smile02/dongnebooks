@@ -78,7 +78,7 @@
 	<!--  댓글  -->
 	<div class="container">
 		<label for="content">댓 글</label>
-		<form:form action="/reply/insert" method="post" modelAttribute="board">
+		<form:form action="/reply/insert" method="post" modelAttribute="reply">
 		<fieldset>
 			<div class="input-group">
 			<c:if test="${!empty sessionScope.user.nickname }">

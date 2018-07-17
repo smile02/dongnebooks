@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.domain.Board;
+import com.inc.domain.Reply;
 import com.inc.service.BoardService;
 import com.inc.service.BoardServiceImpl;
 import com.inc.util.Paging;
@@ -42,6 +43,7 @@ public class BoardController {
 	@RequestMapping(value="/board/view", method=RequestMethod.GET)
 	public String view(@RequestParam int idx,Model model) throws Exception{
 		model.addAttribute("board",boardService.selectOne(idx));
+		model.addAttribute("reply", new Reply());
 	return "/board/view.jsp";
 	}
 	
