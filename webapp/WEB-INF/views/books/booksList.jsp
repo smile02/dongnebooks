@@ -370,9 +370,6 @@
 					</div>
 				</div>
 			</div>
-
-				<!--    -->
-			
 			</div>
 			<div class="row">
 				<div class="col-sm-12 text-center">
@@ -567,16 +564,16 @@
 		
 		location.href =	"?tag="+tag_name;
 	}
-	function commentsMod(){
-		var rno = $("#getRno").val();
-		var comments = $("#mod_area").val();
-		var btn = $("."+rno+"").html();
+	function commentsMod(rno){
+		var comments = $("#mod_area"+rno).val(); //textarea의 내용
+		var btn = $("#"+rno+"").html();//댓글번호의 버튼이름 가져오기
+		
 		console.log("btn : "+btn);
 		console.log("rno : " +rno);
 		if(btn=='변경'){
 			alert("변경 눌림");
-			$("#mod_area").removeAttr("readonly");
-			$("."+rno+"").html('수정');
+			$("#mod_area"+rno).removeAttr("readonly");
+			$("#"+rno+"").html('수정');
 			console.log("btn : "+btn);
 			console.log("rno : " +rno);
 			return;
@@ -596,17 +593,16 @@
 			success:function(result){
 				if(result == 'SUCCESS'){
 					alert("수정 완료");
-					$("."+rno+"").html('변경');
-					$("#mod_area").attr("readonly","readonly");
+					$("#"+rno+"").html('변경');
+					$("#mod_area"+rno).attr("readonly","readonly");
 				}
 			}				
 		});
 		}
 	}
 	
-	function commentsDel(){
+	function commentsDel(rno){
 		alert("삭제 눌림");
-		var rno = $("#getRno").val();
 		console.log("rno : "+rno);
 		$.ajax({
 			url:"/comments/del/"+rno,
@@ -619,6 +615,8 @@
 			success:function(result){
 				if(result=='SUCCESS'){
 					alert("삭제완료");
+					$("#replies").empty();
+					reply();
 				}
 			}
 		});
@@ -634,11 +632,11 @@
 				$(data.commentsList).each(function(){
 					out += "<li class='list-group-item list-group-item-action'>"+"작성자 : "+this.nickname
 					+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
-					+ "<button type='button' class='btn btn-secondary btn-sm "+this.rno+"' onclick='commentsMod();'>"
+					+ "<button id='"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'>"
 					+ "변경"+ "</button>"+"&nbsp;"
-					+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel();'>"
+					+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'>"
 					+ "삭제"+ "</button>"+"</br>"+"내용 : "
-					+"<textarea class='form-control' rows='3' readonly='readonly' id='mod_area'>"
+					+"<textarea class='form-control' rows='3' readonly='readonly' id='mod_area"+this.rno+"'>"
 					+ this.comments +"</textarea>"
 					+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
 					+"</li>";
