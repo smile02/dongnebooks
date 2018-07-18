@@ -81,7 +81,7 @@ th {
 						<th>
 							<a href="${pageContext.request.contextPath }/board/view?idx=${bvo.idx}">
 							${bvo.title }
-							<span class="badge badge-danger">Info</span>
+							<span class="badge badge-danger">댓글</span>
 							</a>
 						</th>
 						<th>${bvo.nickname }</th>
