@@ -3,7 +3,9 @@ package com.inc.controller;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,7 +51,7 @@ public class UsersController {
 	private Paging paging;
 	
 	@RequestMapping("/main")
-	public String mainPage(Model model) {
+	public String mainPage(Model model, @CookieValue Cookie loginCookie) {
 		//1. 로그인 기능.
 		//2. 책 목록 최근 6개정도.
 		int bookCount = 6;
@@ -58,6 +61,7 @@ public class UsersController {
 		int noticeCount = 5;
 		List<Board> noticeList = boardService.getNoticeList(noticeCount);
 		model.addAttribute("noticeList", noticeList);
+		model.addAttribute("id", loginCookie.getValue());
 		return "/main.jsp";
 	}
 	
@@ -213,12 +217,15 @@ public class UsersController {
 	
 	@RequestMapping(value="/user/signin", method=RequestMethod.POST)
 	@ResponseBody
-	public String signin(@ModelAttribute Users user, HttpServletRequest request) {
+	public String signin(@ModelAttribute Users user, HttpServletRequest request, HttpServletResponse response) {
 		Users savedUser = usersService.getUser(user.getId());
 		
 		//입력받은 패스워드 암호화
 		String password = SHA256Encryptor.shaEncrypt(user.getPassword());
 		user.setPassword(password);
+		//System.out.println(request.getAttribute("useCookie") == null);
+		//System.out.println(useCookie);
+		//System.out.println(user.getUseCookie());
 		
 		if(savedUser == null) {
 			return "null";
@@ -229,6 +236,14 @@ public class UsersController {
 			request.getSession().invalidate();
 	
 			request.getSession().setAttribute("user", savedUser);
+			
+			if(request.getParameter("useCookie").equals("SaveCookie")) {
+				Cookie loginCookie = new Cookie("loginCookie", savedUser.getId());
+				loginCookie.setPath("/");
+				loginCookie.setMaxAge(60*60*24*7);
+				response.addCookie(loginCookie);
+				System.out.println("쿠키생성성공");
+			}
 			return "success";
 		}
 	}

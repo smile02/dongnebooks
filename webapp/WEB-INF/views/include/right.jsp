@@ -11,11 +11,14 @@
     <form action="/user/signin" method="post" class="form">
 	    <div class="form-group">
 		   <label for="u_id" class="control-label">ID </label>
-		   <input type="text" class="form-control form-control-sm" id="u_id" placeholder="Enter ID" name="id">
+		   <input type="text" class="form-control form-control-sm" id="u_id" placeholder="Enter ID" name="id" value="${id}">
 		</div>
 		<div class="form-group">
 		   <label for="u_password" class="control-label">Password</label>
 		   <input type="password" class="form-control form-control-sm" id="u_password" placeholder="Password" name="password">
+		</div>
+		<div class="form-group text-center">
+			<label><input type="checkbox" id="useCookie"/>Remember ID</label>
 		</div>
 		<div class="text-center">
 		    <button type="button" class="btn btn-primary btn-sm" onclick="login();">Sign in</button>
@@ -128,10 +131,15 @@
 	function login(){
 		var id = $("#u_id").val();
 		var password = $("#u_password").val();
+		var useCookie = null;
+		if($("#useCookie").is(":checked")){
+			useCookie = "SaveCookie";
+		}
+		console.log(useCookie);
 		$.ajax({
 			url:"/user/signin",
 			type:"post",
-			data:{id:id, password:password},
+			data:{id:id, password:password, useCookie:useCookie},
 			success:function(result){
 				if(result == "null"){
 					alert('존재하지 않는 아이디입니다.');
