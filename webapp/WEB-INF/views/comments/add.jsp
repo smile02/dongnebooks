@@ -77,10 +77,10 @@
 		<form>
 			<input type="hidden" id="idx" value="${cookie.idx.value }" />
 				<fieldset>
-					<legend>댓글작성</legend>
+					<legend class="text-center">댓글작성</legend>
 					<div class="form-group row">					
-						<label for="nickname" class="col-form-label col-sm-2">작성자: </label>						
-						<div class="col-sm-3">
+						<label for="nickname" class="col-form-label col-sm-3">작성자: </label>						
+						<div class="col-sm-4">
 							<input type="text" readonly="readonly"
 								class="form-control-plaintext" id="nickname"
 								value="${sessionScope.user.nickname}">
@@ -88,34 +88,16 @@
 					</div>
 					<div class="form-group">
 						<label for="exampleInputComments">댓글</label> 
-						<input type="text"
-							class="form-control" id="comments"
-							aria-describedby="commentsHelp" placeholder="댓글 작성 칸입니다."> 
+						<textarea class="form-control" name="comments" id="comments" cols="30" rows="3"
+							aria-describedby="commentsHelp"></textarea> 
 						<small id="commentsHelp" class="form-text text-muted">댓글을 작성해 주세요!</small>
-					</div>
-					
+						<span id="comments_error" class="error"></span>
+					</div>					
 					<button id="reg_Btn" type="button" class="btn btn-primary">댓글 등록</button>
 				</fieldset>
 			</form>
 	</div>
-	<!-- 
 
-	<table class="table table-hover text-center">																					
-											<thead>
-												<tr>
-										<th scope="col"
-										class="col-xs-3"><small class="text-muted">작성자</small></th>
-										<th scope="col"
-										class="col-xs-6"><small class="text-muted">내용</small></th>													
-										<th scope="col"
-										class="col-xs-3"><small class="text-muted">기타</small></th>
-												</tr>
-											</thead>
-											<tbody id="replies" >
-											
-											</tbody>
-										</table>
- -->
 	<%-- <jsp:include page="../include/footer.jsp" /> --%>
 
 	<!--스크립트 라이브러리 -->
@@ -149,25 +131,28 @@
 					comments:comments
 				}),
 				success:function(result){
-					if(result != ''){
-						console.log("result : "+result);
+					if(result != 'y'){
+						$("#comments_error").html("");
+						$("#comments").val("");
 						alert("등록 완료");						
-						$.getJSON("/comments/list/"+result, function(data){				
+						$.getJSON("/comments/list/"+result+"/"+1, function(data){				
 							$(data.commentsList).each(function(){
-								out += "<li class='list-group-item'>"+"작성자 : "+this.nickname
+								out += "<li class='list-group-item list-group-item-action'>"+"작성자 : "+this.nickname
 								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
-								+ "<button id='mod_commentsBtn' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod();'>"
+								+ "<button id='"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'>"
 								+ "변경"+ "</button>"+"&nbsp;"
-								+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel();'>"
+								+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'>"
 								+ "삭제"+ "</button>"+"</br>"+"내용 : "
-								+"<textarea class='form-control' rows='3' readonly='readonly' id='mod_area'>"
+								+"<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
 								+ this.comments +"</textarea>"
 								+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
-								+"</li>";
+								+"</li>";							
 							});
-							$("#replies").empty();
-							$("#replies").append(out);
+							$("#replies").html(out);
+							$("#commentsPaging").html(data.paging);
 						});		
+					}else{
+						$("#comments_error").html("댓글을 입력해주세요.");
 					}
 				}
 			});

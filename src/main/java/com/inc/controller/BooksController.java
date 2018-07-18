@@ -25,7 +25,6 @@ import com.inc.domain.Users;
 import com.inc.service.BooksService;
 import com.inc.service.BooksServiceImpl;
 import com.inc.service.CategoryService;
-import com.inc.service.CommentsService;
 import com.inc.service.FileService;
 import com.inc.util.Paging;
 
@@ -44,9 +43,6 @@ public class BooksController {
 	@Autowired
 	private Paging paging;
 	
-	@Autowired
-	private CommentsService commentsService;
-
 	//책의 목록을 보여주는 메서드
 	@RequestMapping(value = "/books/list", method=RequestMethod.GET)
 	public String booksList(Model model,
