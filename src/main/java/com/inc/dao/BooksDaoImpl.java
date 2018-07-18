@@ -50,5 +50,10 @@ public class BooksDaoImpl implements BooksDao{
 		session.update("books.dealChange",dealMap);
 	}
 
+	@Override
+	public List<Books> newBooks(int bookCount) {
+		return session.selectList("books.newBooks", bookCount);
+	}
+
 	
 }

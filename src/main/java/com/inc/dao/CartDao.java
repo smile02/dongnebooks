@@ -15,4 +15,10 @@ public interface CartDao {
 
 	public int getTotalCount(String nickname);
 
+	public List<Cart> getSaleList(Map<String, Object> cartMap);
+
+	public int getSaleTotal(String nickname);
+
+	public int getIdx(int i);
+
 }

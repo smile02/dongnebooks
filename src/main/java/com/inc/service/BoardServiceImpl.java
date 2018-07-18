@@ -66,4 +66,9 @@ public class BoardServiceImpl implements BoardService {
 		return searchMap;
 	}
 
+	@Override
+	public List<Board> getNoticeList(int noticeCount) {
+		return boardDao.getNoticeList(noticeCount);
+	}
+
 }

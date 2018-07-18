@@ -92,8 +92,8 @@
 		select distinct b_category from books
 	</select>
 	
-	<!-- <update id="dealChange" parameterType="map">
-		update books
+	<update id="dealChange" parameterType="map">
+		update books set
 			<if test="status != null">
 				<choose>
 					<when test="status == 'deal'">
@@ -106,8 +106,11 @@
 						deal = 'sale'
 					</when>
 				</choose>
-			</if>			
+			</if>		
 		where idx = #{idx}
-	</update> -->
+	</update>
 	
+	<select id="newBooks" parameterType="int" resultType="books">
+	select rownum, a.* from (select * from books where deal='sale' order by regdate desc) a where rownum between 1 and #{value}
+	</select>
 </mapper>

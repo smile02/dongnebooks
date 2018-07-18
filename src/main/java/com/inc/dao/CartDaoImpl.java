@@ -34,4 +34,19 @@ public class CartDaoImpl implements CartDao {
 		return session.selectOne("cart.getTotalCount", nickname);
 	}
 
+	@Override
+	public List<Cart> getSaleList(Map<String, Object> cartMap) {
+		return session.selectList("cart.getSaleList", cartMap);
+	}
+
+	@Override
+	public int getSaleTotal(String nickname) {
+		return session.selectOne("cart.getSaleTotal", nickname);
+	}
+
+	@Override
+	public int getIdx(int i) {
+		return session.selectOne("cart.getIdx", i);
+	}
+
 }

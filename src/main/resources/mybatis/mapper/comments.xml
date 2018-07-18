@@ -4,6 +4,25 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="comments">
 	<select id="commentsList" parameterType="int" resultType="comments">
-		select * from comments where idx = #{value}
+		select * from comments where idx = #{value} order by regdate desc
 	</select>
+	
+	<insert id="commentsAdd" parameterType="comments">
+		insert into comments
+			values(seq_comments_rno.nextval,
+				   #{idx},
+				   #{nickname},
+				   #{comments},
+				   sysdate)
+	</insert>
+	
+	<update id="commentsMod" parameterType="comments">
+		update comments set comments = #{comments}
+			where rno = #{rno}
+	</update>
+	
+	<delete id="commentsDel" parameterType="int">
+		delete from comments
+			where rno = #{value}
+	</delete>
 </mapper>

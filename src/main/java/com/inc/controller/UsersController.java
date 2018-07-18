@@ -18,8 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.inc.domain.Board;
+import com.inc.domain.Books;
 import com.inc.domain.Cart;
 import com.inc.domain.Users;
+import com.inc.service.BoardService;
+import com.inc.service.BooksService;
 import com.inc.service.CartService;
 import com.inc.service.CartServiceImpl;
 import com.inc.service.UsersService;
@@ -35,13 +39,25 @@ public class UsersController {
 	private CartService cartService;
 	
 	@Autowired
+	private BoardService boardService;
+	
+	@Autowired
+	private BooksService booksService;
+	
+	@Autowired
 	private Paging paging;
 	
 	@RequestMapping("/main")
-	public String mainPage(HttpSession session) {
-		//1. 로그인 기능 OK
-		//2. 책 목록 최근 10개정도.
+	public String mainPage(Model model,HttpSession session) {
+		//1. 로그인 기능.
+		//2. 책 목록 최근 6개정도.
+		int bookCount = 6;
+		List<Books> newBooks = booksService.newBooks(bookCount);
+		model.addAttribute("newBooks", newBooks);
 		//3. 공지사항 최근게시물 출력
+		int noticeCount = 5;
+		List<Board> noticeList = boardService.getNoticeList(noticeCount);
+		model.addAttribute("noticeList", noticeList);
 		Users fakeUser = new Users();
 		fakeUser.setId("admin");
 		fakeUser.setNickname("관리자");
@@ -329,7 +345,7 @@ public class UsersController {
 		List<Cart> cartList = cartService.getCartList(user.getNickname(), page);
 		model.addAttribute("cartList", cartList);
 		int totalCount = cartService.getTotalCount(user.getNickname());
-		model.addAttribute("paging", paging.getPaging("/user/mypage", page, totalCount, CartServiceImpl.numberOfList, CartServiceImpl.numberOfPage, null));
+		model.addAttribute("paging", paging.getPaging("/user/mypage", page, totalCount, CartServiceImpl.numberOfList, CartServiceImpl.numberOfPage, ""));
 		
 		return "/users/mypage.jsp";
 	}

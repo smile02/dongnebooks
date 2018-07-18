@@ -14,5 +14,9 @@ public interface CartService {
 	public void statusChange(Map<String, Object> paramMap);
 	//전체 개체 수 구하기.
 	public int getTotalCount(String nickname);
+	//판매요청 목록 가져오기
+	public List<Cart> getSaleList(String nickname, int page);
+	//판매요청 전체 개체 수
+	public int getSaleTotal(String nickname);
 
 }

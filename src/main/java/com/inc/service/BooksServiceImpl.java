@@ -67,4 +67,9 @@ public class BooksServiceImpl implements BooksService{
 	public void dealChange(Map<String, Object> dealMap) {
 		booksDao.dealChange(dealMap);
 	}
+
+	@Override
+	public List<Books> newBooks(int bookCount) {
+		return booksDao.newBooks(bookCount);
+	}
 }
