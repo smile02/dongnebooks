@@ -20,4 +20,9 @@
 		update comments set comments = #{comments}
 			where rno = #{rno}
 	</update>
+	
+	<delete id="commentsDel" parameterType="int">
+		delete from comments
+			where rno = #{value}
+	</delete>
 </mapper>
