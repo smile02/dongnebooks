@@ -72,4 +72,9 @@ public class BooksServiceImpl implements BooksService{
 	public List<Books> newBooks(int bookCount) {
 		return booksDao.newBooks(bookCount);
 	}
+
+	@Override
+	public void adminDelete(int idx) {
+		booksDao.adminDelete(idx);
+	}
 }
