@@ -55,5 +55,10 @@ public class BooksDaoImpl implements BooksDao{
 		return session.selectList("books.newBooks", bookCount);
 	}
 
+	@Override
+	public void adminDelete(int idx) {
+		session.delete("books.adminDelete",idx);
+	}
+
 	
 }

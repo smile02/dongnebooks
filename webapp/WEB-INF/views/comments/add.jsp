@@ -149,13 +149,13 @@
 									userComments = "<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
 									+ this.comments +"</textarea>";
 									
-									if(sessionUser == this.nickname){
-										console.log("sessionUser == this.nickname : ",sessionUser == this.nickname);
-										changeBtn = "<button id='mod_"+this.rno+"' type='button' class='btn btn-secondary btn-sm sUser' onclick='commentsMod("+this.rno+");'"
-										+"style='position: absolute; right: 0;''>"
+									if(sessionUser != '' && sessionUser == this.nickname){
+										changeBtn = "<button id='mod_"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'"
+										+"style='position: absolute; left: 380px;'>"
 										+ "변경"+ "</button>";
-										deleteBtn = "<button id='del_"+this.rno+"' type='button' class='btn btn-danger btn-sm sUser' onclick='commentsDel("+this.rno+");'"
-										+"style='position: absolute; right: 0;''>"
+										
+										deleteBtn = "<button id='del_"+this.rno+"' type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'"
+										+"style='position: absolute; right: 20px;'>"
 										+ "삭제"+ "</button>";
 									}else{
 										changeBtn = "";

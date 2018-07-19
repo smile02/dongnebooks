@@ -23,4 +23,6 @@ public interface BooksDao {
 
 	public List<Books> newBooks(int bookCount);
 
+	public void adminDelete(int idx);
+
 }

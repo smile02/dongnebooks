@@ -161,6 +161,13 @@ public class BooksController {
 		return keyMap;
 	}	
 	
+	@RequestMapping(value = "/books/adminDelete", method=RequestMethod.POST)
+	@ResponseBody
+	public String adminDelete(@RequestParam int idx) {
+		booksService.adminDelete(idx);
+		return "y";
+	}
+	
 	//유효성검사를 진행하는 메서드
 	public Map<String,Map<String,String>> booksValid(@ModelAttribute @Valid Books books,
 													BindingResult result){

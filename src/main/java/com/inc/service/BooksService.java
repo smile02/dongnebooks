@@ -23,6 +23,8 @@ public interface BooksService {
 	public void dealChange(Map<String, Object> dealMap);
 
 	public List<Books> newBooks(int bookCount);
+
+	public void adminDelete(int idx);
 	
 	
 }

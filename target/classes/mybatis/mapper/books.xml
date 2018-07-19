@@ -115,4 +115,8 @@
 	<select id="newBooks" parameterType="int" resultType="books">
 	select rownum, a.* from (select * from books where deal='sale' order by regdate desc) a where rownum between 1 and #{value}
 	</select>
+	
+	<delete id="adminDelete" parameterType="int">
+		delete from books where idx = #{value} and nickname='관리자'
+	</delete>
 </mapper>

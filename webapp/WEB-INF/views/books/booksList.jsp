@@ -95,7 +95,6 @@
 			    <c:forEach var="tag" items="${tagList }">
 			      <li class="nav-item active">
 			        <a class="nav-link" href="/books/list?tag=${tag }">${tag} <span class="sr-only">(current)</span></a>
-			        <%-- <button type="button" class="nav-link" name=${tag }>${tag }</button> --%>
 			      </li>
 			    </c:forEach>
 			      
@@ -138,8 +137,8 @@
 									<p>
 										게시일 :
 										<f:parseDate var="date" value="${books.regdate }"
-											pattern="yyyy-MM-dddd HH:mm:ss" />
-										<f:formatDate value="${date }" pattern="yy년 MM월 dd일" />
+											pattern="yyyy-MM-dd" />
+										<f:formatDate value="${date }" pattern="yy년 MM월 dd일" />																												
 									</p>
 									<p>가격 : ${books.price }원</p>
 									<p>
@@ -156,6 +155,11 @@
 										<button id="detail" type="button"
 											class="btn btn-primary btn-xs detail_btn"
 											onclick="detail(${books.idx});">자세히 보기</button>
+										<c:if test="${sessionScope.user.nickname eq '관리자' }">
+											<button id="admin_delete" type="button"
+											class="btn btn-danger btn-xs"
+											onclick="adminDelete(${books.idx})">관리자 삭제</button>
+										</c:if>
 									</span>
 								</div>
 							</div>
@@ -190,7 +194,7 @@
 
 										<button id="detail" type="button"
 											class="btn btn-primary btn-xs detail_btn"
-											disabled="disabled">자세히 보기</button>
+											disabled="disabled">자세히 보기</button>										
 									</span>
 								</div>
 							</div>
@@ -304,7 +308,6 @@
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_b_category"></p>
-											<!-- onchange="getSCategory();" -->
 											<select name="b_category" id="mod_b_category"
 												class="form-control view_b_category"
 												onchange="getSCategory();">
@@ -559,15 +562,12 @@
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
 
-	<script>
+<script>
 var page = 0;
 var commentsPage = "";
 	$(function(){		
 		page = 1;
-//		var change = $("#replyBtn").html();
 		$("#replyBtn").on("click", function(){
-//			if(change == '댓글 보기'){
-	//			$("#replyBtn").html("댓글 숨기기");
 				$("#addForm").css("display","block");
 				$("#listDiv").css("display","block");
 				var idx = $("#getIdx").val();
@@ -575,12 +575,6 @@ var commentsPage = "";
 				commentsPage = "/comments/list/"+idx+"/"+page;
 				console.log("commentsPage : "+commentsPage);
 				reply(commentsPage);
-//				return;
-//			}else{
-//				$("#replyBtn").html("댓글 보기");
-//				$("#addForm").css("display","none");
-//				$("#listDiv").css("display","none");
-//			}
 		});
 	});
 	
@@ -589,7 +583,21 @@ var commentsPage = "";
 		var tag_name = t.name;
 		
 		location.href =	"?tag="+tag_name;
+	}	
+	
+	function adminDelete(idx){
+		$.ajax({
+			url:"/books/adminDelete",
+			type:"post",
+			data:{idx:idx},
+			success:function(data){
+				if(data == 'y'){
+					alert("악당 퇴치");
+				}
+			}
+		});
 	}
+	
 	function commentsMod(rno){
 		var comments = $("#mod_area"+rno).val(); //textarea의 내용
 		var btn = $("#mod_"+rno+"").html();//댓글번호의 버튼이름 가져오기
@@ -677,13 +685,13 @@ var commentsPage = "";
 						
 						if(sessionUser != '' && sessionUser == this.nickname){
 							changeBtn = "<button id='mod_"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'"
-							+"style='position: absolute; left: 400px;'>"
+							+"style='position: absolute; left: 380px;'>"
 							+ "변경"+ "</button>";
 							
 							deleteBtn = "<button id='del_"+this.rno+"' type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'"
-							+"style='position: absolute; right: 0;'>"
+							+"style='position: absolute; right: 20px;'>"
 							+ "삭제"+ "</button>";
-						}else{
+						}else{ //sessionUser == '' || sessionUser != this.nickname
 							changeBtn = "";
 							deleteBtn = "";
 						}
@@ -867,7 +875,6 @@ var commentsPage = "";
 					}
 				 });
 		 }
-			 //title:form.title.value,		  
 		 //내용 수정
 		  function mod(form){
 			if(form.d_type.value == 'start' && (form.fee.value == 0 || form.fee.value == '')){
@@ -1114,3 +1121,4 @@ var commentsPage = "";
 					return;
 				}
 			}
+</script>
