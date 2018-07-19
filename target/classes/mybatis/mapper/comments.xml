@@ -3,8 +3,14 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="comments">
-	<select id="commentsList" parameterType="int" resultType="comments">
-		select * from comments where idx = #{value} order by regdate desc
+	<select id="commentsList" parameterType="map" resultType="comments">
+		select * from 
+			(select rownum as rnum, a.* from 
+				(select * from comments 
+					where idx = #{idx} 
+						order by regdate desc) 
+				a)
+		where rnum between #{start} and #{end}
 	</select>
 	
 	<insert id="commentsAdd" parameterType="comments">
@@ -25,4 +31,7 @@
 		delete from comments
 			where rno = #{value}
 	</delete>
+	<select id="commentsCount" parameterType="int" resultType="int">
+		select count(idx) from comments where idx = #{value}
+	</select>
 </mapper>
