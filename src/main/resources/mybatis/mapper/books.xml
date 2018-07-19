@@ -96,7 +96,7 @@
 		update books set
 			<if test="status != null">
 				<choose>
-					<when test="status == 'deal'">
+					<when test="status == 'deal' or status == 'request'">
 						deal = 'deal'
 					</when>
 					<when test="status == 'complete'">

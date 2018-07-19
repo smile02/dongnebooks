@@ -1,9 +1,12 @@
 package com.inc.domain;
 
+import javax.validation.constraints.Size;
+
 public class Comments {
 	private int rno;
 	private int idx;
 	private String nickname;
+	@Size(min=1, max=100, message="댓글은 100자까지 입력 가능합니다.")
 	private String comments;
 	private String regdate;
 

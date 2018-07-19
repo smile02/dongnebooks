@@ -17,7 +17,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="/css/style.css" />
 <style>
-.thumbnail {
+/* .thumbnail {
 	height: 450px;
 }
 .img-container {
@@ -37,7 +37,7 @@
 .photo-hei {
 	width: 100%;
 	height: 200px !important;
-}
+} */
 .err_color {
 	color: red;
 }
@@ -141,7 +141,7 @@
 											pattern="yyyy-MM-dddd HH:mm:ss" />
 										<f:formatDate value="${date }" pattern="yy년 MM월 dd일" />
 									</p>
-									<p>가격 : ${books.price }</p>
+									<p>가격 : ${books.price }원</p>
 									<p>
 										책 상태 :
 										<c:if test="${books.status == 'a'}">최상</c:if>
@@ -176,7 +176,7 @@
 											pattern="yyyy-MM-dddd HH:mm:ss" />
 										<f:formatDate value="${date }" pattern="yy년 MM월 dd일" />
 									</p>
-									<p>가격 : ${books.price }</p>
+									<p>가격 : ${books.price }원</p>
 									<p>
 										책 상태 :
 										<c:if test="${books.status == 'a'}">최상</c:if>
@@ -349,7 +349,8 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-									<button id="replyBtn" type="button" class="btn btn-danger" onclick="reply();">댓글 작성</button>
+									<button id="replyBtn" type="button" class="btn btn-danger">댓글 보기
+									<span id="commentsCount" class="badge badge-pill badge-light"></span></button>
 									<button id="buy_btn" type="button" class="btn btn-warning"
 											onclick="buy(${cookie.idx.value});">구매하기</button>
 										<button id="mod_btn" type="button" class="btn btn-warning"
@@ -358,13 +359,20 @@
 									</div>
 								</form>
 									<form style="display:none" id="addForm" class="form-control">
-										<jsp:include page="../comments/list.jsp"/>																
+										<jsp:include page="../comments/add.jsp"/>																
 									</form>
 									<div style="display:none" class="row" id="listDiv">									
-										<br /><h4 class="text-center text-muted">댓글목록</h4>
+										<br /><h4 id="commentsTitle" class="text-center text-muted">댓글목록</h4>
 										<ul class="list-group" id="replies">
 										
 										</ul>
+									</div>
+									<div class="col-sm-12" >
+										<div class="paging text-center">
+											<ul class="pagination pagination-sm" id="commentsPaging">
+											
+											</ul>
+										</div>
 									</div>						
 						</div>
 					</div>
@@ -515,6 +523,7 @@
 										<input type="file" id="photo_file" name="photo_file"
 											class="custom-file-input" onchange="fileCheck(this);"
 											accept="image/gif, image/GIF, image/png, image/PNG, image/jpeg, image/JPEG" />
+											<small id="photo_file" class="form-text text-muted">사진은 마음대로</small>
 									</div>
 								</div>
 								</div>
@@ -551,10 +560,27 @@
 
 
 	<script>
-	$(function(){
+var page = 0;
+var commentsPage = "";
+	$(function(){		
+		page = 1;
+//		var change = $("#replyBtn").html();
 		$("#replyBtn").on("click", function(){
-			$("#addForm").css("display","block");
-			$("#listDiv").css("display","block");
+//			if(change == '댓글 보기'){
+	//			$("#replyBtn").html("댓글 숨기기");
+				$("#addForm").css("display","block");
+				$("#listDiv").css("display","block");
+				var idx = $("#getIdx").val();
+				console.log("idx : "+idx);
+				commentsPage = "/comments/list/"+idx+"/"+page;
+				console.log("commentsPage : "+commentsPage);
+				reply(commentsPage);
+//				return;
+//			}else{
+//				$("#replyBtn").html("댓글 보기");
+//				$("#addForm").css("display","none");
+//				$("#listDiv").css("display","none");
+//			}
 		});
 	});
 	
@@ -572,7 +598,7 @@
 		console.log("rno : " +rno);
 		if(btn=='변경'){
 			alert("변경 눌림");
-			$("#mod_area"+rno).removeAttr("readonly");
+			$("#mod_area"+rno).removeAttr("disabled");
 			$("#"+rno+"").html('수정');
 			console.log("btn : "+btn);
 			console.log("rno : " +rno);
@@ -594,7 +620,7 @@
 				if(result == 'SUCCESS'){
 					alert("수정 완료");
 					$("#"+rno+"").html('변경');
-					$("#mod_area"+rno).attr("readonly","readonly");
+					$("#mod_area"+rno).attr("disabled","disabled");
 				}
 			}				
 		});
@@ -616,32 +642,46 @@
 				if(result=='SUCCESS'){
 					alert("삭제완료");
 					$("#replies").empty();
-					reply();
+					reply(commentsPage);
 				}
 			}
 		});
 	}
+		
+	$("#commentsPaging").on("click", "li a", function(event){
+		event.preventDefault();
+		commentsPage = $(this).attr("href");
+		reply(commentsPage);
+//		$("#replies").empty();
+	});
 	
-	 function reply() {
+	function reply(commentsPage) {
 		var nickname = "${sessionScope.user.nickname}";
-		var idx = $("#getIdx").val();
 		var out = "";
-		console.log("idx : "+idx);
+		var regdate = "";
 		if(nickname != ''){
-			$.getJSON("/comments/list/"+idx, function(data){				
-				$(data.commentsList).each(function(){
-					out += "<li class='list-group-item list-group-item-action'>"+"작성자 : "+this.nickname
-					+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
-					+ "<button id='"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'>"
-					+ "변경"+ "</button>"+"&nbsp;"
-					+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'>"
-					+ "삭제"+ "</button>"+"</br>"+"내용 : "
-					+"<textarea class='form-control' rows='3' readonly='readonly' id='mod_area"+this.rno+"'>"
-					+ this.comments +"</textarea>"
-					+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
-					+"</li>";
-				});
-				$("#replies").append(out);
+			$.getJSON(commentsPage, function(data){
+				console.log(data.commentsList.length);
+				if(data.commentsList.length == 0){			
+					$("#commentsTitle").html("작성된 댓글이 없습니다~~");
+				}else{					
+					$(data.commentsList).each(function(){
+						console.log(this.regdate);
+						out += "<li class='list-group-item list-group-item-action'>"+"작성자 : "+this.nickname
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
+						+ "<button id='"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'>"
+						+ "변경"+ "</button>"+"&nbsp;"
+						+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'>"
+						+ "삭제"+ "</button>"+"</br>"+"내용 : "
+						+"<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
+						+ this.comments +"</textarea>"
+						+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
+						+"</li>";
+					});
+
+					$("#replies").html(out);
+					$("#commentsPaging").html(data.paging);
+				}
 			});			
 		}else{
 			login();
@@ -979,7 +1019,7 @@
 								$(".res_nickname").html(data.book.nickname); //수정안되게
 								$(".res_comments").html(data.book.comments);							
 								$(".res_regdate").html(regdate);
-								$(".res_price").html(data.book.price);
+								$(".res_price").html(data.book.price+"원");
 								
 								if(data.book.author != null){
 									$(".res_author").html(data.book.author);
@@ -994,7 +1034,7 @@
 									case "complete": $(".res_deal").html('거래 완료'); break;
 								}
 								
-								$(".res_fee").html(data.book.fee);								
+								$(".res_fee").html(data.book.fee+"원");								
 								if(data.book.photo == null){
 									$(".res_photo").attr("src","/image/photo/noimage.png");
 								}else{
