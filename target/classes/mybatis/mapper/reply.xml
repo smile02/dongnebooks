@@ -11,7 +11,7 @@
 	<insert id="insert" parameterType="reply">
 		insert into reply values (seq_reply_rno.nextval,
 								#{idx},
-								'관리자',
+								#{nickname},
 								#{comments},
 								sysdate)
 	</insert>

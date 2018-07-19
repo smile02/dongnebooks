@@ -1114,7 +1114,3 @@ var commentsPage = "";
 					return;
 				}
 			}
-	
-	</script>
-</body>
-</html>

@@ -1,7 +1,13 @@
 package com.inc.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.inc.domain.Reply;
+import com.inc.domain.Users;
+import com.inc.service.BoardService;
 import com.inc.service.ReplyService;
 
 @Controller
@@ -17,20 +25,24 @@ public class ReplyController {
 	@Autowired
 	private ReplyService replyService;
 	
-	/*@RequestMapping(value="/reply/list", method=RequestMethod.GET)
-	public String replyList(@PathVariable int idx, @PathVariable String nickname ,Model model) throws Exception {
-		model.addAttribute("replyList",replyService.replyList(idx));
-		System.out.println(replyList(idx, nickname, model));
-		return "/board/list.jsp";
-	}*/
+	@Autowired
+	private BoardService boardService;
 	
+	//댓글입력
 	@RequestMapping(value="/reply/insert", method=RequestMethod.POST)
-	@ResponseBody
-	public String insert(@ModelAttribute Reply reply) throws Exception {
+	public String insert(@ModelAttribute @Valid Reply reply, BindingResult result, HttpSession session,HttpServletRequest req, Model model) throws Exception {
+		//에러있으면 
+		if(result.hasErrors()) {
+			model.addAttribute("board", boardService.selectOne(reply.getIdx()));
+			return "/board/view.jsp";
+		}
+		Users user = (Users) req.getSession().getAttribute("user");
+		reply.setNickname(user.getNickname());
 		replyService.insert(reply);
-		return "y";
+		return "redirect:/board/view?idx="+reply.getIdx();
 	}
 	
+	//댓글삭제
 	@RequestMapping(value="/reply/delete/{rno}", method=RequestMethod.POST)
 	@ResponseBody
 	public String delete(@RequestParam int rno) throws Exception{
@@ -38,6 +50,7 @@ public class ReplyController {
 		return "y";
 	}
 	
+	//댓글수정
 	@RequestMapping(value="/reply/update", method=RequestMethod.POST)
 	@ResponseBody
 	public String update(@ModelAttribute Reply reply) throws Exception{

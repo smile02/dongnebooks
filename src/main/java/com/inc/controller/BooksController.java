@@ -98,6 +98,7 @@ public class BooksController {
 				String filename;
 				filename = fileService.saveFile(path, books.getPhoto_file());
 				books.setPhoto(filename);
+				System.out.println(nick_user.getNickname());
 				books.setNickname(nick_user.getNickname());
 				booksService.booksAdd(books);
 			}catch (Exception e) {
