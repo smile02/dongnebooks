@@ -1,9 +1,12 @@
 package com.inc.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.WebUtils;
 
 import com.inc.domain.Board;
 import com.inc.domain.Books;
@@ -58,11 +62,12 @@ public class UsersController {
 		int noticeCount = 5;
 		List<Board> noticeList = boardService.getNoticeList(noticeCount);
 		model.addAttribute("noticeList", noticeList);
-		/*Users fakeUser = new Users();
-		fakeUser.setId("choizidane");
-		fakeUser.setNickname("지단의발재간");
-		session.setAttribute("user", fakeUser);*/
 		return "/main.jsp";
+	}
+	
+	@RequestMapping("/faq")
+	public String faqPage() {
+		return "/users/faq.jsp";
 	}
 	
 	@RequestMapping(value="/user/signup", method=RequestMethod.GET)
@@ -217,12 +222,15 @@ public class UsersController {
 	
 	@RequestMapping(value="/user/signin", method=RequestMethod.POST)
 	@ResponseBody
-	public String signin(@ModelAttribute Users user, HttpServletRequest request) {
+	public String signin(@ModelAttribute Users user, HttpServletRequest request, HttpServletResponse response) {
 		Users savedUser = usersService.getUser(user.getId());
 		
 		//입력받은 패스워드 암호화
 		String password = SHA256Encryptor.shaEncrypt(user.getPassword());
 		user.setPassword(password);
+		//System.out.println(request.getAttribute("useCookie") == null);
+		//System.out.println(useCookie);
+		//System.out.println(user.getUseCookie());
 		
 		if(savedUser == null) {
 			return "null";
@@ -233,13 +241,38 @@ public class UsersController {
 			request.getSession().invalidate();
 	
 			request.getSession().setAttribute("user", savedUser);
+			
+			if(request.getParameter("useCookie").equals("SaveCookie")) {
+				//로그인 유지에 체크할 경우 쿠키생성 및 Users DB에 세션ID와 유지 시간을 update함
+				Cookie loginCookie = new Cookie("loginCookie", request.getSession().getId());
+				int amount = 60*60*24*7;
+				loginCookie.setPath("/");
+				loginCookie.setMaxAge(amount);
+				response.addCookie(loginCookie);
+				System.out.println("쿠키생성성공");
+				
+				Date sessionLimit = new Date(System.currentTimeMillis() + (1000*amount));
+				usersService.keepLogin(savedUser.getId(), request.getSession().getId(), sessionLimit);
+			}
 			return "success";
 		}
 	}
 	
 	@RequestMapping(value="/user/signout", method=RequestMethod.GET)
-	public String signout(HttpSession session) {
-		session.invalidate();
+	public String signout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		Users user = (Users)(session.getAttribute("user"));
+		if(user != null) {
+			session.removeAttribute("user");
+			session.invalidate();
+			
+			Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+			if(loginCookie != null) {
+				loginCookie.setPath("/");
+				loginCookie.setMaxAge(0);
+				response.addCookie(loginCookie);
+				usersService.keepLogin(user.getId(), session.getId(), new Date());
+			}
+		}
 		return "redirect:/main";
 	}
 	

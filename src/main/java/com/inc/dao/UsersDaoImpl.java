@@ -1,5 +1,9 @@
 package com.inc.dao;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -45,6 +49,20 @@ public class UsersDaoImpl implements UsersDao {
 	@Override
 	public void update(Users user) {
 		session.update("users.update", user);
+	}
+
+	@Override
+	public void keepLogin(String id, String sessionId, Date next) {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("id", id);
+		paramMap.put("sessionId", sessionId);
+		paramMap.put("next", next);
+		session.update("users.keepLogin", paramMap);
+	}
+
+	@Override
+	public Users checkUserWithSessionKey(String value) {
+		return session.selectOne("checkUserWithSessionKey", value);
 	}
 
 }

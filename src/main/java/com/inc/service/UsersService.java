@@ -1,8 +1,7 @@
 package com.inc.service;
 
+import java.util.Date;
 import java.util.List;
-
-import javax.validation.Valid;
 
 import com.inc.domain.Users;
 
@@ -27,4 +26,8 @@ public interface UsersService {
 	public void update(Users user);
 	//비밀번호 변경
 	public void updatePwd(Users user);
+	
+	public void keepLogin(String id, String sessionId, Date next);
+	
+	public Users checkLoginBefore(String value);
 }

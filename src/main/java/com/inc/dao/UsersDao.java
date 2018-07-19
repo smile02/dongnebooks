@@ -1,5 +1,7 @@
 package com.inc.dao;
 
+import java.util.Date;
+
 import com.inc.domain.Users;
 
 public interface UsersDao {
@@ -17,5 +19,8 @@ public interface UsersDao {
 	public void updatePwd(Users user);
 	//회원정보 변경
 	public void update(Users user);
-
+	
+	public void keepLogin(String id, String sessionId, Date next);
+	
+	public Users checkUserWithSessionKey(String value);
 }

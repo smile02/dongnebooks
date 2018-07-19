@@ -16,7 +16,7 @@
 		select * from users where email =#{value}
 	</select>
 	<insert id="signup" parameterType="users">
-		insert into users values(#{nickname}, #{id}, #{password}, #{email}, #{phone}, #{address})
+		insert into users(nickname, id, password, email, phone, address) values(#{nickname}, #{id}, #{password}, #{email}, #{phone}, #{address})
 	</insert>
 	<select id="findID" parameterType="string" resultType="string">
 		select id from users where email = #{value}
@@ -27,4 +27,12 @@
 	<update id="update" parameterType="users">
 		update users set nickname=#{nickname}, email=#{email}, phone=#{phone}, address=#{address} where id=#{id}
 	</update>
+	
+	<update id="keepLogin" parameterType="map">
+		update users set sessionKey=#{sessionId}, sessionLimit = #{next} where id=#{id}
+	</update>
+	
+	<select id="checkUserWithSessionKey" parameterType="string" resultType="users">
+		select * from users where sessionKey=#{value} and sessionLimit > systimestamp
+	</select>
 </mapper>

@@ -19,7 +19,7 @@
         <a class="nav-link" href="/board/list">Community</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">FAQ</a>
+        <a class="nav-link" href="/faq">FAQ</a>
       </li>
     </ul>
   </div>
