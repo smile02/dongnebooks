@@ -45,11 +45,11 @@
 				<input type="hidden" name="idx" value="${board.idx }"/>	
 				<c:if test="${sessionScope.user.nickname == null }">
 					<input class="form-control col-3 d-inline text-center" type="text" name="nickname" 
-					   value="방문자" readonly/> 님 환영합니다.
+					   	   value="방문자" readonly/> 님 환영합니다.
 				</c:if>
 				<c:if test="${sessionScope.user.nickname != null }">
 					<input class="form-control col-3 d-inline text-center" type="text" name="nickname" 
-					   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
+					  	   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
 				</c:if>
 				
 			</div>
@@ -88,8 +88,13 @@
 				<div class=" col-sm-12 buttons text-center">
 					<button type="button" class="btn btn-primary btn-sm btn-center"
 						onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
+					<!-- 게시글올린 사용자만 수정과 삭제 볼수 있게 -->
+					<c:if test="${sessionScope.user.nickname == board.nickname }">
 					<button type="button" class="btn btn-primary btn-sm btn-center"
 						onclick="update(this.form)">수정</button>
+					<button type="button" class="btn btn-primary btn-sm"
+							onclick="del(${board.idx})">삭제</button>
+					</c:if>
 					<!-- 관리자로 로그인 했을 때 이상한글 올렸을 때 관리자가 임의로 삭제할수 있는버튼 생성 -->
 					<c:if test="${sessionScope.user.nickname == '관리자' }">
 					<button type="button" class="btn btn-primary btn-sm btn-center"
@@ -137,7 +142,7 @@
 							<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
 							<c:if test="${sessionScope.user.nickname == reply.nickname }">
 								<button class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
-								<button class="btn btn-primary btn-sm" type="button" onclick="del(${reply.rno})">삭제</button>
+								<button class="btn btn-primary btn-sm" type="button" onclick="reply_del(${reply.rno})">삭제</button>
 							</c:if>
 						</td>
 					</tr>
@@ -152,6 +157,27 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
+	
+	//해당 사용자에게만 뜨는 게시글 삭제 눌렀을 때 
+	function del(idx){
+		var answer = confirm("삭제할꺼야?");
+		if(!answer){
+			return;
+		}
+		$.ajax({
+			url:"/board/delete",
+			type:"post",
+			data:{idx:idx},
+			success:function(data){
+				if(data=='y'){
+					location.href='${pageContext.request.contextPath}/board/list';
+				}else{
+					alert("삭제실패");
+					location.href='${pageContext.request.contextPath}/board/list';
+				}
+			}
+		});
+	}
 	
 	//관리자 전용삭제(이상한글 올렸을 때 관리자가 임의로 삭제할수 있게)
 	function admin_delete(idx){
@@ -178,27 +204,30 @@
 		if(nickname == '${board.nickname}'){
 			location.href='update?idx=${board.idx}';
 		}else{
-			alert("글의 작성자만 수정가능합니다.");
+			alert("지금 뭐하시는거죠.");
 			location.reload();
 		}
 	}
 	
 	//댓글삭제
-	function del(rno){
-		$.ajax({
-			url:"/reply/delete/{rno}",
-			type:"post",
-			data:{rno:rno},
-			success:function(data){
-				if(data=='y'){
-					alert("삭제");
-					history.go(0);
-				}else{
-					alert("삭제실패");
-					history.go(0);
+	function reply_del(rno){
+		var answer = confirm("해당댓글을 삭제하시겠습니까?");
+		if(answer){
+			$.ajax({
+				url:"/reply/delete/{rno}",
+				type:"post",
+				data:{rno:rno},
+				success:function(data){
+					if(data=='y'){
+						alert("댓글삭제");
+						history.go(0);
+					}else{
+						alert("댓글삭제실패");
+						history.go(0);
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 	
 	//댓글수정

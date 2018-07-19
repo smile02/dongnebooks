@@ -12,6 +12,9 @@ public class Board {
 	private int code;
 	private List<Reply> replyList;
 	private int replysize;
+	private boolean isNew;
+	
+	
 	
 	public int getReplysize() {
 		return replysize;
