@@ -33,11 +33,11 @@
 		</div>
 		<c:if test="${sessionScope.user.nickname == null }">
 			<input class="form-control col-3 d-inline" type="text" name="nickname" 
-				   value="방문자"/> 님 환영합니다.
+				   value="방문자"/ readonly> 님 환영합니다.
 		</c:if>
 		<c:if test="${sessionScope.user.nickname != null }">
 			<input class="form-control col-3 d-inline" type="text" name="nickname" 
-				   value="${sessionScope.user.nickname }"/> 님 환영합니다.
+				   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
 		</c:if>
 		<form action="${pageContext.request.contextPath}/board/update"
 			method="post">
@@ -65,8 +65,8 @@
 						<tr>
 							<th>제목</th>
 							<td colspan="7">
-							<input id="title" type="text" name="title" 
-							style="text-align:center; width:500px; height:50px;" value="${board.title }" />
+								<input id="title" type="text" name="title" 
+									   style="text-align:center; width:500px; height:50px;" value="${board.title }" />
 							</td>
 							
 						</tr>
@@ -128,6 +128,7 @@
 				}
 			});
 		}
+		
 		/* 수정 눌렀을 때 */
 		function update(form) {
 			var title = form.title.value;

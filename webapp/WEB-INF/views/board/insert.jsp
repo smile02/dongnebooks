@@ -21,7 +21,7 @@
 	<div class="container">
 		<form:form action="${pageContext.request.contextPath}/board/insert"
 			method="post">
-			<input type="text" name="nickname" value="${sessionScope.user.nickname }" />
+			<input type="text" value="${sessionScope.user.nickname }" />
 			<fieldset>
 				<div class="row">
 					<div class="col-sm-12">
@@ -36,7 +36,16 @@
 						</div>
 					</div>
 				</div>
+				<c:if test="${sessionScope.user.nickname == null }">
+					<input class="form-control col-3 d-inline" type="text" name="nickname" 
+				   		   value="방문자" readonly/> 님 환영합니다.
+				</c:if>
+				<c:if test="${sessionScope.user.nickname != null }">
+					<input class="form-control col-3 d-inline" type="text" name="nickname" 
+				   		   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
+				</c:if>
 				<div class="row">
+					<input type="hidden" name="idx" value="${board.idx }" />
 					<div class="col-sm-12">
 						<h3 class="text-center">글 쓰 기</h3>
 						<br /> <br />
@@ -44,8 +53,8 @@
 							<label for="code" class="col-sm-1">분 류</label>
 							<div class="col-sm-3">
 								<select name="code" id="code" class="custom-select">
-								<!-- 관리자만 공지 선택할 수 있게 -->
 									<option value="">【유형선택】</option>
+									<!-- 관리자만 공지 선택할 수 있게 -->
 									<c:if test="${sessionScope.user.nickname == '관리자' }">
 										<option value="1">공지</option>
 									</c:if>
@@ -63,7 +72,7 @@
 					<div class="form-group row col-sm-12 ">
 						<label for="comments" class="col-sm-3">내용</label>
 						<div class="col-sm-12">
-							<textarea class="form-control col-sm-12" name="comments" style="height:230px;" 
+							<textarea class="form-control col-sm-12" name="comments" id="comments" style="height:230px;" 
 								placeholder="여기에 글의 내용을 작성해주세요."></textarea>
 						</div>
 						<br />

@@ -6,7 +6,7 @@ public class Reply {
 	private int rno;
 	private int idx;
 	private String nickname;
-	@NotEmpty(message="한글자라도 입력해주세요")
+	@NotEmpty(message="한글자이상 입력해주세요")
 	private String comments;
 	private String regdate;
 	

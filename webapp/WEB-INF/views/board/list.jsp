@@ -55,11 +55,11 @@ th {
 		<div class="col-sm-12">
 				<c:if test="${sessionScope.user.nickname == null }">
 					<input class="form-control col-3 d-inline" type="text" name="nickname" 
-					   value="방문자"/> 님 환영합니다.
+					   value="방문자" readonly/> 님 환영합니다.
 				</c:if>
 				<c:if test="${sessionScope.user.nickname != null }">
 					<input class="form-control col-3 d-inline" type="text" name="nickname" 
-					   value="${sessionScope.user.nickname }"/> 님 환영합니다.
+					   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
 				</c:if>
 			</div>
 		<h3 class="text-center display-5"> 게 시 판 </h3>
