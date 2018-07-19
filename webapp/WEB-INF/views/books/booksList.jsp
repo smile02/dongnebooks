@@ -370,13 +370,15 @@
 										
 										</ul>
 									</div>
-									<div class="col-sm-12" >
-										<div class="paging text-center">
-											<ul class="pagination pagination-sm" id="commentsPaging">
-											
-											</ul>
+									<div class="row">
+										<div class="col-sm-12 text-center" >
+											<div class="paging">
+												<ul class="pagination pagination-sm" id="commentsPaging">
+												
+												</ul>
+											</div>
 										</div>
-									</div>						
+									</div>				
 						</div>
 					</div>
 				</div>
