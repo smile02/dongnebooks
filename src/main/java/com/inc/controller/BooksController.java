@@ -25,7 +25,6 @@ import com.inc.domain.Users;
 import com.inc.service.BooksService;
 import com.inc.service.BooksServiceImpl;
 import com.inc.service.CategoryService;
-import com.inc.service.CommentsService;
 import com.inc.service.FileService;
 import com.inc.util.Paging;
 
@@ -44,9 +43,6 @@ public class BooksController {
 	@Autowired
 	private Paging paging;
 	
-	@Autowired
-	private CommentsService commentsService;
-
 	//책의 목록을 보여주는 메서드
 	@RequestMapping(value = "/books/list", method=RequestMethod.GET)
 	public String booksList(Model model,
@@ -102,6 +98,7 @@ public class BooksController {
 				String filename;
 				filename = fileService.saveFile(path, books.getPhoto_file());
 				books.setPhoto(filename);
+				System.out.println(nick_user.getNickname());
 				books.setNickname(nick_user.getNickname());
 				booksService.booksAdd(books);
 			}catch (Exception e) {
@@ -163,6 +160,13 @@ public class BooksController {
 		
 		return keyMap;
 	}	
+	
+	@RequestMapping(value = "/books/adminDelete", method=RequestMethod.POST)
+	@ResponseBody
+	public String adminDelete(@RequestParam int idx) {
+		booksService.adminDelete(idx);
+		return "y";
+	}
 	
 	//유효성검사를 진행하는 메서드
 	public Map<String,Map<String,String>> booksValid(@ModelAttribute @Valid Books books,

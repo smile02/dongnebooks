@@ -1,5 +1,6 @@
 package com.inc.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.mail.MessagingException;
@@ -121,6 +122,16 @@ public class UsersServiceImpl implements UsersService{
 	@Override
 	public void updatePwd(Users user) {
 		usersDao.updatePwd(user);
+	}
+
+	@Override
+	public void keepLogin(String id, String sessionId, Date next) {
+		usersDao.keepLogin(id, sessionId, next);
+	}
+
+	@Override
+	public Users checkLoginBefore(String value) {
+		return usersDao.checkUserWithSessionKey(value);
 	}
 	
 }

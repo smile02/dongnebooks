@@ -222,6 +222,7 @@ select * from
 delete from board;
 
 select * from board;
+select * from reply;
 
 commit;
 

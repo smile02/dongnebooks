@@ -17,7 +17,7 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="/css/style.css" />
 <style>
-.thumbnail {
+/* .thumbnail {
 	height: 450px;
 }
 .img-container {
@@ -37,7 +37,7 @@
 .photo-hei {
 	width: 100%;
 	height: 200px !important;
-}
+} */
 .err_color {
 	color: red;
 }
@@ -95,7 +95,6 @@
 			    <c:forEach var="tag" items="${tagList }">
 			      <li class="nav-item active">
 			        <a class="nav-link" href="/books/list?tag=${tag }">${tag} <span class="sr-only">(current)</span></a>
-			        <%-- <button type="button" class="nav-link" name=${tag }>${tag }</button> --%>
 			      </li>
 			    </c:forEach>
 			      
@@ -138,10 +137,10 @@
 									<p>
 										게시일 :
 										<f:parseDate var="date" value="${books.regdate }"
-											pattern="yyyy-MM-dddd HH:mm:ss" />
-										<f:formatDate value="${date }" pattern="yy년 MM월 dd일" />
+											pattern="yyyy-MM-dd" />
+										<f:formatDate value="${date }" pattern="yy년 MM월 dd일" />																												
 									</p>
-									<p>가격 : ${books.price }</p>
+									<p>가격 : ${books.price }원</p>
 									<p>
 										책 상태 :
 										<c:if test="${books.status == 'a'}">최상</c:if>
@@ -156,6 +155,11 @@
 										<button id="detail" type="button"
 											class="btn btn-primary btn-xs detail_btn"
 											onclick="detail(${books.idx});">자세히 보기</button>
+										<c:if test="${sessionScope.user.nickname eq '관리자' }">
+											<button id="admin_delete" type="button"
+											class="btn btn-danger btn-xs"
+											onclick="adminDelete(${books.idx})">관리자 삭제</button>
+										</c:if>
 									</span>
 								</div>
 							</div>
@@ -176,7 +180,7 @@
 											pattern="yyyy-MM-dddd HH:mm:ss" />
 										<f:formatDate value="${date }" pattern="yy년 MM월 dd일" />
 									</p>
-									<p>가격 : ${books.price }</p>
+									<p>가격 : ${books.price }원</p>
 									<p>
 										책 상태 :
 										<c:if test="${books.status == 'a'}">최상</c:if>
@@ -190,7 +194,7 @@
 
 										<button id="detail" type="button"
 											class="btn btn-primary btn-xs detail_btn"
-											disabled="disabled">자세히 보기</button>
+											disabled="disabled">자세히 보기</button>										
 									</span>
 								</div>
 							</div>
@@ -304,7 +308,6 @@
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_b_category"></p>
-											<!-- onchange="getSCategory();" -->
 											<select name="b_category" id="mod_b_category"
 												class="form-control view_b_category"
 												onchange="getSCategory();">
@@ -349,7 +352,8 @@
 										</div>
 									</div>
 									<div class="modal-footer">
-									<button id="replyBtn" type="button" class="btn btn-danger" onclick="reply();">댓글 작성</button>
+									<button id="replyBtn" type="button" class="btn btn-danger">댓글 보기
+									<span id="commentsCount" class="badge badge-pill badge-light"></span></button>
 									<button id="buy_btn" type="button" class="btn btn-warning"
 											onclick="buy(${cookie.idx.value});">구매하기</button>
 										<button id="mod_btn" type="button" class="btn btn-warning"
@@ -358,21 +362,25 @@
 									</div>
 								</form>
 									<form style="display:none" id="addForm" class="form-control">
-										<jsp:include page="../comments/list.jsp"/>																
+										<jsp:include page="../comments/add.jsp"/>																
 									</form>
 									<div style="display:none" class="row" id="listDiv">									
-										<br /><h4 class="text-center text-muted">댓글목록</h4>
+										<br /><h4 id="commentsTitle" class="text-center text-muted">댓글목록</h4>
 										<ul class="list-group" id="replies">
 										
 										</ul>
+									</div>
+									<div class="col-sm-12" >
+										<div class="paging text-center">
+											<ul class="pagination pagination-sm" id="commentsPaging">
+											
+											</ul>
+										</div>
 									</div>						
 						</div>
 					</div>
 				</div>
 			</div>
-
-				<!--    -->
-			
 			</div>
 			<div class="row">
 				<div class="col-sm-12 text-center">
@@ -518,6 +526,7 @@
 										<input type="file" id="photo_file" name="photo_file"
 											class="custom-file-input" onchange="fileCheck(this);"
 											accept="image/gif, image/GIF, image/png, image/PNG, image/jpeg, image/JPEG" />
+											<small id="photo_file" class="form-text text-muted">사진은 마음대로</small>
 									</div>
 								</div>
 								</div>
@@ -553,11 +562,19 @@
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 
 
-	<script>
-	$(function(){
+<script>
+var page = 0;
+var commentsPage = "";
+	$(function(){		
+		page = 1;
 		$("#replyBtn").on("click", function(){
-			$("#addForm").css("display","block");
-			$("#listDiv").css("display","block");
+				$("#addForm").css("display","block");
+				$("#listDiv").css("display","block");
+				var idx = $("#getIdx").val();
+				console.log("idx : "+idx);
+				commentsPage = "/comments/list/"+idx+"/"+page;
+				console.log("commentsPage : "+commentsPage);
+				reply(commentsPage);
 		});
 	});
 	
@@ -566,17 +583,31 @@
 		var tag_name = t.name;
 		
 		location.href =	"?tag="+tag_name;
+	}	
+	
+	function adminDelete(idx){
+		$.ajax({
+			url:"/books/adminDelete",
+			type:"post",
+			data:{idx:idx},
+			success:function(data){
+				if(data == 'y'){
+					alert("악당 퇴치");
+				}
+			}
+		});
 	}
-	function commentsMod(){
-		var rno = $("#getRno").val();
-		var comments = $("#mod_area").val();
-		var btn = $("."+rno+"").html();
+	
+	function commentsMod(rno){
+		var comments = $("#mod_area"+rno).val(); //textarea의 내용
+		var btn = $("#mod_"+rno+"").html();//댓글번호의 버튼이름 가져오기
+		
 		console.log("btn : "+btn);
 		console.log("rno : " +rno);
 		if(btn=='변경'){
 			alert("변경 눌림");
-			$("#mod_area").removeAttr("readonly");
-			$("."+rno+"").html('수정');
+			$("#mod_area"+rno).removeAttr("disabled");
+			$("#mod_"+rno+"").html('수정');
 			console.log("btn : "+btn);
 			console.log("rno : " +rno);
 			return;
@@ -596,17 +627,16 @@
 			success:function(result){
 				if(result == 'SUCCESS'){
 					alert("수정 완료");
-					$("."+rno+"").html('변경');
-					$("#mod_area").attr("readonly","readonly");
+					$("#mod_"+rno+"").html('변경');
+					$("#mod_area"+rno).attr("disabled","disabled");
 				}
 			}				
 		});
 		}
 	}
 	
-	function commentsDel(){
+	function commentsDel(rno){
 		alert("삭제 눌림");
-		var rno = $("#getRno").val();
 		console.log("rno : "+rno);
 		$.ajax({
 			url:"/comments/del/"+rno,
@@ -619,36 +649,70 @@
 			success:function(result){
 				if(result=='SUCCESS'){
 					alert("삭제완료");
+					$("#replies").empty();
+					reply(commentsPage);
 				}
 			}
 		});
 	}
+		
+	$("#commentsPaging").on("click", "li a", function(event){
+		event.preventDefault();
+		commentsPage = $(this).attr("href");
+		reply(commentsPage);
+	});
 	
-	 function reply() {
-		var nickname = "${sessionScope.user.nickname}";
-		var idx = $("#getIdx").val();
+	function reply(commentsPage) {
+		var sessionUser = "${sessionScope.user.nickname}";
 		var out = "";
-		console.log("idx : "+idx);
-		if(nickname != ''){
-			$.getJSON("/comments/list/"+idx, function(data){				
-				$(data.commentsList).each(function(){
-					out += "<li class='list-group-item list-group-item-action'>"+"작성자 : "+this.nickname
-					+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
-					+ "<button type='button' class='btn btn-secondary btn-sm "+this.rno+"' onclick='commentsMod();'>"
-					+ "변경"+ "</button>"+"&nbsp;"
-					+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel();'>"
-					+ "삭제"+ "</button>"+"</br>"+"내용 : "
-					+"<textarea class='form-control' rows='3' readonly='readonly' id='mod_area'>"
-					+ this.comments +"</textarea>"
-					+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
-					+"</li>";
-				});
-				$("#replies").append(out);
-			});			
-		}else{
-			login();
-		}
-	} 
+		var regdate = "";
+		console.log("sessionUser : "+sessionUser);
+			$.getJSON(commentsPage, function(data){
+				console.log(data.commentsList.length);
+				var nickname = "";
+				var regdate = "";
+				var changeBtn = "";
+				var deleteBtn = "";
+				var comments = "";
+				if(data.commentsList.length == 0){			
+					$("#commentsTitle").html("작성된 댓글이 없습니다~~");
+				}else{					
+					$(data.commentsList).each(function(){
+						nickname = "작성자 : "+this.nickname;
+						regdate = "작성일 : "+this.regdate;
+						comments = "<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
+						+ this.comments +"</textarea>";
+						
+						if(sessionUser != '' && sessionUser == this.nickname){
+							changeBtn = "<button id='mod_"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'"
+							+"style='position: absolute; left: 380px;'>"
+							+ "변경"+ "</button>";
+							
+							deleteBtn = "<button id='del_"+this.rno+"' type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'"
+							+"style='position: absolute; right: 20px;'>"
+							+ "삭제"+ "</button>";
+						}else{ //sessionUser == '' || sessionUser != this.nickname
+							changeBtn = "";
+							deleteBtn = "";
+						}
+						
+						out += "<li class='list-group-item list-group-item-action'>"
+						+ nickname
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+						+ regdate+"</br>"
+						+ changeBtn
+						+"&nbsp;"
+						+ deleteBtn						
+						+"</br>"+"내용 : "
+						+ comments
+						+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
+						+"</li>";					
+					});					
+					$("#replies").html(out);
+					$("#commentsPaging").html(data.paging);
+				}
+			});		
+		} 
 	
 	//로그인을 안하게 되면 도서등록이 안되도록
 	function login(){
@@ -811,7 +875,6 @@
 					}
 				 });
 		 }
-			 //title:form.title.value,		  
 		 //내용 수정
 		  function mod(form){
 			if(form.d_type.value == 'start' && (form.fee.value == 0 || form.fee.value == '')){
@@ -981,7 +1044,7 @@
 								$(".res_nickname").html(data.book.nickname); //수정안되게
 								$(".res_comments").html(data.book.comments);							
 								$(".res_regdate").html(regdate);
-								$(".res_price").html(data.book.price);
+								$(".res_price").html(data.book.price+"원");
 								
 								if(data.book.author != null){
 									$(".res_author").html(data.book.author);
@@ -996,7 +1059,7 @@
 									case "complete": $(".res_deal").html('거래 완료'); break;
 								}
 								
-								$(".res_fee").html(data.book.fee);								
+								$(".res_fee").html(data.book.fee+"원");								
 								if(data.book.photo == null){
 									$(".res_photo").attr("src","/image/photo/noimage.png");
 								}else{
@@ -1058,7 +1121,4 @@
 					return;
 				}
 			}
-	
-	</script>
-</body>
-</html>
+</script>

@@ -31,26 +31,30 @@
 				</div>
 			</div>
 		</div>
+		<c:if test="${sessionScope.user.nickname == null }">
+			<input class="form-control col-3 d-inline" type="text" name="nickname" 
+				   value="방문자"/ readonly> 님 환영합니다.
+		</c:if>
+		<c:if test="${sessionScope.user.nickname != null }">
+			<input class="form-control col-3 d-inline" type="text" name="nickname" 
+				   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
+		</c:if>
 		<form action="${pageContext.request.contextPath}/board/update"
 			method="post">
 			<input type="hidden" name="idx" value="${board.idx }" />
 			<fieldset>
 				<table class="table">
-					<colgroup>
-						<col width="10%">
-						<col width="10%">
-						<col width="30%">
-						<col width="10%">
-						<col width="*">
-					</colgroup>
 					<tbody>
 						<tr>
 							<th>분류</th>
-							<td><c:if test="${board.code == 1 }">
+							<td>
+								<c:if test="${board.code == 1 }">
 									<td>[공지]</td>
-								</c:if> <c:if test="${board.code == 2 }">
+								</c:if> 
+								<c:if test="${board.code == 2 }">
 									<td>[일반]</td>
-								</c:if></td>
+								</c:if>
+							</td>
 							<th>작성자</th>
 							<td>${board.nickname }</td>
 							<th>작성시간</th>
@@ -60,26 +64,40 @@
 						</tr>
 						<tr>
 							<th>제목</th>
-							<td><input id="titlte" type="text" name="title" style="text-align:center; width:300px; height:50px; letter-spacing: 5px"
-								class="form-control" value="${board.title }" /></td>
+							<td colspan="7">
+								<input id="title" type="text" name="title" 
+									   style="text-align:center; width:500px; height:50px;" value="${board.title }" />
+							</td>
 							
 						</tr>
 						<tr>
 							<th>내용</th>
-							<td colspan="3"><textarea class="form-control" id="comments" 
-									name="comments">${board.comments }</textarea></td>
+							<td colspan="7">
+								<textarea class="form-control" id="comments" 
+								style="text-align:center; width:990px; height:300px; letter-spacing: 1px" 
+										name="comments">${board.comments }
+								</textarea>
+							</td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="row">
 					<div class="col-sm-12 text-center">
 						<button type="button" class="btn btn-primary btn-sm"
-							onclick="update(this.form)">수정하기</button>
-						<button type="reset" class="btn btn-primary btn-sm">재입력</button>
+							onclick="update(this.form)">
+						수정하기
+						</button>
+						<button type="reset" class="btn btn-primary btn-sm">
+						재입력
+						</button>
 						<button type="button" class="btn btn-primary btn-sm"
-							onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
+							onclick="location.href='${pageContext.request.contextPath}/board/list'">
+						목록
+						</button>
 						<button type="button" class="btn btn-primary btn-sm"
-							onclick="del(${board.idx})">삭제</button>
+							onclick="del(${board.idx})">
+						삭제
+						</button>
 					</div>
 				</div>
 			</fieldset>
@@ -93,6 +111,7 @@
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script>
+		/* 게시글 삭제 눌렀을 때 */
 		function del(idx){
 			$.ajax({
 				url:"/board/delete",
@@ -109,7 +128,8 @@
 				}
 			});
 		}
-	
+		
+		/* 수정 눌렀을 때 */
 		function update(form) {
 			var title = form.title.value;
 			var idx = form.idx.value;

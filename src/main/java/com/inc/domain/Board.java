@@ -11,7 +11,17 @@ public class Board {
 	private String regdate;
 	private int code;
 	private List<Reply> replyList;
+	private int replysize;
+	private boolean isNew;
 	
+	
+	
+	public int getReplysize() {
+		return replysize;
+	}
+	public void setReplysize(int replysize) {
+		this.replysize = replysize;
+	}
 	public List<Reply> getReplyList() {
 		return replyList;
 	}
