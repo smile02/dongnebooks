@@ -1,5 +1,6 @@
 package com.inc.controller;
 
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.WebUtils;
 
 import com.inc.domain.Board;
 import com.inc.domain.Books;
@@ -51,7 +52,7 @@ public class UsersController {
 	private Paging paging;
 	
 	@RequestMapping("/main")
-	public String mainPage(Model model, @CookieValue Cookie loginCookie) {
+	public String mainPage(Model model) {
 		//1. 로그인 기능.
 		//2. 책 목록 최근 6개정도.
 		int bookCount = 6;
@@ -61,8 +62,16 @@ public class UsersController {
 		int noticeCount = 5;
 		List<Board> noticeList = boardService.getNoticeList(noticeCount);
 		model.addAttribute("noticeList", noticeList);
-		model.addAttribute("id", loginCookie.getValue());
+		/*if(loginCookie != null) {
+			model.addAttribute("id", loginCookie.getValue());
+		}*/
+		
 		return "/main.jsp";
+	}
+	
+	@RequestMapping("/faq")
+	public String faqPage() {
+		return "/users/faq.jsp";
 	}
 	
 	@RequestMapping(value="/user/signup", method=RequestMethod.GET)
@@ -238,19 +247,36 @@ public class UsersController {
 			request.getSession().setAttribute("user", savedUser);
 			
 			if(request.getParameter("useCookie").equals("SaveCookie")) {
-				Cookie loginCookie = new Cookie("loginCookie", savedUser.getId());
+				//로그인 유지에 체크할 경우 쿠키생성 및 Users DB에 세션ID와 유지 시간을 update함
+				Cookie loginCookie = new Cookie("loginCookie", request.getSession().getId());
+				int amount = 60*60*24*7;
 				loginCookie.setPath("/");
-				loginCookie.setMaxAge(60*60*24*7);
+				loginCookie.setMaxAge(amount);
 				response.addCookie(loginCookie);
 				System.out.println("쿠키생성성공");
+				
+				Date sessionLimit = new Date(System.currentTimeMillis() + (1000*amount));
+				usersService.keepLogin(savedUser.getId(), request.getSession().getId(), sessionLimit);
 			}
 			return "success";
 		}
 	}
 	
 	@RequestMapping(value="/user/signout", method=RequestMethod.GET)
-	public String signout(HttpSession session) {
-		session.invalidate();
+	public String signout(HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+		Users user = (Users)(session.getAttribute("user"));
+		if(user != null) {
+			session.removeAttribute("user");
+			session.invalidate();
+			
+			Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+			if(loginCookie != null) {
+				loginCookie.setPath("/");
+				loginCookie.setMaxAge(0);
+				response.addCookie(loginCookie);
+				usersService.keepLogin(user.getId(), session.getId(), new Date());
+			}
+		}
 		return "redirect:/main";
 	}
 	

@@ -229,7 +229,14 @@
         </div>
         <div class="row">
         	<div class="col-sm-3">책상태</div>
-        	<div class="col-sm-9">${cart.book.status}</div>
+	        <div class="col-sm-9">
+				<c:if test="${cart.book.status == 'a'}">최상</c:if>
+				<c:if test="${cart.book.status == 'b'}">상</c:if>
+				<c:if test="${cart.book.status == 'c'}">중상</c:if>
+				<c:if test="${cart.book.status == 'd'}">중</c:if>
+				<c:if test="${cart.book.status == 'e'}">중하</c:if>
+				<c:if test="${cart.book.status == 'f'}">하</c:if>
+        	</div>
         </div>
         <div class="row">
         	<div class="col-sm-3">저자</div>
@@ -441,7 +448,7 @@
 								"전화번호: " + user.phone + "<br/>" + 
 								"주소: " + user.address + "<br/>" + 
 								"이메일: " + user.email + "<br/>" + 
-								"** 주소나 전화번호가 없는 판매자와는 거래하지 마세요. **";
+								"<b style='font-size:9pt;color:red'>** 주소나 전화번호가 없는 판매자와는 거래하지 마세요. **</b>";
 					$(id).html(info);
 				}
 			}
