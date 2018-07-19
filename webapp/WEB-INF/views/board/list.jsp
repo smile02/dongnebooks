@@ -19,6 +19,10 @@
 	display: inline-block;
 }
 
+.select_option{
+	display: inline-block;
+}
+
 .pagination {
 	margin-top: 20px;
 }
@@ -26,6 +30,10 @@
 th {
 	text-align: center;
 }
+
+	#box1 { position: static; top: 20px; left: 30px; }
+	#box2 { position: relative; top: 20px; left: 30px; }
+	#paging { position: absolute; bottom: 100px; left: 480px; }
 </style>
 </head>
 <body>
@@ -44,16 +52,25 @@ th {
 				</div>
 			</div>
 		</div>
-		<input type="text" name="nickname" value="${sessionScope.user.nickname }" />
-		<h2 class="text-center"> 게 시 판 </h2>
+		<div class="col-sm-12">
+				<c:if test="${sessionScope.user.nickname == null }">
+					<input class="form-control col-3 d-inline" type="text" name="nickname" 
+					   value="방문자" readonly/> 님 환영합니다.
+				</c:if>
+				<c:if test="${sessionScope.user.nickname != null }">
+					<input class="form-control col-3 d-inline" type="text" name="nickname" 
+					   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
+				</c:if>
+			</div>
+		<h3 class="text-center display-5"> 게 시 판 </h3>
 		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th width="10%" class="text-center">분 류</th>
-					<th width="10%" class="text-center">글번호</th>
+					<th width="7%" class="text-center">분 류</th>
+					<th width="9%" class="text-center">글번호</th>
 					<th width="*" class="text-center">제 목</th>
-					<th width="10%" class="text-center">작성자</th>
-					<th width="20%" class="text-center">날 짜</th>
+					<th width="15%" class="text-center">작성자</th>
+					<th width="10%" class="text-center">날 짜</th>
 					<th width="10%" class="text-center">조회수</th>
 				</tr>
 				<c:if test="${empty boardList }">
@@ -81,7 +98,7 @@ th {
 						<th>
 							<a href="${pageContext.request.contextPath }/board/view?idx=${bvo.idx}">
 							${bvo.title }
-							<span class="badge badge-danger">댓글</span>
+							<span class="badge badge-info">댓글 ${bvo.replysize }</span>
 							</a>
 						</th>
 						<th>${bvo.nickname }</th>
@@ -96,26 +113,23 @@ th {
 			</c:forEach>
 		</table>
 		<div class="buttons">
-			<div class="col-sm-1" style="text-align: center;">
-				<button type="button" class="btn btn-primary btn-sm btn-block"
+			<div class="col-sm-1 text-right">
+				<button type="button" class="btn btn-primary btn-sm btn-block text-center"
 					onclick="location.href='${pageContext.request.contextPath}/board/insert'">글쓰기</button>
 			</div>
 
 			<div class="row col-sm-12">
-				<div class="col-sm-4">
-					<div class="form-group">
-						<select class="custom-select text-right" id="search_option" onchange="lock()">
+				<div class="col-sm-2 form-group text-center">
+						<select class="select_option custom-select text-right form-control" id="search_option" onchange="lock()">
 							<option value="all">전체</option>
 							<option value="title">제목</option>
 							<option value="nickname">이름</option>
 							<option value="comments">내용</option>
 							<option value="title_name">제목+이름</option>
 						</select>
-					</div>
 						<div class="has-success">
 							<label class="form-control-label" for="inputSuccess1"> </label> 
-							<input
-								id="search_text" type="text" placeholder="검색"
+							<input id="search_text" type="text" placeholder="검색"
 								class="form-control is-valid" id="inputValid">
 							<div class="valid-feedback">무엇을 검색?</div>
 							<button class="btn btn-primary btn-sm" type="button"
@@ -126,8 +140,9 @@ th {
 			</div>
 			<div class="row">
 					<div class="col-sm-12 text-center">
-						<div class="paging">
-							<ul class="pagination">${paging }
+						<div class="paging" id="paging">
+							<ul class="pagination">
+							${paging }
 							</ul>
 						</div>
 					</div>

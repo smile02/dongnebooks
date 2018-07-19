@@ -29,5 +29,10 @@ public class CommentsDaoImpl implements CommentsDao{
 		session.update("comments.commentsMod",comments);
 	}
 
+	@Override
+	public void commentsDel(int rno) {
+		session.delete("comments.commentsDel",rno);
+	}
+
 
 }

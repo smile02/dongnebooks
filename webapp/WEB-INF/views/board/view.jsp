@@ -9,6 +9,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>동네북스에 오신 것을 환영합니다!</title>
+<style>
+.btn-center{
+	text-align: center;
+	display: inline-block;
+}
+</style>
 <link
 	href="https://stackpath.bootstrapcdn.com/bootswatch/4.1.1/minty/bootstrap.min.css"
 	rel="stylesheet"
@@ -19,6 +25,8 @@
 <body>
 	<jsp:include page="../include/header.jsp" />
 	<div class="container">
+		<form action="${pageContext.request.contextPath}/board/insert" 
+			 	  method="post">
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="jumbotron">
@@ -33,23 +41,31 @@
 			</div>
 		</div>
 		<div class="row col-lg-12">
-			<form action="${pageContext.request.contextPath}/board/insert" 
-			 	  method="post">
 			<div class="col-sm-12">
-				<input class="form-control col-3 d-inline" type="text" name="nickname" value="${sessionScope.user.nickname }" />
-				<input type="hidden" name="idx" value="${board.idx }" />
+				<input type="hidden" name="idx" value="${board.idx }"/>	
+				<c:if test="${sessionScope.user.nickname == null }">
+					<input class="form-control col-3 d-inline text-center" type="text" name="nickname" 
+					   value="방문자" readonly/> 님 환영합니다.
+				</c:if>
+				<c:if test="${sessionScope.user.nickname != null }">
+					<input class="form-control col-3 d-inline text-center" type="text" name="nickname" 
+					   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
+				</c:if>
+				
 			</div>
-			<div class="row text-center col-md-12">
+		</div>	
+		<div class="row">
 				<table class="table table-hover">
 					<tr>
-						<th width="10%">분류</th>
-						<td width="10%">
+						<th>분류</th>
+						<td>
 							<c:if test="${board.code == 1 }">
 								<td>[공지]</td>
 							</c:if> 
 							<c:if test="${board.code == 2 }">
 								<td>[일반]</td>
-							</c:if></td>
+							</c:if>
+						</td>
 						<th>작성자</th>
 						<td>${board.nickname }</td>
 						<th>작성시간</th>
@@ -59,7 +75,7 @@
 					</tr>
 					<tr>
 						<th>제목</th>
-						<td colspan="7">${board.title }</td>
+						<td colspan="8">${board.title }</td>
 					</tr>
 					<tr>
 						<th>내용</th>
@@ -69,40 +85,44 @@
 			</div>
 			<br />
 			<div class="row">
-				<div class="buttons">
-					<button type="button" class="btn btn-primary btn-sm"
+				<div class=" col-sm-12 buttons text-center">
+					<button type="button" class="btn btn-primary btn-sm btn-center"
 						onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
-					<button type="button" class="btn btn-primary btn-sm"
+					<button type="button" class="btn btn-primary btn-sm btn-center"
 						onclick="update(this.form)">수정</button>
+					<!-- 관리자로 로그인 했을 때 이상한글 올렸을 때 관리자가 임의로 삭제할수 있는버튼 생성 -->
+					<c:if test="${sessionScope.user.nickname == '관리자' }">
+					<button type="button" class="btn btn-primary btn-sm btn-center"
+						onclick="admin_delete(${board.idx})">관리자삭제</button>
+					</c:if>
 				</div>
 			</div>
 		</form>
 	</div>
-	</div>
 	<br />
-	<!--  댓글  -->
+	<!--  댓글입력하는  -->
 	<div class="container">
-	
-		<label for="content">댓 글</label>
-		<form:form action="/reply/insert" method="post" modelAttribute="reply">
-		<!-- 로그인 했을 때만 댓글 작성할 수 있는 input태그 추가 -->
-		<c:if test="${!empty sessionScope.user.nickname }">
-			<input type="hidden" name="idx" value="${board.idx }" />
-			<form:input class="form-control col-6 d-inline" type="text" path="comments" id="comments"
-				        placeholder="댓글 내용을 재빠르게 입력하세요."/>
-			<span class="input-group-btn">
+		<div class="row col-12">
+			<form:form action="/reply/insert" method="post" modelAttribute="reply">
+				<!-- 로그인 했을 때만 댓글 작성할 수 있는 input태그 추가 -->
+			<span class="badge badge-danger">댓글</span>
+			<c:if test="${!empty sessionScope.user.nickname }">
+				<input type="hidden" name="idx" value="${board.idx }" />
+				<form:input class="form-control col-12 d-inline text-center" type="text" path="comments" id="comments"
+					        placeholder="댓글 내용을 재빠르게 입력하세요." style="text-align:center; width:820px; height:36px; letter-spacing: -1px"/>
 				<button class="btn btn-primary btn-sm" type="submit">등록</button>
-			</span>
-			<form:errors path="comments" class="error"/>
-		</c:if>
-		</form:form>
+				<form:errors path="comments" class="error"/>
+			</c:if>
+			</form:form>
+		</div>
+		<!-- 댓글리스트 -->
 		<div class="container">
 			<form>
-			<table style="width:100%">
+			<table class="table table-hover">
 				<tr>
-					<th width="30%">작성자</th>
-					<th width="30%">댓글내용</th>
-					<th width="40%">댓글시간</th>
+					<th>작성자</th>
+					<th>댓글내용</th>
+					<th>댓글시간</th>
 				</tr>
 				<c:if test="${empty board.replyList }">
 					<tr>
@@ -132,6 +152,25 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
+	
+	//관리자 전용삭제(이상한글 올렸을 때 관리자가 임의로 삭제할수 있게)
+	function admin_delete(idx){
+		$.ajax({
+			url:"/board/delete",
+			type:"post",
+			data:{idx:idx},
+			success:function(data){
+				if(data=='y'){
+					alert("삭제");
+					location.href='${pageContext.request.contextPath}/board/list';
+				}else{
+					alert("삭제실패");
+					location.href='${pageContext.request.contextPath}/board/list';
+				}
+			}
+		});
+	}
+	
 	//글수정 눌렀을 때 해당글의 올린작성자인지 확인하고 맞으면 수정페이지(update)로 아니면 로그인화면으로
 	function update(form){
 		var nickname ="${sessionScope.user.nickname}";

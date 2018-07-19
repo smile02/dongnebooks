@@ -11,7 +11,6 @@ public class Reply {
 	@NotEmpty @Size(min=1, max=300, message="1글자이이상 300이하로 내용을 작성해 주세요.") 
 	private String comments;
 	private String regdate;
-	
 	private Board board;
 
 	
