@@ -58,10 +58,10 @@ public class UsersController {
 		int noticeCount = 5;
 		List<Board> noticeList = boardService.getNoticeList(noticeCount);
 		model.addAttribute("noticeList", noticeList);
-		/*Users fakeUser = new Users();
-		fakeUser.setId("choizidane");
-		fakeUser.setNickname("지단의발재간");
-		session.setAttribute("user", fakeUser);*/
+		Users fakeUser = new Users();
+		fakeUser.setId("admin");
+		fakeUser.setNickname("관리자");
+		session.setAttribute("user", fakeUser);
 		return "/main.jsp";
 	}
 	

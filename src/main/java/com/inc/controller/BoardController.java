@@ -1,7 +1,5 @@
 package com.inc.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +13,6 @@ import com.inc.domain.Board;
 import com.inc.domain.Reply;
 import com.inc.service.BoardService;
 import com.inc.service.BoardServiceImpl;
-import com.inc.service.ReplyService;
 import com.inc.util.Paging;
 
 @Controller

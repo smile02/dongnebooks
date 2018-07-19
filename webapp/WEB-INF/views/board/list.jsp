@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ page import="java.util.Date" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
@@ -67,7 +69,6 @@ th {
 			<thead>
 				<tr>
 					<th width="7%" class="text-center">분 류</th>
-					<th width="9%" class="text-center">글번호</th>
 					<th width="*" class="text-center">제 목</th>
 					<th width="15%" class="text-center">작성자</th>
 					<th width="10%" class="text-center">날 짜</th>
@@ -94,18 +95,26 @@ th {
 								<span class="badge badge-pill badge-secondary">일반</span>
 							</th>
 						</c:if>
-						<th>${bvo.idx }</th>
 						<th>
 							<a href="${pageContext.request.contextPath }/board/view?idx=${bvo.idx}">
 							${bvo.title }
 							<span class="badge badge-info">댓글 ${bvo.replysize }</span>
+							<%-- <c:set var="today" value="<%=new Date()%>">
+							<f:parseDate var="regdate" value="${bvo.regdate}" pattern="yyyy-MM-dd"/>
+							<f:parseDate var="now" value="${sysdate}" pattern="yyyy-MM-dd"/>
+					        <f:parseNumber var="current" value="${now / (1000*60*60*24)}" integerOnly="true"/>
+					        <f:parseNumber var="reg_date" value="${regdate / (1000*60*60*24)}" integerOnly="true"/>
+							<c:if test="${curent - reg_date < 1 }">
+							<span class="badge badge-info">new</span>
+							</c:if> --%>
 							</a>
 						</th>
 						<th>${bvo.nickname }</th>
 						<th>
+							<!-- 날짜 한국시간으로 뿌리는거 -->
 							<f:parseDate var="date" value="${bvo.regdate }"
-								pattern="yyyy-MM-dddd HH:mm:ss" /> 
-							<f:formatDate value="${date }" pattern="yyyy/MM/dd" />
+								pattern="yyyy-MM-dddd HH:mm:ss" timeZone="KST"/> 
+							<f:formatDate value="${date }" pattern="yyyy/MM/dd HH:mm:ss"/>
 						</th>
 						<th>${bvo.cnt }</th>
 					</tr>

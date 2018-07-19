@@ -13,6 +13,7 @@ public class Board {
 	private List<Reply> replyList;
 	private int replysize;
 	
+	
 	public int getReplysize() {
 		return replysize;
 	}
