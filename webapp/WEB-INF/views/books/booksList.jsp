@@ -592,14 +592,14 @@ var commentsPage = "";
 	}
 	function commentsMod(rno){
 		var comments = $("#mod_area"+rno).val(); //textarea의 내용
-		var btn = $("#"+rno+"").html();//댓글번호의 버튼이름 가져오기
+		var btn = $("#mod_"+rno+"").html();//댓글번호의 버튼이름 가져오기
 		
 		console.log("btn : "+btn);
 		console.log("rno : " +rno);
 		if(btn=='변경'){
 			alert("변경 눌림");
 			$("#mod_area"+rno).removeAttr("disabled");
-			$("#"+rno+"").html('수정');
+			$("#mod_"+rno+"").html('수정');
 			console.log("btn : "+btn);
 			console.log("rno : " +rno);
 			return;
@@ -619,7 +619,7 @@ var commentsPage = "";
 			success:function(result){
 				if(result == 'SUCCESS'){
 					alert("수정 완료");
-					$("#"+rno+"").html('변경');
+					$("#mod_"+rno+"").html('변경');
 					$("#mod_area"+rno).attr("disabled","disabled");
 				}
 			}				
@@ -652,41 +652,59 @@ var commentsPage = "";
 		event.preventDefault();
 		commentsPage = $(this).attr("href");
 		reply(commentsPage);
-//		$("#replies").empty();
 	});
 	
 	function reply(commentsPage) {
-		var nickname = "${sessionScope.user.nickname}";
+		var sessionUser = "${sessionScope.user.nickname}";
 		var out = "";
 		var regdate = "";
-		if(nickname != ''){
+		console.log("sessionUser : "+sessionUser);
 			$.getJSON(commentsPage, function(data){
 				console.log(data.commentsList.length);
+				var nickname = "";
+				var regdate = "";
+				var changeBtn = "";
+				var deleteBtn = "";
+				var comments = "";
 				if(data.commentsList.length == 0){			
 					$("#commentsTitle").html("작성된 댓글이 없습니다~~");
 				}else{					
 					$(data.commentsList).each(function(){
-						console.log(this.regdate);
-						out += "<li class='list-group-item list-group-item-action'>"+"작성자 : "+this.nickname
-						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
-						+ "<button id='"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'>"
-						+ "변경"+ "</button>"+"&nbsp;"
-						+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'>"
-						+ "삭제"+ "</button>"+"</br>"+"내용 : "
-						+"<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
-						+ this.comments +"</textarea>"
+						nickname = "작성자 : "+this.nickname;
+						regdate = "작성일 : "+this.regdate;
+						comments = "<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
+						+ this.comments +"</textarea>";
+						
+						if(sessionUser != '' && sessionUser == this.nickname){
+							changeBtn = "<button id='mod_"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'"
+							+"style='position: absolute; left: 400px;'>"
+							+ "변경"+ "</button>";
+							
+							deleteBtn = "<button id='del_"+this.rno+"' type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'"
+							+"style='position: absolute; right: 0;'>"
+							+ "삭제"+ "</button>";
+						}else{
+							changeBtn = "";
+							deleteBtn = "";
+						}
+						
+						out += "<li class='list-group-item list-group-item-action'>"
+						+ nickname
+						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+						+ regdate+"</br>"
+						+ changeBtn
+						+"&nbsp;"
+						+ deleteBtn						
+						+"</br>"+"내용 : "
+						+ comments
 						+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
-						+"</li>";
-					});
-
+						+"</li>";					
+					});					
 					$("#replies").html(out);
 					$("#commentsPaging").html(data.paging);
 				}
-			});			
-		}else{
-			login();
-		}
-	} 
+			});		
+		} 
 	
 	//로그인을 안하게 되면 도서등록이 안되도록
 	function login(){
@@ -1096,7 +1114,3 @@ var commentsPage = "";
 					return;
 				}
 			}
-	
-	</script>
-</body>
-</html>

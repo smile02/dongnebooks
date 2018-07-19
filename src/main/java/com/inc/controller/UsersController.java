@@ -52,7 +52,7 @@ public class UsersController {
 	private Paging paging;
 	
 	@RequestMapping("/main")
-	public String mainPage(Model model) {
+	public String mainPage(Model model, HttpSession session) {
 		//1. 로그인 기능.
 		//2. 책 목록 최근 6개정도.
 		int bookCount = 6;
@@ -62,10 +62,6 @@ public class UsersController {
 		int noticeCount = 5;
 		List<Board> noticeList = boardService.getNoticeList(noticeCount);
 		model.addAttribute("noticeList", noticeList);
-		/*if(loginCookie != null) {
-			model.addAttribute("id", loginCookie.getValue());
-		}*/
-		
 		return "/main.jsp";
 	}
 	

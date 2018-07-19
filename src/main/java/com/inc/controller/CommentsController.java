@@ -35,7 +35,6 @@ public class CommentsController {
 	public ResponseEntity<Map<String, Object>> commentsList(@PathVariable int idx,
 			@PathVariable int page, Model model) {	
 		ResponseEntity<Map<String, Object>> entity = null;
-		System.out.println("comments : "+idx);
 		getIdx = idx;
 		try {
 			
@@ -64,11 +63,7 @@ public class CommentsController {
 	
 	//댓글을 등록하는 메서드
 	@RequestMapping(value="/comments/add", method=RequestMethod.POST)
-	public ResponseEntity<String> commentsAdd(@RequestBody Comments comments){
-		System.out.println("등록 시 : "+comments.getNickname());
-		System.out.println("등록 시 : "+comments.getComments());
-		System.out.println("등록 시 : "+comments.getIdx());
-		
+	public ResponseEntity<String> commentsAdd(@RequestBody Comments comments){		
 		
 		ResponseEntity<String> entity = null;
 		try {
