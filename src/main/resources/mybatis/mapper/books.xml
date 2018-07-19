@@ -62,7 +62,9 @@
 						 author = #{author},
 						 b_category = #{b_category},
 						 s_category = #{s_category},
-						 deal = #{deal},
+						 <if test="deal == '판매중'">
+						 	deal = 'sale'					 	
+						 </if>						 
 						 comments = #{comments}
 			where idx = #{idx}
 	</update>

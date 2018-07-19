@@ -111,52 +111,84 @@
 	<script>
 		
 		$("#reg_Btn").on("click", function(){
-			
+			var sessionUser = "${sessionScope.user.nickname}";
 			var out = "";
 			var nickname = $("#nickname").val();
 			var comments = $("#comments").val();
 			console.log("등록 : "+nickname);
 			console.log("등록 : "+comments);
 			console.log("등록 : "+idx);
-			$.ajax({
-				url:"/comments/add",
-				type:"post",
-				headers:{
-					"Content-Type":"application/json",
-					"X-HTTP-Method-Override":"POST"
-				},
-				dataType:"text",
-				data:JSON.stringify({
-					nickname:nickname,
-					comments:comments
-				}),
-				success:function(result){
-					if(result != 'y'){
-						$("#comments_error").html("");
-						$("#comments").val("");
-						alert("등록 완료");						
-						$.getJSON("/comments/list/"+result+"/"+1, function(data){				
-							$(data.commentsList).each(function(){
-								out += "<li class='list-group-item list-group-item-action'>"+"작성자 : "+this.nickname
-								+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+"작성일 : "+this.regdate+"&nbsp;&nbsp;"
-								+ "<button id='"+this.rno+"' type='button' class='btn btn-secondary btn-sm' onclick='commentsMod("+this.rno+");'>"
-								+ "변경"+ "</button>"+"&nbsp;"
-								+ "<button type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'>"
-								+ "삭제"+ "</button>"+"</br>"+"내용 : "
-								+"<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
-								+ this.comments +"</textarea>"
-								+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
-								+"</li>";							
-							});
-							$("#replies").html(out);
-							$("#commentsPaging").html(data.paging);
-						});		
-					}else{
-						$("#comments_error").html("댓글을 입력해주세요.");
+			console.log("sessionUser : "+sessionUser);
+			if(sessionUser != ''){
+				$.ajax({
+					url:"/comments/add",
+					type:"post",
+					headers:{
+						"Content-Type":"application/json",
+						"X-HTTP-Method-Override":"POST"
+					},
+					dataType:"text",
+					data:JSON.stringify({
+						nickname:nickname,
+						comments:comments
+					}),
+					success:function(result){
+						if(result != 'y'){
+							$("#comments_error").html("");
+							$("#comments").val("");
+							alert("등록 완료");						
+							$.getJSON("/comments/list/"+result+"/"+1, function(data){
+								var userNickname = "";
+								var regdate = "";
+								var changeBtn = "";
+								var deleteBtn = "";
+								var userComments = "";
+								$(data.commentsList).each(function(){
+									userNickname = "작성자 : "+this.nickname;
+									regdate = "작성일 : "+this.regdate;
+									userComments = "<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
+									+ this.comments +"</textarea>";
+									
+									if(sessionUser == this.nickname){
+										console.log("sessionUser == this.nickname : ",sessionUser == this.nickname);
+										changeBtn = "<button id='mod_"+this.rno+"' type='button' class='btn btn-secondary btn-sm sUser' onclick='commentsMod("+this.rno+");'"
+										+"style='position: absolute; right: 0;''>"
+										+ "변경"+ "</button>";
+										deleteBtn = "<button id='del_"+this.rno+"' type='button' class='btn btn-danger btn-sm sUser' onclick='commentsDel("+this.rno+");'"
+										+"style='position: absolute; right: 0;''>"
+										+ "삭제"+ "</button>";
+									}else{
+										changeBtn = "";
+										deleteBtn = "";
+									}
+									
+									out += "<li class='list-group-item list-group-item-action'>"
+									+ userNickname
+									+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+									+ regdate+"</br>"
+									+ changeBtn
+									+"&nbsp;"
+									+ deleteBtn						
+									+"</br>"+"내용 : "
+									+ userComments
+									+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
+									+"</li>";							
+								});
+								$("#replies").html(out);
+								$("#commentsPaging").html(data.paging);
+							});		
+						}else{
+							$("#comments_error").html("댓글을 입력해주세요.");
+						}
 					}
+				});
+			}else{
+				var answer = confirm("로그인 후 이용가능합니다.\n로그인 페이지로 이동하시겠습니까?");
+				console.log(answer);
+				if(answer){
+					location.href='/main';
 				}
-			});
-			
+			}
 		});		
 		
 	</script>

@@ -25,7 +25,6 @@
 			<mvc:mapping path="/cart/**"/>
 			<mvc:mapping path="/books/add"/>
 			<mvc:mapping path="/books/mod"/>
-			<mvc:mapping path="/comments/**"/>
 			<ref bean="loginInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
