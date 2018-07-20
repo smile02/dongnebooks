@@ -357,9 +357,14 @@
 												
 												</ul>
 											</div>
+<<<<<<< HEAD
 										</div>
 									</div>				
 							</div>
+=======
+										</div>			
+									</div>					
+>>>>>>> b769496d8f798636ed2ecf56f13a10a85f5de537
 						</div>
 					</div>
 				</div>
