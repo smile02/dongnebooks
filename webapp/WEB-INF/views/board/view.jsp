@@ -65,6 +65,12 @@
 							<c:if test="${board.code == 2 }">
 								<td>[일반]</td>
 							</c:if>
+							<c:if test="${board.code == 3 }">
+								<td>[질문]</td>
+							</c:if>
+							<c:if test="${board.code == 3 }">
+								<td>[신고]</td>
+							</c:if>
 						</td>
 						<th>작성자</th>
 						<td>${board.nickname }</td>
@@ -137,7 +143,14 @@
 				<c:forEach var="reply" items="${board.replyList }">
 					<tr>
 						<td>${reply.nickname }</td>
-						<td id="td_${reply.rno }">${reply.comments }</td>
+						<td id="td_${reply.rno }">${reply.comments }
+						<%-- <jsp:useBean id="now" class="java.util.Date" />
+						<f:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />  
+						<f:formatDate value="${reply.regdate }" pattern="yyyy-MM-dd" var="write_dt"/>
+						<c:if test="${today <= write_dt }">
+						new
+						</c:if> --%>
+						</td>
 						<td>${reply.regdate }
 							<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
 							<c:if test="${sessionScope.user.nickname == reply.nickname }">

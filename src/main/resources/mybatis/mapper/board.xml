@@ -25,7 +25,7 @@
 					     </when>
 					  </choose>
 				</if>	    			
-	    			order by code asc, regdate desc	    		
+	    			order by decode(code,1,1) asc, regdate desc	    		
 	    		) a
 	    	) b
 	    where rnum between #{start} and #{end}
@@ -52,6 +52,12 @@
 								     </when>
 								     <when test="code == 2">
 								       	'[일반] '||#{title},	
+								     </when>
+								     <when test="code == 3">
+								       	'[질문] '||#{title},	
+								     </when>
+								     <when test="code == 4">
+								       	'[신고] '||#{title},	
 								     </when>
 								  </choose>
 								</if>

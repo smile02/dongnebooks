@@ -59,6 +59,8 @@
 										<option value="1">공지</option>
 									</c:if>
 										<option value="2">일반</option>
+										<option value="3">질문</option>
+										<option value="4">신고</option>
 								</select>
 							</div>
 							<label for="title" class="col-sm-1">제 목</label>

@@ -54,6 +54,12 @@
 								<c:if test="${board.code == 2 }">
 									<td>[일반]</td>
 								</c:if>
+								<c:if test="${board.code == 3 }">
+									<td>[질문]</td>
+								</c:if>
+								<c:if test="${board.code == 4 }">
+									<td>[신고]</td>
+								</c:if>
 							</td>
 							<th>작성자</th>
 							<td>${board.nickname }</td>
