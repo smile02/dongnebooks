@@ -31,6 +31,7 @@ public class Books {
 	@NotNull(message="s_category: 소분류 -잘못된 선택입니다.")
 	private String s_category;
 	private String deal;
+	private int commentsSize;	
 	
 	public int getIdx() {
 		return idx;
@@ -121,6 +122,12 @@ public class Books {
 	}
 	public void setPhoto_file(MultipartFile photo_file) {
 		this.photo_file = photo_file;
+	}
+	public int getCommentsSize() {
+		return commentsSize;
+	}
+	public void setCommentsSize(int commentsSize) {
+		this.commentsSize = commentsSize;
 	}
 	
 	
