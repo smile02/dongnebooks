@@ -17,27 +17,6 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="/css/style.css" />
 <style>
-/* .thumbnail {
-	height: 450px;
-}
-.img-container {
-	height: 220px;
-	margin-top:15px;
-}
-.thumbnail img {
-	width: 100%;
-	height: 100% !important;
-}
-.detail-modal {
-	height: auto;
-}
-.photo {
-	height: 220px;
-}
-.photo-hei {
-	width: 100%;
-	height: 200px !important;
-} */
 .err_color {
 	color: red;
 }
@@ -367,8 +346,9 @@
 									<div style="display:none" class="row" id="listDiv">									
 										<br /><h4 id="commentsTitle" class="text-center text-muted">댓글목록</h4>
 										<ul class="list-group" id="replies">
-										
-										</ul>
+										</ul><br />				
+										<span style="float:right; margin-top:10px; margin-right:20px;"><button id="commentsExit" 
+										class="btn btn-secondary text-center">댓글 닫기</button></span>
 									</div>
 									<div class="row">
 										<div class="col-sm-12 text-center">
@@ -570,15 +550,22 @@ var commentsPage = "";
 	$(function(){		
 		page = 1;
 		$("#replyBtn").on("click", function(){
-				$("#addForm").css("display","block");
-				$("#listDiv").css("display","block");
-				var idx = $("#getIdx").val();
-				console.log("idx : "+idx);
-				commentsPage = "/comments/list/"+idx+"/"+page;
-				console.log("commentsPage : "+commentsPage);
-				reply(commentsPage);
+			$("#addForm").css("display","block");
+			$("#listDiv").css("display","block");
+			$(".paging").css("display","inline-block");
+			var idx = $("#getIdx").val();			
+			commentsPage = "/comments/list/"+idx+"/"+page;
+			reply(commentsPage);
+		});
+		
+		$("#commentsExit").on("click",function(){
+			$("#addForm").css("display","none");
+			$("#listDiv").css("display","none");
+			$(".paging").css("display","none");
 		});
 	});
+	
+	
 	
 	//각 태그 클릭했을 때 같은 대분류만 보이도록
 	function tag(t){
@@ -678,10 +665,13 @@ var commentsPage = "";
 				var comments = "";
 				if(data.commentsList.length == 0){			
 					$("#commentsTitle").html("작성된 댓글이 없습니다~~");
-				}else{					
+				}else{
 					$(data.commentsList).each(function(){
+						$("#commentsCount").html(this.commentsSize);
+						var lastIndex = this.regdate.toString().lastIndexOf('.');
+						var reg = this.regdate.toString().substring(0,lastIndex);
 						nickname = "작성자 : "+this.nickname;
-						regdate = "작성일 : "+this.regdate;
+						regdate = "작성일 : "+reg;
 						comments = "<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
 						+ this.comments +"</textarea>";
 						
@@ -693,7 +683,7 @@ var commentsPage = "";
 							deleteBtn = "<button id='del_"+this.rno+"' type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'"
 							+"style='position: absolute; right: 20px;'>"
 							+ "삭제"+ "</button>";
-						}else{ //sessionUser == '' || sessionUser != this.nickname
+						}else{ 
 							changeBtn = "";
 							deleteBtn = "";
 						}
