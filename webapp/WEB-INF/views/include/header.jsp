@@ -21,6 +21,9 @@
       <li class="nav-item">
         <a class="nav-link" href="/faq">FAQ</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/socket/chat">오픈채팅방</a>
+      </li>
     </ul>
   </div>
 </div>

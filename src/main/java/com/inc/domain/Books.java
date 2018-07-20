@@ -31,7 +31,8 @@ public class Books {
 	@NotNull(message="s_category: 소분류 -잘못된 선택입니다.")
 	private String s_category;
 	private String deal;
-	private int commentsSize;	
+	private int commentsSize;
+	private boolean newBooks;
 	
 	public int getIdx() {
 		return idx;
@@ -128,6 +129,12 @@ public class Books {
 	}
 	public void setCommentsSize(int commentsSize) {
 		this.commentsSize = commentsSize;
+	}
+	public boolean isNewBooks() {
+		return newBooks;
+	}
+	public void setNewBooks(boolean newBooks) {
+		this.newBooks = newBooks;
 	}
 	
 	

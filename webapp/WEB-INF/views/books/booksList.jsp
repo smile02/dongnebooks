@@ -101,7 +101,10 @@
 					<c:if test="${books.deal ne 'complete' }">
 						<div class="col-md-3 col-xs-6">
 							<div class="thumbnail">
-								<div class="img-container">
+								<div class="img-container">								
+									<c:if test="${books.newBooks }">
+										새책
+									</c:if>									
 									<c:if test="${books.photo ne 'no_file' && books.photo != null}">
 										<img src="/image/photo/${books.photo }" />
 									</c:if>									
@@ -357,18 +360,13 @@
 												
 												</ul>
 											</div>
-<<<<<<< HEAD
 										</div>
 									</div>				
 							</div>
-=======
 										</div>			
-									</div>					
->>>>>>> b769496d8f798636ed2ecf56f13a10a85f5de537
+									</div>				
 						</div>
 					</div>
-				</div>
-				</div>
 			<div class="row">
 				<div class="col-sm-12 text-center">
 					<div class="paging">
