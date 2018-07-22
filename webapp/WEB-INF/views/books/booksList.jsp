@@ -101,14 +101,25 @@
 					<c:if test="${books.deal ne 'complete' }">
 						<div class="col-md-3 col-xs-6">
 							<div class="thumbnail">
-								<div class="img-container">								
-									<c:if test="${books.newBooks }">
-										새책
-									</c:if>									
+								<div class="img-container">			
 									<c:if test="${books.photo ne 'no_file' && books.photo != null}">
+										<c:if test="${books.newBooks }">
+											<div style="position: absolute;">
+												<div style="position: relative; top: 10px; left: 10px; width:40px; height:40px;">
+												<img src="/image/photo/new.png" alt="new"/>
+												</div>
+											</div>
+										</c:if>
 										<img src="/image/photo/${books.photo }" />
 									</c:if>									
 									<c:if test="${books.photo == 'no_file' || books.photo == null}">
+										<c:if test="${books.newBooks }">
+											<div style="position: absolute;">
+												<div style="position: relative; top: 10px; left: 10px; width:40px; height:40px;">
+												<img src="/image/photo/new.png" alt="new"/>
+												</div>
+											</div>
+										</c:if>
 										<img src="/image/photo/noimage.png" />
 									</c:if>
 
@@ -503,17 +514,16 @@
 								</div>
 
 								<div class="form-group">
-								<div class="custom-file">
 									<div class="col-xs-2 col-xs-offset-3">
 										<label for="photo_file" class="custom-file-label">사진 : </label>
 									</div>
 									<div class="col-xs-5">
 										<input type="file" id="photo_file" name="photo_file"
-											class="custom-file-input" onchange="fileCheck(this);"
-											accept="image/gif, image/GIF, image/png, image/PNG, image/jpeg, image/JPEG" />
-											<small id="photo_file" class="form-text text-muted">사진은 마음대로</small>
+											class="form-control-file" onchange="fileCheck(this);"
+											accept="image/gif, image/GIF, image/png, image/PNG, image/jpeg, image/JPEG"
+										    aria-describedby="photo_file" />
+										<small id="photo_file" class="form-text text-muted">사진만 선택해주세요!!</small>
 									</div>
-								</div>
 								</div>
 
 								<div class="modal-footer">

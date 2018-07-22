@@ -17,16 +17,28 @@
 </head>
 <body>
 	<jsp:include page="../include/header.jsp" />
-	<pre> 동네북스 소개페이지
-	  동네북스에 오신것을 환영합니다!
-	동네북스는 '동네'라는 정감이가는 단어와 Books를 합쳐서 만든 이름입니다.	
-	한 동네에서 내가 필요한 도서나 다른사람이 필요한 도서를 서로 구매,판매를 하며
-	의사소통도 하고, 중고도서를 사거나 팔 수 있는 목적으로 만들어졌습니다.
-	</pre>
-	
-	<%-- <div class="col-sm-3">
-		<jsp:include page="../include/right.jsp" />
-	</div> --%>
+	<div class="container">
+			<h1 class="text-center">DongneBooks 소개페이지</h1>
+		<div class="row">
+			<pre class="text-muted"> 
+			  <strong>동네북스에 오신것을 환영합니다!</strong>
+			동네북스는 '동네'라는 친숙하고 정감이가는 단어와 Books 를 합쳐서 만든 이름입니다.	
+			작은 동네에서, 더 나아가 국내에서 내가 필요한 도서나 다른사람이 필요한 도서에 대해
+			의사소통도 하고, 사거나 팔 수 있는 목적으로 만들어졌습니다.
+			
+			동네북스는 사용자들의 의견을 귀담아 듣고 반영하여 동네북스 사이트를 사용하시는데 느끼시는
+			불편함을 최소화 하도록 하겠습니다.
+			
+			또한, 사용자들이 동네북스를 통해서 책에 한걸음 더 가까이 다가갈 수 있도록 함께 노력하겠습니다.
+			
+			감사합니다!
+			</pre>
+		</div>
+			
+		<%-- <div class="col-sm-3">
+			<jsp:include page="../include/right.jsp" />
+		</div> --%>
+	</div>
 	<jsp:include page="../include/footer.jsp" />
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
