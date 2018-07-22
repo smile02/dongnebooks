@@ -144,8 +144,11 @@
 								var deleteBtn = "";
 								var userComments = "";
 								$(data.commentsList).each(function(){
+									$("#commentsCount").html(this.commentsSize);
+									var lastIndex = this.regdate.toString().lastIndexOf('.');
+									var reg = this.regdate.toString().substring(0,lastIndex);
 									userNickname = "작성자 : "+this.nickname;
-									regdate = "작성일 : "+this.regdate;
+									regdate = "작성일 : "+reg;
 									userComments = "<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
 									+ this.comments +"</textarea>";
 									

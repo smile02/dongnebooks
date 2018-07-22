@@ -166,7 +166,7 @@ select * from big_category;
 select * from small_category;
 select * from reply;
 delete from users ;
-
+desc board;
 
 update users set
     password='989099e0edc9f04a2a06e3c5e4b5b56d04aed5e23973513d83068ee0cc76e0a9', email='dongnebooks21@gmail.com'

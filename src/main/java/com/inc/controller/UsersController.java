@@ -68,12 +68,7 @@ public class UsersController {
 		session.setAttribute("user", fakeUser);*/
 		return "/main.jsp";
 	}
-	
-	@RequestMapping("/faq")
-	public String faqPage() {
-		return "/users/faq.jsp";
-	}
-	
+		
 	@RequestMapping(value="/user/signup", method=RequestMethod.GET)
 	public String signup(Model model) {
 		model.addAttribute("user", new Users());
