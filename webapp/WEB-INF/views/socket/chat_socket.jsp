@@ -18,16 +18,17 @@
 #chatArea{
 	width:200px; height:100px; overflow-y:auto; border: 1px solid black;
 }
+#message{
+	width:45%;
+}
 </style>
 </head>
 <body>
 	<jsp:include page="../include/header.jsp" />
-	<form action="" class="form-control">
-		이름: <p id="nickname" style="display:inline;">${loginUser.nickname }</p>
-		<button type="button" id="exitBtn" class="btn btn-danger">나가기</button>
-		
+	<form action="" class="form-control" onsubmit="return false">
+		작성자 : <p id="nickname" style="display:inline;">${loginUser.nickname }</p>		
 			<h1>의사소통 공간</h1>
-		<textarea id="chatMessageArea" cols="100" rows="30" readonly="readonly"></textarea>
+		<textarea id="chatMessageArea" cols="100" rows="20" readonly="readonly"></textarea>
 		<br />
 		<input type="text" id="message"/>
 		<button type="button" id="sendBtn">전송</button>
@@ -41,47 +42,45 @@
 	var wsocket;
 	var chatArea = $("#chatMessageArea");
 	var nick = $("#nickname").html();
-	
-	function disconnect(){
-		wsocket.close();
-	}
-	
+		
 	 function onOpen(event){
-		appendMessage(nick+"님이 입장하셨습니다.");		
+		wsocket.send(nick+"님이 입장하셨습니다.");		
 	} 
 	
 	function onMessage(event){
 		var data = event.data;
+		console.log(data);
 		if(data.substring(0,4) == "msg:"){
 			appendMessage(data.substring(4));
+		}else{
+			appendMessage(data);
 		}
 	}
 	
 	function onClose(event){
-		appendMessage(nick+"님이 퇴장하셨습니다.");
+		wsocket.send(nick+"님이 퇴장하셨습니다.");
 	}
 	
 	function send(){
 		var nickname = nick;
 		console.log(":"+nickname);
 		var msg = $("#message").val();
+		console.log("msg:"+nickname+":"+msg);
 		wsocket.send("msg:"+nickname+":"+msg);
 		$("#message").val("");
 	}
 	
 	function appendMessage(msg){
-		/* if(chatArea.val().indexOf(nick+":") == -1 || chatArea.val().indexOf(nick) == -1){
-			console.log(chatArea.val().indexOf(nick+":"));
-			console.log(chatArea.val().indexOf(nick));
-			wsocket.send(nick+"님이 입장하셨습니다.");
-			return;
-		} */
 		chatArea.val(chatArea.val()+msg+"\n");
 	}
 	
+	$(window).on("beforeunload", function(){
+		wsocket.close();
+	})
 	
 	$(document).ready(function(){
 		console.log("nick :"+nick);
+		
 		if(nick == '' || nick == null){
 			var check = confirm("로그인 후 이용가능합니다.\n로그인페이지로 이동하시겠습니까?");
 			if(check){
@@ -89,21 +88,23 @@
 			}
 			return;
 		}
-		wsocket = new WebSocket("ws://localhost:9090/chat");
+		wsocket = new WebSocket("ws://192.168.0.23:9090/chat");
 		wsocket.onopen=onOpen;
 		wsocket.onmessage=onMessage;
-		wsocket.onclose=onClose;
+		wsocket.onclose = onClose;
 		
-		$("#message").keypress(function(event){
-			var keycode = (event.keyCoed ? event.keyCode : event.which);
-			if(keycode == '13'){
+		 $("#message").keypress(function(event){
+			var keycode = (event.keyCode == 13 ? event.keyCode : event.which);
+			console.log(typeof keycode);
+			console.log("key : "+keycode);
+			console.log("event.which : "+event.which);
+			if(event.keyCode == 13){
 				send();
 			}
 			event.stopPropagation();
-		});
-		$("#sendBtn").click(function(){send();});
-		$("#exitBtn").click(function(){disconnect();});
+		});	 
 		
+		$("#sendBtn").click(function(){send();});		
 	});
 	
 </script>

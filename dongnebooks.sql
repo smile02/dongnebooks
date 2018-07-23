@@ -226,3 +226,23 @@ select * from reply;
 
 commit;
 
+
+create or replace trigger nickname_trg
+ after update of nickname on users for each row
+begin
+   update books
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update board
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update cart
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update reply
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update comments
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+end;

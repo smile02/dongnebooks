@@ -398,7 +398,6 @@
 							<button type="button" class="close" onclick="exit_btn();">&times;</button>							
 						</div>
 						<div class="modal-body">
-
 							<form method="post" id="form" class="form-horizontal"
 								enctype="multipart/form-data" action="/books/add">
 								<div class="form-group">
@@ -515,7 +514,7 @@
 
 								<div class="form-group">
 									<div class="col-xs-2 col-xs-offset-3">
-										<label for="photo_file" class="custom-file-label">사진 : </label>
+										<label for="photo_file" class="control-label">사진 : </label>
 									</div>
 									<div class="col-xs-5">
 										<input type="file" id="photo_file" name="photo_file"
@@ -651,7 +650,7 @@ var commentsPage = "";
 			success:function(result){
 				if(result=='SUCCESS'){
 					alert("삭제완료");
-					$("#replies").empty();
+//					$("#replies").empty();
 					reply(commentsPage);
 				}
 			}

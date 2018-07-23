@@ -17,18 +17,21 @@ public class ChatWebSocketHandler extends TextWebSocketHandler{
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		log(session.getId()+"연결 됨");
 		users.put(session.getId(), session); //session.getid()는 사용자의 세션ID
+		System.out.println("들어온 유저 수 :"+users.size());
 	}
 	
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		log(session.getId() + "종료 됨");
 		users.remove(session.getId());
+		System.out.println("나간 유저 수 :"+users.size());
 	}
 	
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 		log(session.getId()+"로 부터 메세지 수신 : "+message.getPayload());
 		for(WebSocketSession s: users.values() ) {
+			log("message : "+message);
 			s.sendMessage(message);
 			log(s.getId()+"에 메세지 발송"+message.getPayload());
 		}
