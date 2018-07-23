@@ -12,8 +12,6 @@ public class Board {
 	private int code;
 	private List<Reply> replyList;
 	private int replysize;
-	private boolean isNew;
-	
 	
 	public int getReplysize() {
 		return replysize;
@@ -68,12 +66,6 @@ public class Board {
 	}
 	public void setCode(int code) {
 		this.code = code;
-	}
-	public boolean isNew() {
-		return isNew;
-	}
-	public void setNew(boolean isNew) {
-		this.isNew = isNew;
 	}
 	
 }

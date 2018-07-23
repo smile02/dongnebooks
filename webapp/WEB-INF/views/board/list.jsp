@@ -1,8 +1,15 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page import="java.util.Date" %>
+<%
+	Calendar today = Calendar.getInstance();
+	today.set(Calendar.HOUR_OF_DAY, today.get(Calendar.HOUR_OF_DAY)-24);
+	Date yesterday = today.getTime();
+	pageContext.setAttribute("yesterday", yesterday);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -109,22 +116,30 @@ th {
 						<th>
 							<a href="${pageContext.request.contextPath }/board/view?idx=${bvo.idx}">
 							${bvo.title }
-							<span class="badge badge-info">댓글 ${bvo.replysize }</span>
-							<%-- <jsp:useBean id="now" class="java.util.Date" />
-							<f:formatDate value="${now}" pattern="yyyy/MM/dd HH:mm:ss" var="today" />  
-							<f:parseNumber value="${now.time / (1000*60*60*24)}" integerOnly="true" var="currunt" scope="request"/>
-							<f:formatDate value="${bvo.regdate }" pattern="yyyy/MM/dd HH:mm:ss" var="write_dt"/>
-							<f:parseNumber value="${bvo.regdate / (1000*60*60*24)}" integerOnly="true" var="bvo" scope="request"/>
-							<c:if test="${currunt == bvo }">
-							new
-							</c:if> --%>
+								<!-- 댓글 갯수만큼 숫자 표시 -->
+								<span class="badge badge-info">댓글 ${bvo.replysize }</span>
+								<f:parseDate var="date2" value="${bvo.regdate }"
+								pattern="yyyy-MM-dddd HH:mm:ss"/>
+								<!-- 글작성 시간이 24시간 이내이면 새글표시 -->
+							<c:if test="${date2 ge yesterday}">	
+									<span class="badge badge-secondary">NEW</span>
+									<!-- 글작성시간 24시간 이내에서 게시글의 조회수가 100넘으면 인기게시글 표시 -->
+								<c:if test="${bvo.cnt >= 100 }">
+									<span class="badge badge-danger">HOT</span>
+								</c:if>
+							</c:if>
 							</a>
 						</th>
 						<th>${bvo.nickname }</th>
 						<th>
 							<f:parseDate var="date" value="${bvo.regdate }"
 								pattern="yyyy-MM-dddd HH:mm:ss"/> <!-- timeZone="KST" 요거 우리나라 시간으로 맞출때-->
-							<f:formatDate value="${date }" pattern="yyyy/MM/dd HH:mm:ss"/>
+							<c:if test="${date le yesterday}">	
+								<f:formatDate value="${date }" pattern="yyyy/MM/dd"/>
+							</c:if>
+							<c:if test="${date ge yesterday}">	
+								<f:formatDate value="${date }" pattern="HH:mm:ss"/>
+							</c:if>
 						</th>
 						<th>${bvo.cnt }</th>
 					</tr>
@@ -138,9 +153,9 @@ th {
 									id="search_option" onchange="lock()" style="width:100%;text-align:center;">
 								<option value="all">전체</option>
 								<option value="title">제목</option>
-								<option value="nickname">이름</option>
+								<option value="nickname">작성자</option>
 								<option value="comments">내용</option>
-								<option value="title_name">제목+이름</option>
+								<option value="title_name">제목+작성자</option>
 							</select>
 							<input id="search_text" type="text" placeholder="검색할 단어를 이곳에"
 								   class="form-control is-valid custom-input-width col-3" id="inputValid">

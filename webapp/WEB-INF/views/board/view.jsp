@@ -120,7 +120,7 @@
 			<c:if test="${!empty sessionScope.user.nickname }">
 				<input type="hidden" name="idx" value="${board.idx }" />
 				<form:input class="form-control col-12 d-inline text-center" type="text" path="comments" id="comments"
-					        placeholder="댓글 내용을 재빠르게 입력하세요." style="text-align:center; width:820px; height:36px; letter-spacing: -1px"/>
+					        placeholder="댓글 내용을 아주 재빠르게 입력하세요." style="text-align:center; width:820px; height:36px; letter-spacing: -1px"/>
 				<button class="btn btn-primary btn-sm" type="submit">등록</button>
 				<form:errors path="comments" class="error"/>
 			</c:if>
@@ -137,19 +137,13 @@
 				</tr>
 				<c:if test="${empty board.replyList }">
 					<tr>
-						<th colspan="2" style="text-align: center">이 게시판에 댓글이 존재하지않습니다. <br /> 첫댓글을 달아보세요.</th>
+						<th colspan="3" style="text-align: center">이 게시판에 댓글이 존재하지않습니다. <br /> 첫댓글을 달아보세요.</th>
 					</tr>
 				</c:if>
 				<c:forEach var="reply" items="${board.replyList }">
 					<tr>
 						<td>${reply.nickname }</td>
 						<td id="td_${reply.rno }">${reply.comments }
-						<%-- <jsp:useBean id="now" class="java.util.Date" />
-						<f:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />  
-						<f:formatDate value="${reply.regdate }" pattern="yyyy-MM-dd" var="write_dt"/>
-						<c:if test="${today <= write_dt }">
-						new
-						</c:if> --%>
 						</td>
 						<td>${reply.regdate }
 							<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
