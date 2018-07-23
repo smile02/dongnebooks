@@ -76,14 +76,12 @@ public class BooksController {
 				//Date클래스를 사용하여 현재시간과 도서등록시간을 String형태에서 Date형태로 변환
 				Date curTime = changeFormat.parse(curDate);
 				Date regTime = changeFormat.parse(book.getRegdate());
-				System.out.println("curTime : "+curTime+", "+"regTime : "+regTime);
+				
 				//현재시간을 밀리세컨드, 등록시간을 밀리세컨드로 변환한 후 뺀 값을 diffTime에 넣기
 				long diffTime = curTime.getTime() - regTime.getTime();
-				System.out.println("curTime : "+curTime.getTime()+", "+regTime.getTime());
 				
 				//넣은 값을 (1시간)으로 나누어서 out타임에 저장
 				long outTime = diffTime / (1000*60*60);
-				System.out.println(book.getTitle()+"의 차이나는 시간 : "+outTime);
 				
 				//반복문이 돌때마다 outTime즉 차이나는 시간이 2시간보다 작을때만 newBooks를 true로
 				if(outTime < 2) {
@@ -91,7 +89,6 @@ public class BooksController {
 				}else {
 					book.setNewBooks(false);
 				}
-				System.out.println("=====================================");
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}			

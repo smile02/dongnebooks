@@ -17,6 +17,6 @@ public class SocketController {
 		
 		model.addAttribute("loginUser",user);
 		
-		return "/socket/chat_socket.jsp";
+		return "/socket/open_chatting.jsp";
 	}
 }

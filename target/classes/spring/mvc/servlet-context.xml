@@ -21,14 +21,6 @@
 	<bean id="loginInterceptor" class="com.inc.interceptor.LoginInterceptor"/>
 	<bean id="authInterceptor" class="com.inc.interceptor.AuthInterceptor"/>
 	
-	<websocket:handlers>
-		<websocket:mapping handler="chatHandler" path="/chat"/>
-	</websocket:handlers>
-	
-	<bean id="chatHandler" class="com.inc.util.ChatWebSocketHandler"/>
-	
-	<mvc:default-servlet-handler/>
-	
 	<context:component-scan base-package="com.inc.controller"/>
 	<!-- interceptor 등록 -->
 	<mvc:interceptors>
