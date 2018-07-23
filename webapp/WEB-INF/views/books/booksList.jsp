@@ -562,7 +562,7 @@ var commentsPage = "";
 	$(function(){		
 		page = 1;
 		$("#replyBtn").on("click", function(){
-			$("#addForm").css("display","block");
+			$("#addForm").css("inline","block").slideDown();
 			$("#listDiv").css("display","block");
 			$(".paging").css("display","inline-block");
 			var idx = $("#getIdx").val();			
@@ -571,7 +571,7 @@ var commentsPage = "";
 		});
 		
 		$("#commentsExit").on("click",function(){
-			$("#addForm").css("display","none");
+			$("#addForm").css("inline","none").slideUp();
 			$("#listDiv").css("display","none");
 			$(".paging").css("display","none");
 		});

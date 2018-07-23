@@ -22,6 +22,10 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>classpath:spring/mvc/servlet-context.xml</param-value>
     </init-param>
+    <load-on-startup>1</load-on-startup>
+    <!-- 클라이언트와의 통신이 하나일때는 상관없지만 둘 이상일 때 비동기방식은 에러 발생
+    따라서, true로 지정하여 비동기방식일때 여러 클라이언트여도 에러발생x -->
+    <async-supported>true</async-supported>
   </servlet>
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>

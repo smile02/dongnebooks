@@ -15,9 +15,6 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="/css/style.css" />
 <style>
-#chatArea{
-	width:200px; height:100px; overflow-y:auto; border: 1px solid black;
-}
 #message{
 	width:45%;
 }
@@ -25,15 +22,17 @@
 </head>
 <body>
 	<jsp:include page="../include/header.jsp" />
-	<form action="" class="form-control" onsubmit="return false">
-		작성자 : <p id="nickname" style="display:inline;">${loginUser.nickname }</p>		
-			<h1>의사소통 공간</h1>
-		<textarea id="chatMessageArea" cols="100" rows="20" readonly="readonly"></textarea>
-		<br />
-		<input type="text" id="message"/>
-		<button type="button" id="sendBtn">전송</button>
-	</form>
-	
+		<form class="form-control" onsubmit="return false">
+			작성자 : <p id="nickname" style="display:inline;">${loginUser.nickname }</p>		
+				<h1>의사소통 공간</h1>
+			<textarea id="chatMessageArea" cols="100" rows="20" readonly="readonly"></textarea>
+			<br />
+			<div class="row">
+				<input type="text" id="to" style="margin-right:20px;" />				
+				<input type="text" id="message"/>
+				<button type="button" id="sendBtn">전송</button>
+			</div>
+		</form>
 	<jsp:include page="../include/footer.jsp" />
 <!--스크립트 라이브러리 -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -44,17 +43,14 @@
 	var nick = $("#nickname").html();
 		
 	 function onOpen(event){
-		wsocket.send(nick+"님이 입장하셨습니다.");		
+		 //wsocket.send(JSON.stringify({"from":nick, "to":"", "msg":"입장하셨습니다."}));
+		 wsocket.send(nick+"님이 입장하셨습니다.");
 	} 
 	
 	function onMessage(event){
 		var data = event.data;
-		console.log(data);
-		if(data.substring(0,4) == "msg:"){
-			appendMessage(data.substring(4));
-		}else{
-			appendMessage(data);
-		}
+		console.log("data : "+data);
+		appendMessage(data);
 	}
 	
 	function onClose(event){
@@ -65,18 +61,20 @@
 		var nickname = nick;
 		console.log(":"+nickname);
 		var msg = $("#message").val();
+		var to = $("#to").val();
 		console.log("msg:"+nickname+":"+msg);
 		wsocket.send("msg:"+nickname+":"+msg);
+//		wsocket.send(JSON.stringify({"from":nickname, "to":to, "msg":msg}));
 		$("#message").val("");
 	}
 	
-	function appendMessage(msg){
-		chatArea.val(chatArea.val()+msg+"\n");
+	function appendMessage(msg){		
+		chatArea.val(chatArea.val()+msg+"\n");		
 	}
 	
-	$(window).on("beforeunload", function(){
+	/* $(window).on("beforeunload", function(){
 		wsocket.close();
-	})
+	}) */
 	
 	$(document).ready(function(){
 		console.log("nick :"+nick);

@@ -110,12 +110,20 @@
   		<artifactId>spring-context-support</artifactId>
   		<version>${spring.version}</version>
   	</dependency>
-  	
+  	<!-- 웹 소켓 라이브러리 -->
   	<dependency>
   		<groupId>org.springframework</groupId>
   		<artifactId>spring-websocket</artifactId>
   		<version>4.0.4.RELEASE</version>
   	</dependency>
+  	
+  	<!-- 웹소켓에서 대화내용을 객체로 보낼 때 -->
+	<dependency>
+	    <groupId>com.googlecode.json-simple</groupId>
+	    <artifactId>json-simple</artifactId>
+	    <version>1.1.1</version>
+	</dependency>
+  	
   	
   	<!-- dbcp (pool) -->
   	<dependency>

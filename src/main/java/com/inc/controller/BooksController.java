@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -65,17 +66,17 @@ public class BooksController {
 			try {
 				//현재시간을 불러와서 형식을 년-월-일 시:분:초 로 변환
 				Calendar calendar = Calendar.getInstance();
-				SimpleDateFormat curFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+				SimpleDateFormat curFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.KOREA);
 				//변환한 시간을 스트링으로 저장
 				String curDate = curFormat.format(calendar.getTime());
 				
 				//아래에서 도서등록시간과 현재시간을 아래의 형식으로 변환해줄 변수
-				SimpleDateFormat changeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+				SimpleDateFormat changeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.KOREA);
 				
 				//Date클래스를 사용하여 현재시간과 도서등록시간을 String형태에서 Date형태로 변환
 				Date curTime = changeFormat.parse(curDate);
 				Date regTime = changeFormat.parse(book.getRegdate());
-				
+				System.out.println("curTime : "+curTime+", "+"regTime : "+regTime);
 				//현재시간을 밀리세컨드, 등록시간을 밀리세컨드로 변환한 후 뺀 값을 diffTime에 넣기
 				long diffTime = curTime.getTime() - regTime.getTime();
 				System.out.println("curTime : "+curTime.getTime()+", "+regTime.getTime());

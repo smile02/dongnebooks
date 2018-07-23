@@ -4,10 +4,17 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.websocket.DecodeException;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
+
+import com.inc.domain.Message;
 
 public class ChatWebSocketHandler extends TextWebSocketHandler{
 	
@@ -30,8 +37,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler{
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 		log(session.getId()+"로 부터 메세지 수신 : "+message.getPayload());
+		
 		for(WebSocketSession s: users.values() ) {
-			log("message : "+message);
 			s.sendMessage(message);
 			log(s.getId()+"에 메세지 발송"+message.getPayload());
 		}
@@ -45,5 +52,4 @@ public class ChatWebSocketHandler extends TextWebSocketHandler{
 	private void log(String logmsg) {
 		System.out.println(new Date()+" : "+logmsg);
 	}
-
 }
