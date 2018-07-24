@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="comments">
+	<select id="commentsList" parameterType="map" resultType="comments">
+		select b.*, (select count(*) from comments where idx = #{idx}) as commentsSize from 
+			(select rownum as rnum, a.* from 
+				(select * from comments 
+					where idx = #{idx} 
+						order by regdate desc) 
+				a) b 
+		where rnum between #{start} and #{end}
+	</select>
+	
+	<insert id="commentsAdd" parameterType="comments">
+		insert into comments
+			values(seq_comments_rno.nextval,
+				   #{idx},
+				   #{nickname},
+				   #{comments},
+				   sysdate)
+	</insert>
+	
+	<update id="commentsMod" parameterType="comments">
+		update comments set comments = #{comments}
+			where rno = #{rno}
+	</update>
+	
+	<delete id="commentsDel" parameterType="int">
+		delete from comments
+			where rno = #{value}
+	</delete>
+	<select id="commentsCount" parameterType="int" resultType="int">
+		select count(idx) from comments where idx = #{value}
+	</select>
+</mapper>
