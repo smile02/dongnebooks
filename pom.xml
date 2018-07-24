@@ -39,6 +39,7 @@
   			<configuration>
   				<webappDirectory>webapp</webappDirectory>
   				<webXml>webapp/WEB-INF/web.xml</webXml>
+  				<failOnMissingWebXml>false</failOnMissingWebXml>
   			</configuration>
   		</plugin>
   		
