@@ -30,7 +30,7 @@
 			<div class="row">
 				<input type="text" id="to" style="margin-right:20px;" />				
 				<input type="text" id="message"/>
-				<button type="button" id="sendBtn">전송</button>
+				<button type="button" id="sendBtn" onclick="send(event)">전송</button>
 			</div>
 		</form>
 	<jsp:include page="../include/footer.jsp" />
@@ -86,7 +86,7 @@
 			}
 			return;
 		}
-		wsocket = new WebSocket("ws://localhost:9090/chat/test");
+		wsocket = new WebSocket("ws://localhost:9090/chat");
 		wsocket.onopen=onOpen;
 		wsocket.onmessage=onMessage;
 		wsocket.onclose = onClose;

@@ -4,18 +4,42 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:p="http://www.springframework.org/schema/p"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
 	
 	<mvc:annotation-driven/>
 	<mvc:resources  mapping="/css/**" location="/WEB-INF/resources/css/"/>
-	<!-- 여러개 등록이 가능함 (아래는 자바스크립트를 외부에 작성하는 경우) -->
- 	<!-- <mvc:resources  mapping="/js/**" location="/WEB-INF/resources/js/"/> -->
+	<mvc:resources  mapping="/js/**" location="/WEB-INF/resources/js/"/>
 	
-	<bean class="com.inc.controller.BookController"
-		p:bookDao-ref="bookDao"/>
-
+	<mvc:resources  mapping="/image/**" location="/WEB-INF/resources/image/"/>
+	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 			p:prefix="/WEB-INF/views"/>
+	<bean id="loginInterceptor" class="com.inc.interceptor.LoginInterceptor"/>
+	<bean id="authInterceptor" class="com.inc.interceptor.AuthInterceptor"/>
+	
+	<context:component-scan base-package="com.inc.controller"/>
+	<!-- interceptor 등록 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/mypage/**"/>
+			<mvc:mapping path="/cart/**"/>
+			<mvc:mapping path="/books/add"/>
+			<mvc:mapping path="/books/mod"/>
+			<mvc:mapping path="/board/insert"/>
+			<mvc:mapping path="/board/update"/>
+			<mvc:mapping path="/board/delete"/>
+			<ref bean="loginInterceptor"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<ref bean="authInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	<bean name="multipartResolver"
+	 class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+			p:defaultEncoding="UTF-8" p:maxUploadSize="10485760"/>
 </beans>
