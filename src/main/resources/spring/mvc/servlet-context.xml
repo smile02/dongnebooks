@@ -20,6 +20,7 @@
 			p:prefix="/WEB-INF/views"/>
 	<bean id="loginInterceptor" class="com.inc.interceptor.LoginInterceptor"/>
 	<bean id="authInterceptor" class="com.inc.interceptor.AuthInterceptor"/>
+	<bean id="xssInterceptor" class="com.inc.interceptor.XssInterceptor"/>
 	
 	<websocket:handlers>
 		<websocket:mapping handler="chatHandler" path="/chat"/>
@@ -45,6 +46,10 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/>
 			<ref bean="authInterceptor"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<ref bean="xssInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
 	<bean name="multipartResolver"
