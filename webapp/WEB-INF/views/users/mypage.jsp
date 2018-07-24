@@ -19,9 +19,6 @@
 .paging{
 	display:inline-block;
 }
-#salePaging{
-	display:inline-block;
-}
 </style>
 </head>
 <body>

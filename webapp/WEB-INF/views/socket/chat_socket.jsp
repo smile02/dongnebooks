@@ -88,7 +88,7 @@
 			}
 			return;
 		}
-		wsocket = new WebSocket("ws://192.168.0.23:9090/chat");
+		wsocket = new WebSocket("ws://localhost:9090/chat");
 		wsocket.onopen=onOpen;
 		wsocket.onmessage=onMessage;
 		wsocket.onclose = onClose;
