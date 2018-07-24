@@ -17,4 +17,6 @@ public interface CommentsDao {
 
 	int commentsCount(int idx);
 
+	void commentsAdmin(int rno);
+
 }

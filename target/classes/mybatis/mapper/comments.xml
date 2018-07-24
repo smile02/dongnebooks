@@ -34,4 +34,7 @@
 	<select id="commentsCount" parameterType="int" resultType="int">
 		select count(idx) from comments where idx = #{value}
 	</select>
+	<delete id="commentsAdmin" parameterType="int">
+		delete from comments where rno = #{value}
+	</delete>
 </mapper>

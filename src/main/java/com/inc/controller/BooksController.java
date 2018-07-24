@@ -202,9 +202,13 @@ public class BooksController {
 	
 	@RequestMapping(value = "/books/adminDelete", method=RequestMethod.POST)
 	@ResponseBody
-	public String adminDelete(@RequestParam int idx) {
-		booksService.adminDelete(idx);
-		return "y";
+	public String adminDelete(@RequestParam int idx, @RequestParam String nickname) {
+		if("관리자".equals(nickname)) {
+			booksService.adminDelete(idx);
+			return "y";
+		}else {
+			return "n";
+		}
 	}
 	
 	//유효성검사를 진행하는 메서드

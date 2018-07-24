@@ -16,4 +16,6 @@ public interface CommentsService {
 
 	int commentsCount(int idx);
 
+	void commentsAdmin(int rno);
+
 }

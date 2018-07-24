@@ -118,6 +118,6 @@
 	</select>
 	
 	<delete id="adminDelete" parameterType="int">
-		delete from books where idx = #{value} and nickname='관리자'
+		delete from books where idx = #{value}
 	</delete>
 </mapper>

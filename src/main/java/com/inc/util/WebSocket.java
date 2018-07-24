@@ -22,7 +22,7 @@ public class WebSocket {
 	
 	@OnOpen
 	public void handleOpen(Session session){
-		System.out.println("New client is connected..."+session.getId());
+		System.out.println("New client is connected..."+session.getId());		
 		clients.add(session);
 	}
 	

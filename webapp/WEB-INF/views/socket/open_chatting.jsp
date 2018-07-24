@@ -18,7 +18,6 @@
 <body>
 <jsp:include page="../include/header.jsp" />
 <div class="container">
-	<div class="row">
 		<form class="form-control form-horizontal">
 				<div class="col-sm-6">					
 					<p id="nick" class="control-label">닉네임 : ${loginUser.nickname }</p>
@@ -26,30 +25,35 @@
 				
 			    <br />
 			    <h2 class="text-muted text-center">의사소통 공간</h2>
+			    <br />
 				<!-- 결과 메시지 보여주는 창 -->
-				<div class="form-group">
-					<div class="col-sm-6 col-sm-offset-3">
-						<div id="textbox" class="panel panel-default"
-						 style="width:600px; height:400px; padding:30px; overflow:auto; border: 1px solid black"></div>
-					 </div>
+				<div class="row">
+					<div class="form-group col-sm-7">
+						<div id="textbox" class="panel panel-default col-sm-offset-2"
+						 style="height:500px; padding-left:20px; overflow:auto; border: 1px solid black;"></div>					
+					</div>
 				</div>
-				<div class="form-group">
+				<br />
+				<div class="row col-sm-11">			
 					<div class="col-sm-5">
-						<input id="message" type="text" class="form-control" placeholder="글을 입력해주세요!" style="display:inline"
-							onkeypress="sendMessage(event);">												
+						<!-- <input id="message" type="text" class="form-control" placeholder="글을 입력해주세요!"
+							onkeypress="sendMessage(event);"> -->
+							<textarea id="message" cols="30" rows="3" class="form-control"
+							placeholder="글을 입력해주세요!" onkeypress="sendMessage(event);"></textarea>
 					</div>
-					<div class="col-sm-2">
-						<button type="button" onclick="sendMessage(event)" class="btn btn-info form-control" style="display:inline">전송</button>
+					
+					<div class="col-sm-2">	
+						<button type="button" onclick="sendMessage(event)" class="btn btn-info form-control">전송</button>
 					</div>
 				</div>
-				<div class="form-group">			
+				<br />
+				 <div class="form-group">			
 				    <div class="col-sm-6">
 				    	<label for="" class="control-label" style="display:block;">to</label>
 				    	<input id="to" type="text" class="form-control">
 				    </div>			    
-				</div>		
+				</div>
 	    </form>    
-	    </div>
   </div>
    <jsp:include page="../include/footer.jsp" />
 
@@ -101,17 +105,15 @@
         	console.log(message.data);
         	var json = JSON.parse(message.data);
         	var $div = $("<div>").addClass("row");
-        	var $p = $("<p>").text('');
+        	var $p = $("<p>");
         	if(json.msg.indexOf("입장하셨습니다.") != -1){
-        		$p.text(json.from+json.msg); 		
-        	}else if(json.to.length == 0 || json.to == name){ //사용자가 to에 아무것도 입력하지 않았을 때
-        		console.log("json.from : "+json.from);
-        		console.log("name : "+name);
-        		$p.text(json.from+" : "+json.msg);
+        		$p.text(json.from+json.msg);        		
+        	}else{
+            	$p.text(json.from+" : "+json.msg);
             	if(json.from == name){            		
         			$p.css("text-align","right");
         		}
-        	}
+        	}        	
         	$div.append($p);
         	textbox.append($div);
         	$("#textbox").scrollTop($("#textbox")[0].scrollHeight);
@@ -121,6 +123,7 @@
             //웹소켓으로 textMessage객체의 값을 보낸다.
             if(event.type == "click" || event.type == "keypress" && event.key =="Enter"){
             	ws.send(JSON.stringify({from:name, to:$("#to").val(), msg:$("#message").val()}));
+            	event.preventDefault();
                 $("#message").val('');	
             }            
         }

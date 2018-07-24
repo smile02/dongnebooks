@@ -40,5 +40,10 @@ public class CommentsDaoImpl implements CommentsDao{
 		return session.selectOne("comments.commentsCount",idx);
 	}
 
+	@Override
+	public void commentsAdmin(int rno) {
+		session.delete("comments.commentsAdmin",rno);
+	}
+
 
 }

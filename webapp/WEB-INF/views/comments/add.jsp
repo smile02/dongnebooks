@@ -143,6 +143,7 @@
 								var changeBtn = "";
 								var deleteBtn = "";
 								var userComments = "";
+								var adminBtn = "";
 								$(data.commentsList).each(function(){
 									$("#commentsCount").html(this.commentsSize);
 									var lastIndex = this.regdate.toString().lastIndexOf('.');
@@ -165,10 +166,17 @@
 										deleteBtn = "";
 									}
 									
+									if(sessionUser == '관리자'){
+										adminBtn = "<button id='admin_"+this.rno+"' type='button' class='btn btn-dark btn-sm' onclick='commentsAdmin("+this.rno+");'"
+										+"style='position: absolute; left:280px;'>"
+										+"관리자 삭제"+"</button>";
+									}
+									
 									out += "<li class='list-group-item list-group-item-action'>"
 									+ userNickname
 									+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 									+ regdate+"</br>"
+									+ adminBtn
 									+ changeBtn
 									+"&nbsp;"
 									+ deleteBtn						

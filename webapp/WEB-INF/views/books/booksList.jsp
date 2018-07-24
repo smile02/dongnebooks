@@ -587,13 +587,17 @@ var commentsPage = "";
 	}	
 	
 	function adminDelete(idx){
+		var admin = "${sessionScope.user.nickname}";
 		$.ajax({
 			url:"/books/adminDelete",
 			type:"post",
-			data:{idx:idx},
+			data:{idx:idx,nickname:admin},
 			success:function(data){
 				if(data == 'y'){
 					alert("악당 퇴치");
+					location.reload();
+				}else{
+					alert("관리자만 가능한 권한입니다.");
 				}
 			}
 		});
@@ -656,6 +660,23 @@ var commentsPage = "";
 			}
 		});
 	}
+	
+	function commentsAdmin(rno){
+		var admin = "${sessionScope.user.nickname}";
+		$.ajax({
+			url:"/comments/admin",
+			type:"post",
+			data:{rno:rno,nickname:admin},
+			success:function(data){
+				if(data == 'y'){
+					alert("악당퇴치");
+					reply(commentsPage);
+				}else{
+					alert("관리자만 삭제 가능한 권한입니다!");
+				}
+			}
+		});
+	}
 		
 	$("#commentsPaging").on("click", "li a", function(event){
 		event.preventDefault();
@@ -675,6 +696,7 @@ var commentsPage = "";
 				var changeBtn = "";
 				var deleteBtn = "";
 				var comments = "";
+				var adminBtn = "";
 				if(data.commentsList.length == 0){			
 					$("#commentsTitle").html("작성된 댓글이 없습니다~~");
 				}else{
@@ -699,11 +721,16 @@ var commentsPage = "";
 							changeBtn = "";
 							deleteBtn = "";
 						}
-						
+						if(sessionUser == '관리자'){
+							adminBtn = "<button id='admin_"+this.rno+"' type='button' class='btn btn-dark btn-sm' onclick='commentsAdmin("+this.rno+");'"
+							+"style='position: absolute; left:280px;'>"
+							+"관리자 삭제"+"</button>";
+						}
 						out += "<li class='list-group-item list-group-item-action'>"
 						+ nickname
 						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ regdate+"</br>"
+						+ adminBtn
 						+ changeBtn
 						+"&nbsp;"
 						+ deleteBtn						
@@ -803,9 +830,6 @@ var commentsPage = "";
 			 }
 		 }
 		
-			  //var reg_price = parseInt($(".reg_price").val());
-			  //var reg_fee = parseInt($(".reg_fee").val());
-			  
 		  //도서등록
 		   function reg(){
 			 var formData = new FormData($("#form")[0]);
