@@ -22,11 +22,11 @@ public class MessageDecoder implements Decoder.Text<Message> {
 	public void init(EndpointConfig ec) {
 
 	}
-
+	//ws.html에서 보내준 키값에 대한 값들을 받는 메서드
 	public Message decode(String jsonMessage) throws DecodeException {
 		JSONParser parser = new JSONParser();
 		JSONObject jsonObject;
-		Message message = null;
+		Message message = null; //to, from, message를 담는 Vo객체
 		try {
 			jsonObject = (JSONObject) parser.parse(jsonMessage);
 			message = new Message();
@@ -38,13 +38,13 @@ public class MessageDecoder implements Decoder.Text<Message> {
 			throw new DecodeException(jsonMessage,e.getMessage());
 			
 		}
-		
 		return message;
 
 	}
 
 	@Override
 	public boolean willDecode(String jsonMessage) {
+		//들어온 문자열이 디코딩 가능한지 아닌지 판단(JSON)으로 변환이 가능한지
 		try {
 			// Check if incoming message is valid JSON
 			JSONParser parser = new JSONParser();

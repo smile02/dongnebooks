@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ <mapper namespace="board">
+	<select id="selectList" resultType="board" parameterType="map">
+		select b.*, (select count(*) from reply where idx = b.idx) replysize
+	    	from (select rownum as rnum, a.* 
+	    	from (select * from board
+			    <if test="option != null and option != 'all'">
+					where
+					  <choose>
+					     <when test="option == 'nickname'">
+					       	nickname like '%'||#{text}||'%'	
+					     </when>
+					     <when test="option == 'title'">
+					       	title like '%'||#{text}||'%'	
+					     </when>
+					     <when test="option == 'comments'">
+					       	comments like '%'||#{text}||'%'	
+					     </when>
+					     <when test="option == 'title_name'">
+					       	title like '%'||#{text}||'%' or
+					       	nickname like '%'||#{text}||'%'	
+					     </when>
+					  </choose>
+				</if>	    			
+	    			order by code asc, regdate desc	    		
+	    		) a
+	    	) b
+	    where rnum between #{start} and #{end}
+	</select>
+	
+	<select id="selectOne" resultMap="boardMap" parameterType="int">
+		select * from board where idx = #{value}
+	</select>
+	
+	<resultMap type="board" id="boardMap">
+		<id property="idx" column="idx"/>
+		<collection select="reply.replyList"
+					column="idx"
+					ofType="reply"
+					property="replyList"/>
+	</resultMap>
+	
+	<insert id="insert" parameterType="board">
+		insert into board values(seq_board_idx.nextval,
+								<if test="code != null and code != ''">
+			 					 <choose>
+								     <when test="code == 1">
+								       	'[공지] '||#{title},	
+								     </when>
+								     <when test="code == 2">
+								       	'[일반] '||#{title},	
+								     </when>
+								  </choose>
+								</if>
+								#{nickname},
+								#{comments},
+								0,
+								sysdate,
+								#{code})
+	</insert>	
+	
+	<update id="plusHit" parameterType="int">
+		update board set cnt = cnt + 1 where idx = #{value}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from board where idx = #{idx}
+	</delete>
+	
+	<update id="update" parameterType="board">
+		update board set title = #{title}, comments = #{comments}
+		where idx = #{idx}
+	</update>
+	
+	<select id="totalCount" resultType="int">
+		select count(*) from board
+		<if test="option != null and option != 'all'">
+			where
+			  <choose>
+			     <when test="option == 'nickname'">
+			       	nickname like '%'||#{text}||'%'	
+			     </when>
+			     <when test="option == 'title'">
+			       	title like '%'||#{text}||'%'	
+			     </when>
+			     <when test="option == 'comments'">
+			       	comments like '%'||#{text}||'%'	
+			     </when>
+			     <when test="option == 'title_name'">
+			       	title like '%'||#{text}||'%' or
+			       	nickname like '%'||#{text}||'%'	
+			     </when>
+			  </choose>
+		</if>
+	</select>
+	<select id="noticeList" parameterType="int" resultType="board">
+		select rownum, a.* from (select * from board where code=1 order by regdate desc) a where rownum between 1 and #{value}
+	</select>
+</mapper>
+  

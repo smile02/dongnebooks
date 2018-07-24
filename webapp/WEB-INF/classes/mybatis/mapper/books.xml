@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="books">
+	<select id="booksList" resultType="books" parameterType="map">
+		 select * 
+	    from (select rownum as rnum, a.* from 
+	    	(
+	    		select * from 
+	    			books where deal != 'deal'
+	    			<if test="tag != null and tag != 'all'">
+	    				<choose>
+	    					<when test="tag == 'IT'">
+	    						and b_category = #{tag}		
+	    					</when>
+	    					<when test="tag == '사회'">
+	    						and b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '과학'">
+	    						and b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '문학'">
+	    						and b_category = #{tag}
+	    					</when>
+	    				</choose>	    				
+	    			</if>	    			
+	    			order by regdate desc	    		
+	    		) a
+	    	) 
+	    where rnum between #{start} and #{end}
+	</select>	
+	
+	<insert id="booksAdd" parameterType="books">
+		insert into books
+			values(seq_books_idx.nextval,
+				   #{title},
+				   #{nickname},
+				   #{comments},
+				   sysdate,
+				   #{price},
+				   #{status},
+				   #{fee},
+				   #{photo},
+				   #{d_type},
+				   #{author},
+				   #{b_category},
+				   #{s_category},
+				   'sale')
+	</insert>
+	
+	<select id="booksView" parameterType="int" resultType="books">
+		select a.*, (select count(*) from comments where idx = #{value}) commentsSize from
+			(select * from books) a
+			where idx = #{value}
+	</select>
+	
+	<update id="booksMod" parameterType="books">
+		update books set price = #{price},
+						 status = #{status},
+						 d_type = #{d_type},
+						 fee = #{fee},
+						 author = #{author},
+						 b_category = #{b_category},
+						 s_category = #{s_category},
+						 <if test="deal == '판매중'">
+						 	deal = 'sale'					 	
+						 </if>						 
+						 comments = #{comments}
+			where idx = #{idx}
+	</update>
+	
+	<select id="getTotalCount" resultType="int" parameterType="map">
+		select count(*) from books
+			where deal != 'deal' 
+					<if test="tag != null and tag != 'all'">	    			
+	    				<choose>
+	    					<when test="tag == 'IT'">
+	    						and b_category = #{tag}		
+	    					</when>
+	    					<when test="tag == '사회'">
+	    						and b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '과학'">
+	    						and b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '문학'">
+	    						and b_category = #{tag}
+	    					</when>
+	    				</choose>	    				
+	    			</if>		
+	</select>
+	
+	<select id="tagList" resultType="String">
+		select distinct b_category from books
+	</select>
+	
+	<update id="dealChange" parameterType="map">
+		update books set
+			<if test="status != null">
+				<choose>
+					<when test="status == 'deal' or status == 'request'">
+						deal = 'deal'
+					</when>
+					<when test="status == 'complete'">
+						deal = 'complete'
+					</when>
+					<when test="status == 'cancel'">
+						deal = 'sale'
+					</when>
+				</choose>
+			</if>		
+		where idx = #{idx}
+	</update>
+	
+	<select id="newBooks" parameterType="int" resultType="books">
+	select rownum, a.* from (select * from books where deal='sale' order by regdate desc) a where rownum between 1 and #{value}
+	</select>
+	
+	<delete id="adminDelete" parameterType="int">
+		delete from books where idx = #{value} and nickname='관리자'
+	</delete>
+</mapper>

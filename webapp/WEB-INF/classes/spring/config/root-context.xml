@@ -3,23 +3,20 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
 	<!-- 외부에서 아래의 파일을 참조하게 되면 중복된 코드를 줄일 수 있다. 그리고, db.propertise를 수정하면 자동적용 됨 
 	아래에서 ${}안에 키값을 넣어서 사용 -->
-	<bean id="paging" class="com.inc.util.Paging"/>
-	
-	<bean id="boardService" class="com.inc.service.BoardServiceImpl" p:boardDao-ref="boardDao"/>
-	
-	<bean id="boardDao" class="com.inc.dao.BoardDao" p:session-ref="sqlSession" />
-	
 	<context:property-placeholder 
 		location="classpath:mybatis/config/db.properties"/>
+	<tx:annotation-driven/>
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
+		p:dataSource-ref="dataSource-pool"/>
+	<bean id="paging" class="com.inc.util.Paging"/>
 	
-	<bean id="bookDao" class="com.inc.dao.BookDao"
-		 p:sqlSession-ref="sqlSession"/>
-		 
-	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+	<bean id="session" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg ref="sqlSessionFactory"/>	
 	</bean>
 	
@@ -39,4 +36,20 @@
 	p:url="${url}"
 	p:username="${user-name}"
 	p:password="${password}"/> 
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com"/>
+		<property name="port" value="587"/>
+		<property name="username" value="dongnebooks21@gmail.com"/>
+		<property name="password" value="aaaa1111!!"/>
+		<property name="defaultEncoding" value="UTF-8"/>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.transport.protocol">smtp</prop>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.debug">true</prop>
+			</props>
+		</property>
+	</bean>
+	<context:component-scan base-package="com.inc.dao com.inc.service"/>
 </beans>

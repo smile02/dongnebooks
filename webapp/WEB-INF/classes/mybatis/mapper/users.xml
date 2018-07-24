@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="users">
+	<select id="selectOne" resultType="users">
+		select * from users where id = 'admin'
+	</select>
+	<select id="getUser" parameterType="string" resultType="users">
+		select * from users where id = #{value}
+	</select>
+	<select id="nickCheck" parameterType="string" resultType="users">
+		select * from users where nickname = #{value}
+	</select>
+	<select id="emailCheck" parameterType="string" resultType="users">
+		select * from users where email =#{value}
+	</select>
+	<insert id="signup" parameterType="users">
+		insert into users(nickname, id, password, email, phone, address) values(#{nickname}, #{id}, #{password}, #{email}, #{phone}, #{address})
+	</insert>
+	<select id="findID" parameterType="string" resultType="string">
+		select id from users where email = #{value}
+	</select>
+	<update id="updatePwd" parameterType="users">
+		update users set password = #{password} where id = #{id}
+	</update>
+	<update id="update" parameterType="users">
+		update users set nickname=#{nickname}, email=#{email}, phone=#{phone}, address=#{address} where id=#{id}
+	</update>
+	
+	<update id="keepLogin" parameterType="map">
+		update users set sessionKey=#{sessionId}, sessionLimit = #{next} where id=#{id}
+	</update>
+	
+	<select id="checkUserWithSessionKey" parameterType="string" resultType="users">
+		select * from users where sessionKey=#{value} and sessionLimit > systimestamp
+	</select>
+</mapper>
