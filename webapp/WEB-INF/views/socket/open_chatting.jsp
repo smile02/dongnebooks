@@ -88,10 +88,7 @@
              ws.onopen = function(message){
              	ws.send(JSON.stringify({from:name, to:"", msg:"님이 입장하셨습니다."}));
              };
-             //웹 소켓이 닫혔을 때 호출되는 이벤트
-             ws.onclose = function(message){
-             	textbox.val(textbox.val() + "Server Disconnect...\n");
-             };
+             
              //웹 소켓이 에러가 났을 때 호출되는 이벤트
              ws.onerror = function(message){
              	textbox.val(textbox.val() + "error...\n");
@@ -104,7 +101,9 @@
              	var $entity = $("<p class='col-sm-12'>");
              	if(json.msg.indexOf("입장하셨습니다.") != -1){
              		$entity.text(json.from+json.msg);        		
-             	}else{        		
+             	}else if(json.msg.indexOf("퇴장하셨습니다.") != -1){
+             		$entity.text(json.from+json.msg);
+             	}else{
                  	$entity.text(json.from+" : "+json.msg);
                  	if(json.from == name){            		
              			$entity.css("text-align","right");
@@ -129,12 +128,17 @@
                 $("#message").val('');	
             }            
         }
-        //웹소켓 종료
+        /* //웹소켓 종료
         function disconnect(){
             ws.close();
+        } */
+        window.onbeforeunload = function(){
+        	//웹 소켓이 닫혔을 때 호출되는 이벤트
+            ws.onclose = function(message){
+            	//textbox.val(textbox.val() + "Server Disconnect...\n");
+           	 ws.send(JSON.stringify({from:name, to:"", msg:"님이 퇴장하셨습니다."}));
+            };
         }
-    	
-        
     </script>
 </body>
 </html>

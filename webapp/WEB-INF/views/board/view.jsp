@@ -141,7 +141,7 @@
 						<td>${reply.regdate }
 							<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
 							<c:if test="${sessionScope.user.nickname == reply.nickname }">
-								<button class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
+								<button id="replyMod_${reply.rno}" class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
 								<button class="btn btn-primary btn-sm" type="button" onclick="reply_del(${reply.rno})">삭제</button>
 							</c:if>
 						</td>
@@ -232,8 +232,12 @@
 	
 	//댓글수정
 	function reply_update(rno) {
-		var comments_td = $("#td_"+rno);
+		console.log(rno);
+		$("#replyMod_"+rno).attr("disabled",true);
+		console.log($("#replyMod_"+rno).val());
+		var comments_td = $("#td_"+rno);		
 		var $input = $("<input id='input_"+rno+"' type='text'/>");
+		console.log(comments_td.text());
 		$input.val(comments_td.text());
 		comments_td.empty();
 		comments_td.append($input);
