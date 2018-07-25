@@ -238,7 +238,7 @@
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_price"></p>
-											<input id="mod_price" name="price" type="text"
+											<input id="mod_price" name="price" type="text" onkeypress="onlyMyNumber(event);"
 												class="form-control" />
 											<span class="error error_price err_color"></span>
 										</div>
@@ -280,7 +280,7 @@
 										<div class="col-xs-5">
 											<p class="form-control res_fee"></p>
 											<input id="mod_fee" type="text" name="fee"
-												class="form-control" />
+												class="form-control"  onkeypress="onlyMyNumber(event);" />
 											<span class="error error_fee err_color"></span>
 										</div>
 									</div>
@@ -427,7 +427,7 @@
 										<label for="price" class="control-label">가격 : </label>
 									</div>
 									<div class="col-xs-5">
-										<input type="text" id="price" name="price" value="0"
+										<input type="text" id="price" name="price" onkeypress="onlyMyNumber(event);"
 											class="form-control reg_price" placeholder="가격을 입력해주세요." />
 										<span class="error error_price err_color"></span>
 									</div>
@@ -469,7 +469,7 @@
 									</div>
 									<div class="col-xs-5">
 										<input type="text" id="fee" name="fee" class="form-control reg_fee"
-											placeholder="배송비를 입력해주세요."/>
+											placeholder="배송비를 입력해주세요." onkeypress="onlyMyNumber(event);"/>
 										<span class="error error_fee err_color"></span>
 									</div>
 								</div>
@@ -512,16 +512,18 @@
 									</div>
 								</div>
 
-								<div class="form-group">
+								<div class="form-group">								
+								<div class="custom-file">
 									<div class="col-xs-2 col-xs-offset-3">
-										<label for="photo_file" class="control-label">사진 : </label>
+										<label for="photo_file" class="custom-file-label">사진 : </label>
 									</div>
 									<div class="col-xs-5">
 										<input type="file" id="photo_file" name="photo_file"
-											class="form-control-file" onchange="fileCheck(this);"
+											class="custom-file-input" onchange="fileCheck(this);"
 											accept="image/gif, image/GIF, image/png, image/PNG, image/jpeg, image/JPEG"
 										    aria-describedby="photo_file" />
-										<small id="photo_file" class="form-text text-muted">사진만 선택해주세요!!</small>
+										 </div>
+										<small id="photo_file" class="form-text text-muted">사진은 ↑ 클릭 시 등록할 수 있습니다!!</small>
 									</div>
 								</div>
 
@@ -654,7 +656,6 @@ var commentsPage = "";
 			success:function(result){
 				if(result=='SUCCESS'){
 					alert("삭제완료");
-//					$("#replies").empty();
 					reply(commentsPage);
 				}
 			}
@@ -699,8 +700,12 @@ var commentsPage = "";
 				var adminBtn = "";
 				if(data.commentsList.length == 0){			
 					$("#commentsTitle").html("작성된 댓글이 없습니다~~");
+					$("#commentsCount").html(0);
+					$("#commentsPaging").empty();
+					$("#replies").empty();
 				}else{
 					$(data.commentsList).each(function(){
+						console.log(this.commentsSize);
 						$("#commentsCount").html(this.commentsSize);
 						var lastIndex = this.regdate.toString().lastIndexOf('.');
 						var reg = this.regdate.toString().substring(0,lastIndex);
@@ -744,6 +749,14 @@ var commentsPage = "";
 				}
 			});		
 		} 
+	
+	function onlyMyNumber(event) {	
+		if (event.which && 
+				(event.which <= 47 || event.which >= 58)
+			&& event.which != 8) { 		
+			event.preventDefault(); 
+		}		
+	}
 	
 	//로그인을 안하게 되면 도서등록이 안되도록
 	function login(){

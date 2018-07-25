@@ -185,6 +185,7 @@
 									+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
 									+"</li>";							
 								});
+								$("#commentsTitle").html("");
 								$("#replies").html(out);
 								$("#commentsPaging").html(data.paging);
 							});		
