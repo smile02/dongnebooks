@@ -238,7 +238,7 @@
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_price"></p>
-											<input id="mod_price" name="price" type="text" onkeypress="onlyMyNumber(event);"
+											<input id="mod_price" name="price" type="text" onkeypress="return onlyMyNumber(event);"
 												class="form-control" />
 											<span class="error error_price err_color"></span>
 										</div>
@@ -280,7 +280,7 @@
 										<div class="col-xs-5">
 											<p class="form-control res_fee"></p>
 											<input id="mod_fee" type="text" name="fee"
-												class="form-control"  onkeypress="onlyMyNumber(event);" />
+												class="form-control"  onkeypress="return onlyMyNumber(event);" />
 											<span class="error error_fee err_color"></span>
 										</div>
 									</div>
@@ -427,7 +427,7 @@
 										<label for="price" class="control-label">가격 : </label>
 									</div>
 									<div class="col-xs-5">
-										<input type="text" id="price" name="price" onkeypress="onlyMyNumber(event);"
+										<input type="text" id="price" name="price" onkeypress="return onlyMyNumber(event);"
 											class="form-control reg_price" placeholder="가격을 입력해주세요." />
 										<span class="error error_price err_color"></span>
 									</div>
@@ -469,7 +469,7 @@
 									</div>
 									<div class="col-xs-5">
 										<input type="text" id="fee" name="fee" class="form-control reg_fee"
-											placeholder="배송비를 입력해주세요." onkeypress="onlyMyNumber(event);"/>
+											placeholder="배송비를 입력해주세요." onkeypress="return onlyMyNumber(event);"/>
 										<span class="error error_fee err_color"></span>
 									</div>
 								</div>
@@ -750,13 +750,13 @@ var commentsPage = "";
 			});		
 		} 
 	
-	function onlyMyNumber(event) {	
-		if (event.which && 
-				(event.which <= 47 || event.which >= 58)
-			&& event.which != 8) { 		
-			event.preventDefault(); 
-		}		
-	}
+	function onlyMyNumber(event) {			
+		var keyValue = event.keyCode; 
+		if( ((keyValue >= 48) && (keyValue <= 57)) ) 
+			return true; 
+		else 
+			return false; 
+		}
 	
 	//로그인을 안하게 되면 도서등록이 안되도록
 	function login(){
