@@ -33,14 +33,14 @@
 		</div>
 		<c:if test="${sessionScope.user.nickname == null }">
 			<input class="form-control col-3 d-inline" type="text" name="nickname" 
-				   value="방문자"/ readonly> 님 환영합니다.
+				   value="방문자" readonly> 님 환영합니다.
 		</c:if>
 		<c:if test="${sessionScope.user.nickname != null }">
 			<input class="form-control col-3 d-inline" type="text" name="nickname" 
 				   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
 		</c:if>
 		<form action="${pageContext.request.contextPath}/board/update"
-			method="post">
+			method="post" name="form1">
 			<input type="hidden" name="idx" value="${board.idx }" />
 			<fieldset>
 				<table class="table">
@@ -71,18 +71,15 @@
 						<tr>
 							<th>제목</th>
 							<td colspan="7">
-								<input id="title" type="text" name="title" 
-									   style="text-align:center; width:500px; height:50px;" value="${board.title }" />
+								<input id="title" type="text" name="title" class="form-control" onkeypress="enabled_enter()"
+									   style="width:500px; height:50px;" value="${board.title}" />
 							</td>
 							
 						</tr>
 						<tr>
 							<th>내용</th>
 							<td colspan="7">
-								<textarea class="form-control" id="comments" 
-								style="text-align:center; width:990px; height:300px; letter-spacing: 1px" 
-										name="comments">${board.comments }
-								</textarea>
+								<textarea class="form-control" id="comments" style="width:990px; height:300px;"name="comments">${board.comments}</textarea>
 							</td>
 						</tr>
 					</tbody>
@@ -90,20 +87,12 @@
 				<div class="row">
 					<div class="col-sm-12 text-center">
 						<button type="button" class="btn btn-primary btn-sm"
-							onclick="update(this.form)">
-						수정하기
-						</button>
-						<button type="reset" class="btn btn-primary btn-sm">
-						재입력
-						</button>
+							onclick="update(this.form)">수정하기</button>
+						<button type="reset" class="btn btn-primary btn-sm">재입력</button>
 						<button type="button" class="btn btn-primary btn-sm"
-							onclick="location.href='${pageContext.request.contextPath}/board/list'">
-						목록
-						</button>
+							onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
 						<button type="button" class="btn btn-primary btn-sm"
-							onclick="del(${board.idx})">
-						삭제
-						</button>
+							onclick="del(${board.idx})">삭제</button>
 					</div>
 				</div>
 			</fieldset>
@@ -119,6 +108,10 @@
 	<script>
 		/* 게시글 삭제 눌렀을 때 */
 		function del(idx){
+			var answer = confirm("정말로 삭제하시겠습니까?")
+			if(!answer){
+				return;
+			}
 			$.ajax({
 				url:"/board/delete",
 				type:"post",
@@ -135,8 +128,19 @@
 			});
 		}
 		
+		//input태그에서 엔터눌러서 전송 안되게 막는거
+		function enabled_enter(){
+			if(event.keyCode==13){
+				event.returnValue=false;
+			}else{
+				return;
+			}
+		}
+
+		
 		/* 수정 눌렀을 때 */
 		function update(form) {
+			
 			var title = form.title.value;
 			var idx = form.idx.value;
 			var comments = form.comments.value;
@@ -146,12 +150,13 @@
 				form.title.focus();
 				return;
 			}
-
+	        
 			if (!/^.{10,1000}$/.test(form.comments.value)) {
 				alert("내용을 10글자이상 1000글자 이하로 작성하시오.")
 				form.comments.focus();
 				return;
 			}
+			
 			$.ajax({
 				url:"/board/update",
 				type:"post",

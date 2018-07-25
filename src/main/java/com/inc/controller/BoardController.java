@@ -20,10 +20,7 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
-	
-	/*@Autowired
-	private ReplyService replyService;*/
-	
+		
 	@Autowired
 	private Paging paging;
 	
@@ -86,7 +83,6 @@ public class BoardController {
 	//게시글 추가
 	@RequestMapping(value="/board/insert",method=RequestMethod.POST)
 	public String insert(@ModelAttribute Board board) throws Exception{
-		System.out.println(board.getNickname());
 		boardService.insert(board);
 		return "redirect:/board/list";
 	}

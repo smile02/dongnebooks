@@ -124,7 +124,7 @@ th {
 							<c:if test="${date2 ge yesterday}">	
 									<span class="badge badge-secondary">NEW</span>
 									<!-- 글작성시간 24시간 이내에서 게시글의 조회수가 100넘으면 인기게시글 표시 -->
-								<c:if test="${bvo.cnt >= 100 }">
+								<c:if test="${bvo.cnt >= 10 }">
 									<span class="badge badge-danger">HOT</span>
 								</c:if>
 							</c:if>
@@ -150,7 +150,7 @@ th {
 			<div class="row">
 				<div class="col-md-10 form-group">
 							<select class="select_option custom-select-width form-control col-3" 
-									id="search_option" onchange="lock()" style="width:100%;text-align:center;">
+									id="search_option" onchange="lock()">
 								<option value="all">전체</option>
 								<option value="title">제목</option>
 								<option value="nickname">작성자</option>
@@ -170,14 +170,14 @@ th {
 			</div>
 		</div>
 			<div class="row">
-					<div class="col-sm-12 text-center">
-						<div class="paging" id="paging">
-							<ul class="pagination">
+				<div class="col-sm-12 text-center">
+					<div class="paging" id="paging">
+						<ul class="pagination">
 							${paging }
-							</ul>
-						</div>
+						</ul>
 					</div>
 				</div>
+			</div>
 		</div>
 		<jsp:include page="../include/footer.jsp" />
 		<script>

@@ -103,10 +103,6 @@
 		</if>
 	</select>
 	
-	<select id="tagList" resultType="String">
-		select distinct code from board
-	</select>
-	
 	<select id="noticeList" parameterType="int" resultType="board">
 		select rownum, a.* from (select * from board where code=1 order by regdate desc) a where rownum between 1 and #{value}
 	</select>

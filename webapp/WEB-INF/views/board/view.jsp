@@ -45,7 +45,7 @@
 				<input type="hidden" name="idx" value="${board.idx }"/>	
 				<c:if test="${sessionScope.user.nickname == null }">
 					<input class="form-control col-3 d-inline text-center" type="text" name="nickname" 
-					   	   value="방문자" readonly/> 님 환영합니다.
+					   	   value="방문자" readonly/> 
 				</c:if>
 				<c:if test="${sessionScope.user.nickname != null }">
 					<input class="form-control col-3 d-inline text-center" type="text" name="nickname" 
@@ -68,7 +68,7 @@
 							<c:if test="${board.code == 3 }">
 								<td>[질문]</td>
 							</c:if>
-							<c:if test="${board.code == 3 }">
+							<c:if test="${board.code == 4 }">
 								<td>[신고]</td>
 							</c:if>
 						</td>
@@ -145,12 +145,17 @@
 						<td>${reply.nickname }</td>
 						<td id="td_${reply.rno }">${reply.comments }
 						</td>
-						<td>${reply.regdate }
-							<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
-							<c:if test="${sessionScope.user.nickname == reply.nickname }">
-								<button class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
-								<button class="btn btn-primary btn-sm" type="button" onclick="reply_del(${reply.rno})">삭제</button>
-							</c:if>
+						<td><f:parseDate var="date" value="${bvo.regdate }"
+								pattern="yyyy-MM-dddd HH:mm"/>
+						<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
+						<c:if test="${sessionScope.user.nickname == reply.nickname }">
+							<button class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
+							<button class="btn btn-primary btn-sm" type="button" onclick="reply_del(${reply.rno})">삭제</button>
+						</c:if>
+						<!-- 관리자권한으로 댓글 삭제 -->
+						<c:if test="${sessionScope.user.nickname == '관리자' }">
+							<button class="btn btn-primary btn-sm" type="button" onclick="reply_del_admin(${reply.rno})">관리자삭제</button>
+						</c:if>
 						</td>
 					</tr>
 				</c:forEach>
@@ -167,7 +172,7 @@
 	
 	//해당 사용자에게만 뜨는 게시글 삭제 눌렀을 때 
 	function del(idx){
-		var answer = confirm("삭제할꺼야?");
+		var answer = confirm("이글을 삭제 하시겠습니까?");
 		if(!answer){
 			return;
 		}
@@ -186,15 +191,19 @@
 		});
 	}
 	
-	//관리자 전용삭제(이상한글 올렸을 때 관리자가 임의로 삭제할수 있게)
+	//관리자 전용 글삭제(이상한글 올렸을 때 관리자가 임의로 삭제할수 있게)
 	function admin_delete(idx){
+		var answer = confirm("관리자권한으로 이 글을 삭제 하시겠습니까?");
+		if(!answer){
+			return;
+		}
 		$.ajax({
 			url:"/board/delete",
 			type:"post",
 			data:{idx:idx},
 			success:function(data){
 				if(data=='y'){
-					alert("삭제");
+					alert("관리자권한으로 삭제");
 					location.href='${pageContext.request.contextPath}/board/list';
 				}else{
 					alert("삭제실패");
@@ -204,6 +213,27 @@
 		});
 	}
 	
+	//관리자전용 댓글삭제(이상한글 올렸을 때 관리자가 임의로 삭제할수 있게)
+	function reply_del_admin(rno){
+		var answer = confirm("관리자권한으로 이 댓글을 삭제 하시겠습니가?");
+		if(answer){
+			$.ajax({
+				url:"/reply/delete/{rno}",
+				type:"post",
+				data:{rno:rno},
+				success:function(data){
+					if(data=='y'){
+						alert("권한사용");
+						history.go(0);
+					}else{
+						alert("권한사용실패");
+						history.go(0);
+					}
+				}
+			});
+		}
+	}
+	
 	//글수정 눌렀을 때 해당글의 올린작성자인지 확인하고 맞으면 수정페이지(update)로 아니면 로그인화면으로
 	function update(form){
 		var nickname ="${sessionScope.user.nickname}";
@@ -211,7 +241,7 @@
 		if(nickname == '${board.nickname}'){
 			location.href='update?idx=${board.idx}';
 		}else{
-			alert("지금 뭐하시는거죠.");
+			alert("지금 뭐하시는거죠.?");
 			location.reload();
 		}
 	}
