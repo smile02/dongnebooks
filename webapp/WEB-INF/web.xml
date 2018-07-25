@@ -22,6 +22,10 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>classpath:spring/mvc/servlet-context.xml</param-value>
     </init-param>
+    <load-on-startup>1</load-on-startup>
+    <!-- 클라이언트와의 통신이 하나일때는 상관없지만 둘 이상일 때 비동기방식은 에러 발생
+    따라서, true로 지정하여 비동기방식일때 여러 클라이언트여도 에러발생x -->
+    <async-supported>true</async-supported>
   </servlet>
   <servlet-mapping>
     <servlet-name>dispatcher</servlet-name>
@@ -39,6 +43,32 @@
   </filter>
   <filter-mapping>
     <filter-name>encoding</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <!-- encType이 multipart/form-data 인 경우를 위한 필터. xss필터보다 반드시 위에 적용해주어야 한다. -->
+  <!-- 톰캣 서버 설정 변경 필요 . context.xml에 <Context allowCasualMultipartParsing="true"> -->
+  <filter>
+  	<filter-name>multipartFilter</filter-name>
+  	<filter-class>
+  		org.springframework.web.multipart.support.MultipartFilter
+  	</filter-class>
+  	<init-param>
+  		<param-name>multipartResolverBeanName</param-name>
+  		<param-value>multipartResolver</param-value>
+  	</init-param>
+  </filter>
+  <filter-mapping>
+  	<filter-name>multipartFilter</filter-name>
+  	<url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <filter-name>xss</filter-name>
+    <filter-class>
+  		com.inc.filter.XssFilter
+  	</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>xss</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 </web-app>

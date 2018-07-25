@@ -4,9 +4,15 @@
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 <typeAliases>
-	<typeAlias type="com.inc.vo.BookVo" alias="bvo"/>
-</typeAliases> <!-- mapper에 vo패키지에 별칭을 주는 태그 -->
+	<package name="com.inc.domain"/>
+</typeAliases>
   <mappers>
-  	<mapper resource="mybatis/mapper/guestbook.xml"/>
+  	<mapper resource="mybatis/mapper/board.xml"/>
+  	<mapper resource="mybatis/mapper/reply.xml"/>
+  	<mapper resource="mybatis/mapper/users.xml"/>
+  	<mapper resource="mybatis/mapper/books.xml"/>
+  	<mapper resource="mybatis/mapper/category.xml"/>
+  	<mapper resource="mybatis/mapper/cart.xml"/>
+  	<mapper resource="mybatis/mapper/comments.xml"/>
   </mappers>
 </configuration>

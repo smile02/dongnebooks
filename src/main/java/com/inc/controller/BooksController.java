@@ -1,6 +1,12 @@
 package com.inc.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -54,11 +60,44 @@ public class BooksController {
 		if(tag != null && !tag.equals("all")) { //전체검색 외에 다른 옵션을 선택 했다는 뜻
 			searchParam = "&tag="+tag;
 		}
+		List<Books> booksList = booksService.booksList(tag, page);
+		
+		for(Books book : booksList) {
+			try {
+				//현재시간을 불러와서 형식을 년-월-일 시:분:초 로 변환
+				Calendar calendar = Calendar.getInstance();
+				SimpleDateFormat curFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.KOREA);
+				//변환한 시간을 스트링으로 저장
+				String curDate = curFormat.format(calendar.getTime());
+				
+				//아래에서 도서등록시간과 현재시간을 아래의 형식으로 변환해줄 변수
+				SimpleDateFormat changeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S", Locale.KOREA);
+				
+				//Date클래스를 사용하여 현재시간과 도서등록시간을 String형태에서 Date형태로 변환
+				Date curTime = changeFormat.parse(curDate);
+				Date regTime = changeFormat.parse(book.getRegdate());
+				
+				//현재시간을 밀리세컨드, 등록시간을 밀리세컨드로 변환한 후 뺀 값을 diffTime에 넣기
+				long diffTime = curTime.getTime() - regTime.getTime();
+				
+				//넣은 값을 (1시간)으로 나누어서 out타임에 저장
+				long outTime = diffTime / (1000*60*60);
+				
+				//반복문이 돌때마다 outTime즉 차이나는 시간이 2시간보다 작을때만 newBooks를 true로
+				if(outTime < 2) {
+					book.setNewBooks(true);
+				}else {
+					book.setNewBooks(false);
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}			
+		}
 		
 		//현재 등록되어져 있는 태그들의 목록을 불러온다.
 		model.addAttribute("tagList",booksService.tagList());
 		//전체 도서목록을 불러온다.
-		model.addAttribute("booksList",booksService.booksList(tag, page));
+		model.addAttribute("booksList",booksList);
 		//자세히보기에서 대분류에 들어가야 할 내용들을 미리 넣어준다.
 		model.addAttribute("bigCategory",categoryService.bigCategoryList());
 		//도서목록 페이지에서 페이징이 가능하도록 page의 번호 가져오기
@@ -163,9 +202,13 @@ public class BooksController {
 	
 	@RequestMapping(value = "/books/adminDelete", method=RequestMethod.POST)
 	@ResponseBody
-	public String adminDelete(@RequestParam int idx) {
-		booksService.adminDelete(idx);
-		return "y";
+	public String adminDelete(@RequestParam int idx, @RequestParam String nickname) {
+		if("관리자".equals(nickname)) {
+			booksService.adminDelete(idx);
+			return "y";
+		}else {
+			return "n";
+		}
 	}
 	
 	//유효성검사를 진행하는 메서드

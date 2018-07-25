@@ -56,6 +56,11 @@ public class CommentsServiceImpl implements CommentsService{
 	@Override
 	public int commentsCount(int idx) {
 		return commentsDao.commentsCount(idx);
+	}
+
+	@Override
+	public void commentsAdmin(int rno) {
+		commentsDao.commentsAdmin(rno);
 	}	
 
 }

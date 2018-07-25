@@ -143,9 +143,13 @@
 								var changeBtn = "";
 								var deleteBtn = "";
 								var userComments = "";
+								var adminBtn = "";
 								$(data.commentsList).each(function(){
+									$("#commentsCount").html(this.commentsSize);
+									var lastIndex = this.regdate.toString().lastIndexOf('.');
+									var reg = this.regdate.toString().substring(0,lastIndex);
 									userNickname = "작성자 : "+this.nickname;
-									regdate = "작성일 : "+this.regdate;
+									regdate = "작성일 : "+reg;
 									userComments = "<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
 									+ this.comments +"</textarea>";
 									
@@ -162,10 +166,17 @@
 										deleteBtn = "";
 									}
 									
+									if(sessionUser == '관리자'){
+										adminBtn = "<button id='admin_"+this.rno+"' type='button' class='btn btn-dark btn-sm' onclick='commentsAdmin("+this.rno+");'"
+										+"style='position: absolute; left:280px;'>"
+										+"관리자 삭제"+"</button>";
+									}
+									
 									out += "<li class='list-group-item list-group-item-action'>"
 									+ userNickname
 									+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 									+ regdate+"</br>"
+									+ adminBtn
 									+ changeBtn
 									+"&nbsp;"
 									+ deleteBtn						
@@ -174,6 +185,7 @@
 									+"<input type='hidden' id='getRno' value='"+this.rno+"'/>"
 									+"</li>";							
 								});
+								$("#commentsTitle").html("");
 								$("#replies").html(out);
 								$("#commentsPaging").html(data.paging);
 							});		

@@ -19,9 +19,6 @@
 .paging{
 	display:inline-block;
 }
-#salePaging{
-	display:inline-block;
-}
 </style>
 </head>
 <body>
@@ -133,7 +130,7 @@
   <tbody>
   	<c:if test="${empty cartList}">
     <tr class="table-active">
-      <td colspan="3">구매한 도서가 없습니다.</td>
+      <td colspan="4">구매한 도서가 없습니다.</td>
     </tr>
     </c:if>
     <c:forEach var="cart" items="${cartList }">

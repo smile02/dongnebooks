@@ -10,7 +10,7 @@
   <div class="collapse navbar-collapse" id="navbarColor01">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">DongneBooks? <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="/intro">DongneBooks? <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/books/list">Books</a>
@@ -20,6 +20,9 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/faq">FAQ</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/socket/chat">오픈채팅방</a>
       </li>
     </ul>
   </div>

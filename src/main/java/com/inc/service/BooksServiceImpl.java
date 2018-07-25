@@ -21,7 +21,7 @@ public class BooksServiceImpl implements BooksService{
 	
 	
 	@Override
-	public List<Books> booksList(String tag, int page) {
+	public List<Books> booksList(String tag, int page) {		
 		return booksDao.booksList(getSearchMap(tag, page));
 	}
 

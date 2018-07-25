@@ -50,7 +50,8 @@
 	</insert>
 	
 	<select id="booksView" parameterType="int" resultType="books">
-		select * from books
+		select a.*, (select count(*) from comments where idx = #{value}) commentsSize from
+			(select * from books) a
 			where idx = #{value}
 	</select>
 	
@@ -117,6 +118,6 @@
 	</select>
 	
 	<delete id="adminDelete" parameterType="int">
-		delete from books where idx = #{value} and nickname='관리자'
+		delete from books where idx = #{value}
 	</delete>
 </mapper>

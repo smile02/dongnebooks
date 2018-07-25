@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cart">
+	<insert id="cartAdd" parameterType="cart">
+		insert into cart values (seq_cart_num.nextval,#{nickname},#{address},#{d_type},'request',#{idx},#{request},#{name}, sysdate)
+	</insert>
+	<select id="getCartList" parameterType="map" resultMap="cartMap">
+		select * from (select rownum as rnum, a.* from (select * from cart where nickname = #{nickname} order by num desc) a)
+		where rnum between #{start} and #{end}
+	</select>
+	
+	<resultMap id="cartMap" type="cart">
+		<result column="idx" property="idx"/>
+		<association select="books.booksView" column="idx" javaType="books" property="book"/>
+	</resultMap>
+	<update id="statusChange" parameterType="map">
+		update cart set status = #{status} where num = #{num}
+	</update>
+	<select id="getTotalCount" parameterType="string" resultType="int">
+		select count(num) from cart where nickname = #{nickname} 
+	</select>
+	<select id="getSaleTotal" parameterType="string" resultType="int">
+	select count(num) from cart c, (select idx from books where nickname=#{nickname}) b where c.idx = b.idx order by regdate desc
+	</select>
+	<select id="getSaleList" parameterType="map" resultMap="cartMap">
+		<!-- 내가 판매하는 책들 중 구매신청받은 책 목록 가져오기. -->
+	select * from 
+		(select rownum as rnum, a.* 
+        from 
+			(select * from cart c
+                where c.idx in(select idx from books where nickname = #{nickname}) ) 
+        a) 
+	where rnum between #{start} and #{end}
+	</select>
+	<select id="getIdx" parameterType="int" resultType="int">
+		select idx from cart where num = #{value}
+	</select>
+</mapper>

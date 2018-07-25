@@ -1,5 +1,7 @@
 package com.inc.domain;
 
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -15,11 +17,11 @@ public class Books {
 	@Size(min=1, max=300, message="comments:내용 - 한글 1~300글자이내")
 	private String comments;
 	private String regdate;
-	@Range(min=1, max=9999999,message="price:가격 - 예)1000")
+	@Range(min=1, max=9999999, message="price:가격 - 예)1000")
 	private int price;
 	@Pattern(regexp="[abcdef]", message="status:상태 - 잘못된 선택입니다.")
 	private String status;
-	@Range(min=0, max=9999999,message="fee:배송비- 예)1000")
+	@Range(min=0, max=9999999, message="fee:배송비- 예)1000")
 	private int fee;
 	private String photo;
 	private MultipartFile photo_file;
@@ -31,6 +33,8 @@ public class Books {
 	@NotNull(message="s_category: 소분류 -잘못된 선택입니다.")
 	private String s_category;
 	private String deal;
+	private int commentsSize;
+	private boolean newBooks;
 	
 	public int getIdx() {
 		return idx;
@@ -121,6 +125,18 @@ public class Books {
 	}
 	public void setPhoto_file(MultipartFile photo_file) {
 		this.photo_file = photo_file;
+	}
+	public int getCommentsSize() {
+		return commentsSize;
+	}
+	public void setCommentsSize(int commentsSize) {
+		this.commentsSize = commentsSize;
+	}
+	public boolean isNewBooks() {
+		return newBooks;
+	}
+	public void setNewBooks(boolean newBooks) {
+		this.newBooks = newBooks;
 	}
 	
 	

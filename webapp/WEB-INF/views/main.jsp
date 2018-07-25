@@ -94,7 +94,8 @@
 					  </div>
 					  <div class="media-body">
 					    <h5 class="media-heading">${book.title}</h5>
-					   	${book.price}원<br />
+					   	${book.price}원 <c:if test="${book.fee > 0}"> + 배송비 : ${book.fee}원</c:if>
+					   	<br />
 					   	${book.b_category}/${book.s_category}
 					  </div>
 					</div>

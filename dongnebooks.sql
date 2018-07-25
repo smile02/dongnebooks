@@ -166,7 +166,7 @@ select * from big_category;
 select * from small_category;
 select * from reply;
 delete from users ;
-
+desc board;
 
 update users set
     password='989099e0edc9f04a2a06e3c5e4b5b56d04aed5e23973513d83068ee0cc76e0a9', email='dongnebooks21@gmail.com'
@@ -226,3 +226,23 @@ select * from reply;
 
 commit;
 
+
+create or replace trigger nickname_trg
+ after update of nickname on users for each row
+begin
+   update books
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update board
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update cart
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update reply
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+   update comments
+   set nickname=:new.nickname
+   where nickname=:old.nickname;
+end;

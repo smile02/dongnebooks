@@ -17,27 +17,6 @@
 	crossorigin="anonymous">
 <link rel="stylesheet" href="/css/style.css" />
 <style>
-/* .thumbnail {
-	height: 450px;
-}
-.img-container {
-	height: 220px;
-	margin-top:15px;
-}
-.thumbnail img {
-	width: 100%;
-	height: 100% !important;
-}
-.detail-modal {
-	height: auto;
-}
-.photo {
-	height: 220px;
-}
-.photo-hei {
-	width: 100%;
-	height: 200px !important;
-} */
 .err_color {
 	color: red;
 }
@@ -122,11 +101,25 @@
 					<c:if test="${books.deal ne 'complete' }">
 						<div class="col-md-3 col-xs-6">
 							<div class="thumbnail">
-								<div class="img-container">
+								<div class="img-container">			
 									<c:if test="${books.photo ne 'no_file' && books.photo != null}">
+										<c:if test="${books.newBooks }">
+											<div style="position: absolute;">
+												<div style="position: relative; top: 10px; left: 10px; width:40px; height:40px;">
+												<img src="/image/photo/new.png" alt="new"/>
+												</div>
+											</div>
+										</c:if>
 										<img src="/image/photo/${books.photo }" />
 									</c:if>									
 									<c:if test="${books.photo == 'no_file' || books.photo == null}">
+										<c:if test="${books.newBooks }">
+											<div style="position: absolute;">
+												<div style="position: relative; top: 10px; left: 10px; width:40px; height:40px;">
+												<img src="/image/photo/new.png" alt="new"/>
+												</div>
+											</div>
+										</c:if>
 										<img src="/image/photo/noimage.png" />
 									</c:if>
 
@@ -245,7 +238,7 @@
 										</div>
 										<div class="col-xs-5">
 											<p class="form-control res_price"></p>
-											<input id="mod_price" name="price" type="text"
+											<input id="mod_price" name="price" type="text" onkeypress="return onlyMyNumber(event);"
 												class="form-control" />
 											<span class="error error_price err_color"></span>
 										</div>
@@ -287,7 +280,7 @@
 										<div class="col-xs-5">
 											<p class="form-control res_fee"></p>
 											<input id="mod_fee" type="text" name="fee"
-												class="form-control" />
+												class="form-control"  onkeypress="return onlyMyNumber(event);" />
 											<span class="error error_fee err_color"></span>
 										</div>
 									</div>
@@ -367,21 +360,24 @@
 									<div style="display:none" class="row" id="listDiv">									
 										<br /><h4 id="commentsTitle" class="text-center text-muted">댓글목록</h4>
 										<ul class="list-group" id="replies">
-										
-										</ul>
+										</ul><br />				
+										<span style="float:right; margin-top:10px; margin-right:20px;"><button id="commentsExit" 
+										class="btn btn-secondary text-center">댓글 닫기</button></span>
 									</div>
-									<div class="col-sm-12" >
-										<div class="paging text-center">
-											<ul class="pagination pagination-sm" id="commentsPaging">
-											
-											</ul>
+									<div class="row">
+										<div class="col-sm-12 text-center">
+											<div class="paging">
+												<ul class="pagination pagination-sm" id="commentsPaging">
+												
+												</ul>
+											</div>
 										</div>
-									</div>						
+									</div>				
+							</div>
+										</div>			
+									</div>				
 						</div>
 					</div>
-				</div>
-			</div>
-			</div>
 			<div class="row">
 				<div class="col-sm-12 text-center">
 					<div class="paging">
@@ -402,7 +398,6 @@
 							<button type="button" class="close" onclick="exit_btn();">&times;</button>							
 						</div>
 						<div class="modal-body">
-
 							<form method="post" id="form" class="form-horizontal"
 								enctype="multipart/form-data" action="/books/add">
 								<div class="form-group">
@@ -432,7 +427,7 @@
 										<label for="price" class="control-label">가격 : </label>
 									</div>
 									<div class="col-xs-5">
-										<input type="text" id="price" name="price" value="0"
+										<input type="text" id="price" name="price" onkeypress="return onlyMyNumber(event);"
 											class="form-control reg_price" placeholder="가격을 입력해주세요." />
 										<span class="error error_price err_color"></span>
 									</div>
@@ -474,7 +469,7 @@
 									</div>
 									<div class="col-xs-5">
 										<input type="text" id="fee" name="fee" class="form-control reg_fee"
-											placeholder="배송비를 입력해주세요."/>
+											placeholder="배송비를 입력해주세요." onkeypress="return onlyMyNumber(event);"/>
 										<span class="error error_fee err_color"></span>
 									</div>
 								</div>
@@ -517,7 +512,7 @@
 									</div>
 								</div>
 
-								<div class="form-group">
+								<div class="form-group">								
 								<div class="custom-file">
 									<div class="col-xs-2 col-xs-offset-3">
 										<label for="photo_file" class="custom-file-label">사진 : </label>
@@ -525,10 +520,11 @@
 									<div class="col-xs-5">
 										<input type="file" id="photo_file" name="photo_file"
 											class="custom-file-input" onchange="fileCheck(this);"
-											accept="image/gif, image/GIF, image/png, image/PNG, image/jpeg, image/JPEG" />
-											<small id="photo_file" class="form-text text-muted">사진은 마음대로</small>
+											accept="image/gif, image/GIF, image/png, image/PNG, image/jpeg, image/JPEG"
+										    aria-describedby="photo_file" />
+										 </div>
+										<small id="photo_file" class="form-text text-muted">사진은 ↑ 클릭 시 등록할 수 있습니다!!</small>
 									</div>
-								</div>
 								</div>
 
 								<div class="modal-footer">
@@ -568,15 +564,22 @@ var commentsPage = "";
 	$(function(){		
 		page = 1;
 		$("#replyBtn").on("click", function(){
-				$("#addForm").css("display","block");
-				$("#listDiv").css("display","block");
-				var idx = $("#getIdx").val();
-				console.log("idx : "+idx);
-				commentsPage = "/comments/list/"+idx+"/"+page;
-				console.log("commentsPage : "+commentsPage);
-				reply(commentsPage);
+			$("#addForm").css("inline","block").slideDown();
+			$("#listDiv").css("display","block");
+			$(".paging").css("display","inline-block");
+			var idx = $("#getIdx").val();			
+			commentsPage = "/comments/list/"+idx+"/"+page;
+			reply(commentsPage);
+		});
+		
+		$("#commentsExit").on("click",function(){
+			$("#addForm").css("inline","none").slideUp();
+			$("#listDiv").css("display","none");
+			$(".paging").css("display","none");
 		});
 	});
+	
+	
 	
 	//각 태그 클릭했을 때 같은 대분류만 보이도록
 	function tag(t){
@@ -586,13 +589,17 @@ var commentsPage = "";
 	}	
 	
 	function adminDelete(idx){
+		var admin = "${sessionScope.user.nickname}";
 		$.ajax({
 			url:"/books/adminDelete",
 			type:"post",
-			data:{idx:idx},
+			data:{idx:idx,nickname:admin},
 			success:function(data){
 				if(data == 'y'){
 					alert("악당 퇴치");
+					location.reload();
+				}else{
+					alert("관리자만 가능한 권한입니다.");
 				}
 			}
 		});
@@ -649,8 +656,24 @@ var commentsPage = "";
 			success:function(result){
 				if(result=='SUCCESS'){
 					alert("삭제완료");
-					$("#replies").empty();
 					reply(commentsPage);
+				}
+			}
+		});
+	}
+	
+	function commentsAdmin(rno){
+		var admin = "${sessionScope.user.nickname}";
+		$.ajax({
+			url:"/comments/admin",
+			type:"post",
+			data:{rno:rno,nickname:admin},
+			success:function(data){
+				if(data == 'y'){
+					alert("악당퇴치");
+					reply(commentsPage);
+				}else{
+					alert("관리자만 삭제 가능한 권한입니다!");
 				}
 			}
 		});
@@ -674,12 +697,20 @@ var commentsPage = "";
 				var changeBtn = "";
 				var deleteBtn = "";
 				var comments = "";
+				var adminBtn = "";
 				if(data.commentsList.length == 0){			
 					$("#commentsTitle").html("작성된 댓글이 없습니다~~");
-				}else{					
+					$("#commentsCount").html(0);
+					$("#commentsPaging").empty();
+					$("#replies").empty();
+				}else{
 					$(data.commentsList).each(function(){
+						console.log(this.commentsSize);
+						$("#commentsCount").html(this.commentsSize);
+						var lastIndex = this.regdate.toString().lastIndexOf('.');
+						var reg = this.regdate.toString().substring(0,lastIndex);
 						nickname = "작성자 : "+this.nickname;
-						regdate = "작성일 : "+this.regdate;
+						regdate = "작성일 : "+reg;
 						comments = "<textarea class='form-control' rows='3' disabled='disabled' id='mod_area"+this.rno+"'>"
 						+ this.comments +"</textarea>";
 						
@@ -691,15 +722,20 @@ var commentsPage = "";
 							deleteBtn = "<button id='del_"+this.rno+"' type='button' class='btn btn-danger btn-sm' onclick='commentsDel("+this.rno+");'"
 							+"style='position: absolute; right: 20px;'>"
 							+ "삭제"+ "</button>";
-						}else{ //sessionUser == '' || sessionUser != this.nickname
+						}else{ 
 							changeBtn = "";
 							deleteBtn = "";
 						}
-						
+						if(sessionUser == '관리자'){
+							adminBtn = "<button id='admin_"+this.rno+"' type='button' class='btn btn-dark btn-sm' onclick='commentsAdmin("+this.rno+");'"
+							+"style='position: absolute; left:280px;'>"
+							+"관리자 삭제"+"</button>";
+						}
 						out += "<li class='list-group-item list-group-item-action'>"
 						+ nickname
 						+ "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 						+ regdate+"</br>"
+						+ adminBtn
 						+ changeBtn
 						+"&nbsp;"
 						+ deleteBtn						
@@ -713,6 +749,14 @@ var commentsPage = "";
 				}
 			});		
 		} 
+	
+	function onlyMyNumber(event) {			
+		var keyValue = event.keyCode; 
+		if( ((keyValue >= 48) && (keyValue <= 57)) ) 
+			return true; 
+		else 
+			return false; 
+		}
 	
 	//로그인을 안하게 되면 도서등록이 안되도록
 	function login(){
@@ -799,9 +843,6 @@ var commentsPage = "";
 			 }
 		 }
 		
-			  //var reg_price = parseInt($(".reg_price").val());
-			  //var reg_fee = parseInt($(".reg_fee").val());
-			  
 		  //도서등록
 		   function reg(){
 			 var formData = new FormData($("#form")[0]);
@@ -986,6 +1027,7 @@ var commentsPage = "";
 							alert("서버에 문제가 발생했습니다.\n 잠시후에 시도해주세요.");
 							return;
 						}else{
+							$("#commentsCount").html(data.book.commentsSize);
 							if(nick == data.book.nickname){
 								$("#buy_btn").remove();
 								$("#mod_price").val(data.book.price);

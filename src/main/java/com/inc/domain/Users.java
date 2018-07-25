@@ -7,7 +7,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 public class Users {
 	@NotEmpty(message="사용할 닉네임을 입력해 주세요.")
-	@Length(min=2, max=15, message="2자이상 15자 이하로 닉네임을 입력해주세요.")
+	@Pattern(regexp="[0-9a-zA-Z가-힣]{2,15}", message="영문,숫자,한글 2자이상 15자 이하로 닉네임을 입력해주세요.")
 	private String nickname;
 	@Pattern(regexp="[0-9a-z]{4,20}", message="소문자+숫자 4자이상 20자 이하로 아이디를 입력해 주세요.")
 	private String id;
