@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,8 +40,8 @@
 			<input class="form-control col-3 d-inline" type="text" name="nickname" 
 				   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
 		</c:if>
-		<form action="${pageContext.request.contextPath}/board/update"
-			method="post" name="form1">
+		<form:form action="${pageContext.request.contextPath}/board/update"
+			method="post" modelAttribute="board">
 			<input type="hidden" name="idx" value="${board.idx }" />
 			<fieldset>
 				<table class="table">
@@ -71,23 +72,24 @@
 						<tr>
 							<th>제목</th>
 							<td colspan="7">
-								<input id="title" type="text" name="title" class="form-control" onkeypress="enabled_enter()"
+								<form:input path="title" type="text" class="form-control" onkeypress="enabled_enter()"
 									   style="width:500px; height:50px;" value="${board.title}" />
+								<form:errors path="title" class="error"/>
 							</td>
 							
 						</tr>
 						<tr>
 							<th>내용</th>
 							<td colspan="7">
-								<textarea class="form-control" id="comments" style="width:990px; height:300px;"name="comments">${board.comments}</textarea>
+								<form:textarea class="form-control" path="comments" style="width:990px; height:300px;" title="${board.comments}"></form:textarea>
+								<form:errors path="comments" class="error"/>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="row">
 					<div class="col-sm-12 text-center">
-						<button type="button" class="btn btn-primary btn-sm"
-							onclick="update(this.form)">수정하기</button>
+						<button type="submit" class="btn btn-primary btn-sm">수정하기</button>
 						<button type="reset" class="btn btn-primary btn-sm">재입력</button>
 						<button type="button" class="btn btn-primary btn-sm"
 							onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
@@ -96,7 +98,7 @@
 					</div>
 				</div>
 			</fieldset>
-		</form>
+		</form:form>
 	</div>
 	<br />
 
@@ -139,7 +141,7 @@
 
 		
 		/* 수정 눌렀을 때 */
-		function update(form) {
+		/* function update(form) {
 			
 			var title = form.title.value;
 			var idx = form.idx.value;
@@ -176,7 +178,7 @@
 			
 			form.submit();
 
-		}
+		} */
 	</script>
 </body>
 </html>

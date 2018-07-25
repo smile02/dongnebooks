@@ -145,11 +145,10 @@
 						<td>${reply.nickname }</td>
 						<td id="td_${reply.rno }">${reply.comments }
 						</td>
-						<td><f:parseDate var="date" value="${bvo.regdate }"
-								pattern="yyyy-MM-dddd HH:mm"/>
+						<td>${reply.regdate }
 						<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
 						<c:if test="${sessionScope.user.nickname == reply.nickname }">
-							<button class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
+							<button id="replyMod_${reply.rno }" class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
 							<button class="btn btn-primary btn-sm" type="button" onclick="reply_del(${reply.rno})">삭제</button>
 						</c:if>
 						<!-- 관리자권한으로 댓글 삭제 -->
@@ -270,6 +269,8 @@
 	//댓글수정
 	function reply_update(rno) {
 		var comments_td = $("#td_"+rno);
+		//$("#replyMod_"+rno).attr('disabled',true);
+		$("#replyMod_"+rno).css('display',"none");
 		var $input = $("<input id='input_"+rno+"' type='text'/>");
 		$input.val(comments_td.text());
 		comments_td.empty();
@@ -280,7 +281,6 @@
 	}
 	function updateToServer(rno){
 		var comments = $("#input_"+rno).val();
-		//$btn_dis = $('.btn_dis').attr('disabled', true);
 		if (!/^.{3,100}$/.test(comments)) {
 			alert("내용을 3글자이상 100글자 이하로 작성하시오.");
 			$("#input_"+rno).focus();

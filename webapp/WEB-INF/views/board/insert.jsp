@@ -20,7 +20,7 @@
 	<jsp:include page="../include/header.jsp" />
 	<div class="container">
 		<form:form action="${pageContext.request.contextPath}/board/insert"
-			method="post">
+			method="post" modelAttribute="board">
 			<input type="text" value="${sessionScope.user.nickname }" />
 			<fieldset>
 				<div class="row">
@@ -52,8 +52,8 @@
 						<div class="form-group row">
 							<label for="code" class="col-sm-1">분 류</label>
 							<div class="col-sm-3">
-								<select name="code" id="code" class="custom-select">
-									<option value="">【유형선택】</option>
+								<form:select path="code" class="custom-select">
+									<option value="0">【유형선택】</option>
 									<!-- 관리자만 공지 선택할 수 있게 -->
 									<c:if test="${sessionScope.user.nickname == '관리자' }">
 										<option value="1">공지</option>
@@ -61,12 +61,14 @@
 										<option value="2">일반</option>
 										<option value="3">질문</option>
 										<option value="4">신고</option>
-								</select>
+								</form:select>
+								<form:errors path="code" class="error"/>
 							</div>
 							<label for="title" class="col-sm-1">제 목</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" id="title" name="title"
+								<form:input type="text" class="form-control" path="title"
 									placeholder="글의 제목을 입력해주세요." />
+								<form:errors path="comments" class="error"/>
 							</div>
 							<br />
 						</div>
@@ -74,16 +76,16 @@
 					<div class="form-group row col-sm-12 ">
 						<label for="comments" class="col-sm-3">내용</label>
 						<div class="col-sm-12">
-							<textarea class="form-control col-sm-12" name="comments" id="comments" style="height:230px;" 
-								placeholder="여기에 글의 내용을 작성해주세요."></textarea>
+							<form:textarea class="form-control col-sm-12" path="comments" style="height:230px;" 
+								placeholder="여기에 글의 내용을 작성해주세요."></form:textarea>
+							<form:errors path="comments" class="error"/>
 						</div>
 						<br />
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-sm-12 text-center">
-						<button type="button" class="btn btn-primary btn-sm"
-							onclick="check(this.form)">글쓰기</button>
+						<button type="submit" class="btn btn-primary btn-sm">글쓰기</button>
 						<button type="reset" class="btn btn-primary btn-sm">재입력</button>
 					</div>
 				</div>
@@ -99,7 +101,7 @@
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 	<script>
-		function check(form) {
+		/* function check(form) {
 			//제목,내용 유효성 검사
 			
 			if(form.code.value==""){
@@ -122,7 +124,7 @@
 			
 			form.submit();
 
-		}
+		} */
 	</script>
 </body>
 </html>

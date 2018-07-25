@@ -157,7 +157,7 @@ th {
 								<option value="comments">내용</option>
 								<option value="title_name">제목+작성자</option>
 							</select>
-							<input id="search_text" type="text" placeholder="검색할 단어를 이곳에"
+							<input id="search_text" type="text" placeholder="검색할 단어를 이곳에" disabled="disabled"
 								   class="form-control is-valid custom-input-width col-3" id="inputValid">
 							<div class="valid-feedback">무엇을 검색 하실껀가요?</div>
 							<button class="btn btn-primary btn-sm custom-select-width" type="button"
@@ -182,11 +182,11 @@ th {
 		<jsp:include page="../include/footer.jsp" />
 		<script>
 	function lock(){
-		if($("#search_option").val() == 'all'){
-			$("#search_text").attr("disabled","disabled");
+		if($("#search_option").val() != 'all'){
+			$("#search_text").removeAttr("disabled");
 			$("#search_text").val("");
 		}else{
-			$("#search_text").removeAttr("disabled");
+			$("#search_text").attr("disabled",true);
 		} 
  	}
  	
