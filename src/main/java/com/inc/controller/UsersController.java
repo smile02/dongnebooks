@@ -144,7 +144,7 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/user/mypage", method=RequestMethod.POST)
-	public String update(@ModelAttribute("user") @Valid Users user, BindingResult result, Model model, HttpSession session) {
+	public String update(@ModelAttribute("user") @Valid Users user, BindingResult result, Model model, HttpSession session, @RequestParam(defaultValue="1") int page) {
 		//닉네임과 이메일은 타인과 중복되어서는 안되지만 자신의 정보와 중복될수는 있다.
 		//그러므로 기존 정보를 불러와 비교한다.
 		Users savedUser = usersService.getUser(user.getId());
@@ -160,6 +160,14 @@ public class UsersController {
 
 		if(result.hasErrors()) {
 			model.addAttribute("user", user);
+			List<Cart> cartList = cartService.getCartList(savedUser.getNickname(), page);
+			
+			System.out.println(cartList);
+			model.addAttribute("cartList", cartList);
+			int totalCount = cartService.getTotalCount(savedUser.getNickname());
+			System.out.println(totalCount);
+			model.addAttribute("paging", paging.getPaging("/user/mypage", page, totalCount, CartServiceImpl.numberOfList, CartServiceImpl.numberOfPage, ""));
+			
 			return "/users/mypage.jsp";
 		}
 		

@@ -62,6 +62,8 @@ public class CartController {
 				System.out.println(error.getDefaultMessage());
 			}*/
 			model.addAttribute("idx", cart.getIdx());
+			String title = booksService.booksView(idx).getTitle();
+			model.addAttribute("title", title);
 			model.addAttribute("cart", cart);
 			return "/cart/add.jsp";
 		}
