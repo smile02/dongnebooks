@@ -19,6 +19,8 @@ import com.inc.domain.Message;
 public class WebSocket {
 	//Set은 순서가 정해져있지 않지만 중복 안됨 : 동기화까지 해줌
 	private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
+	private static Set<String> userSet = new HashSet<String>();
+//	private Map<>
 	
 	@OnOpen
 	public void handleOpen(Session session){
@@ -28,10 +30,11 @@ public class WebSocket {
 	
 	@OnMessage
 	public void handleMessage(Message message, Session session) throws EncodeException, IOException{
-		System.out.println("to:"+message.getTo());
+//		System.out.println("to:"+message.getTo());
 		synchronized (clients) {
 			for(Session client : clients) {
 				//client.getBasicRemote().sendText(message);
+				userSet.add(message.getFrom());
 				client.getBasicRemote().sendObject(message);
 			}
 		}

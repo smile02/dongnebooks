@@ -81,7 +81,7 @@
     		$("#outNick").html(name+"님 환영합니다~!!");
     		//WebSocketEx는 프로젝트 이름
             //websocket 클래스 이름
-             ws = new WebSocket("ws://13.209.89.95:9090/chat");
+             ws = new WebSocket("ws://localhost:9090/chat");
     		
            //웹 소켓이 연결되었을 때 호출되는 이벤트
              ws.onopen = function(message){
@@ -92,6 +92,10 @@
              ws.onerror = function(message){
              	textbox.val(textbox.val() + "error...\n");
              };
+             
+           //웹 소켓이 닫혔을 때 호출되는 이벤트
+               
+             
              //웹 소켓에서 메시지가 날라왔을 때 호출되는 이벤트
              ws.onmessage = function(message){
              	console.log(message.data);
@@ -127,17 +131,13 @@
                 $("#message").val('');	
             }            
         }
-        /* //웹소켓 종료
-        function disconnect(){
-            ws.close();
-        } */
-        window.onbeforeunload = function(){
-        	//웹 소켓이 닫혔을 때 호출되는 이벤트
-            ws.onclose = function(message){
-            	//textbox.val(textbox.val() + "Server Disconnect...\n");
-           	 ws.send(JSON.stringify({from:name, to:"", msg:"님이 퇴장하셨습니다."}));
-            };
-        }
+         window.onbeforeunload = function(){
+            ws.send(JSON.stringify({from:name, to:"", msg:"님이 퇴장하셨습니다."}));
+        	  ws.onclose = function(message){
+            		
+               };
+        } 
+       
     </script>
 </body>
 </html>
