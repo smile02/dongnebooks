@@ -69,7 +69,6 @@
     	console.log(typeof name);
     	$(document).ready(function(){
     		if(name == ' ' || name == null || name.length == 0){
-    			console.log("들어오나");
     			var loginCheck = confirm("로그인 후 이용가능한 페이지입니다. \n로그인페이지로 이동하겠습니다.");
 	    			if(loginCheck){
 	    				location.href="/main";
@@ -82,7 +81,7 @@
     		$("#outNick").html(name+"님 환영합니다~!!");
     		//WebSocketEx는 프로젝트 이름
             //websocket 클래스 이름
-             ws = new WebSocket("ws://localhost:9090/chat");
+             ws = new WebSocket("ws://13.209.89.95:9090/chat");
     		
            //웹 소켓이 연결되었을 때 호출되는 이벤트
              ws.onopen = function(message){
