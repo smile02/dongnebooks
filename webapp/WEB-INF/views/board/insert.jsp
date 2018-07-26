@@ -20,8 +20,8 @@
 	<jsp:include page="../include/header.jsp" />
 	<div class="container">
 		<form:form action="${pageContext.request.contextPath}/board/insert"
-			method="post">
-			<input type="text" value="${sessionScope.user.nickname }" />
+			method="post" modelAttribute="board">
+			<input type="hidden" name="nickname" value="${sessionScope.user.nickname }" />
 			<fieldset>
 				<div class="row">
 					<div class="col-sm-12">
@@ -36,14 +36,6 @@
 						</div>
 					</div>
 				</div>
-				<c:if test="${sessionScope.user.nickname == null }">
-					<input class="form-control col-3 d-inline" type="text" name="nickname" 
-				   		   value="방문자" readonly/> 님 환영합니다.
-				</c:if>
-				<c:if test="${sessionScope.user.nickname != null }">
-					<input class="form-control col-3 d-inline" type="text" name="nickname" 
-				   		   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
-				</c:if>
 				<div class="row">
 					<input type="hidden" name="idx" value="${board.idx }" />
 					<div class="col-sm-12">
@@ -52,19 +44,23 @@
 						<div class="form-group row">
 							<label for="code" class="col-sm-1">분 류</label>
 							<div class="col-sm-3">
-								<select name="code" id="code" class="custom-select">
-									<option value="">【유형선택】</option>
+								<form:select path="code" class="custom-select">
+									<option value="0">【유형선택】</option>
 									<!-- 관리자만 공지 선택할 수 있게 -->
 									<c:if test="${sessionScope.user.nickname == '관리자' }">
 										<option value="1">공지</option>
 									</c:if>
 										<option value="2">일반</option>
-								</select>
+										<option value="3">질문</option>
+										<option value="4">신고</option>
+								</form:select>
+								<form:errors path="code" class="error"/>
 							</div>
 							<label for="title" class="col-sm-1">제 목</label>
 							<div class="col-sm-6">
-								<input type="text" class="form-control" id="title" name="title"
+								<form:input type="text" class="form-control" path="title"
 									placeholder="글의 제목을 입력해주세요." />
+								<form:errors path="title" class="error"/>
 							</div>
 							<br />
 						</div>
@@ -72,17 +68,19 @@
 					<div class="form-group row col-sm-12 ">
 						<label for="comments" class="col-sm-3">내용</label>
 						<div class="col-sm-12">
-							<textarea class="form-control col-sm-12" name="comments" id="comments" style="height:230px;" 
-								placeholder="여기에 글의 내용을 작성해주세요."></textarea>
+							<form:textarea class="form-control col-sm-12" path="comments" style="height:230px;" 
+								placeholder="여기에 글의 내용을 작성해주세요."></form:textarea>
+							<form:errors path="comments" class="error"/>
 						</div>
 						<br />
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-sm-12 text-center">
-						<button type="button" class="btn btn-primary btn-sm"
-							onclick="check(this.form)">글쓰기</button>
+						<button type="submit" class="btn btn-primary btn-sm">글쓰기</button>
 						<button type="reset" class="btn btn-primary btn-sm">재입력</button>
+						<button type="button" class="btn btn-primary btn-sm"
+						onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
 					</div>
 				</div>
 			</fieldset>
@@ -97,30 +95,7 @@
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
 	<script>
-		function check(form) {
-			//제목,내용 유효성 검사
-			
-			if(form.code.value==""){
-				alert("게시글의유형을선택해주세요.")
-				form.code.focus();
-				return;
-			} 
-			
-			if (!/^.{5,30}$/.test(form.title.value)) {
-				alert("제목 5글자이상 30이하로 작성하시오.")
-				form.title.focus();
-				return;
-			}
-
-			if (!/^.{10,1000}$/.test(form.comments.value)) {
-				alert("내용을 10글자이상 1000글자 이하로 작성하시오.")
-				form.comments.focus();
-				return;
-			}
-			
-			form.submit();
-
-		}
+		
 	</script>
 </body>
 </html>

@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,16 +32,8 @@
 				</div>
 			</div>
 		</div>
-		<c:if test="${sessionScope.user.nickname == null }">
-			<input class="form-control col-3 d-inline" type="text" name="nickname" 
-				   value="방문자"/ readonly> 님 환영합니다.
-		</c:if>
-		<c:if test="${sessionScope.user.nickname != null }">
-			<input class="form-control col-3 d-inline" type="text" name="nickname" 
-				   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
-		</c:if>
-		<form action="${pageContext.request.contextPath}/board/update"
-			method="post">
+		<form:form action="${pageContext.request.contextPath}/board/update"
+			method="post" modelAttribute="board">
 			<input type="hidden" name="idx" value="${board.idx }" />
 			<fieldset>
 				<table class="table">
@@ -54,6 +47,12 @@
 								<c:if test="${board.code == 2 }">
 									<td>[일반]</td>
 								</c:if>
+								<c:if test="${board.code == 3 }">
+									<td>[질문]</td>
+								</c:if>
+								<c:if test="${board.code == 4 }">
+									<td>[신고]</td>
+								</c:if>
 							</td>
 							<th>작성자</th>
 							<td>${board.nickname }</td>
@@ -65,43 +64,33 @@
 						<tr>
 							<th>제목</th>
 							<td colspan="7">
-								<input id="title" type="text" name="title" 
-									   style="text-align:center; width:500px; height:50px;" value="${board.title }" />
+								<form:input path="title" type="text" class="form-control" onkeypress="enabled_enter()"
+									   style="width:500px; height:50px;" value="${board.title}" />
+								<form:errors path="title" class="error"/>
 							</td>
 							
 						</tr>
 						<tr>
 							<th>내용</th>
 							<td colspan="7">
-								<textarea class="form-control" id="comments" 
-								style="text-align:center; width:990px; height:300px; letter-spacing: 1px" 
-										name="comments">${board.comments }
-								</textarea>
+								<form:textarea class="form-control" path="comments" style="width:990px; height:300px;" title="${board.comments}"></form:textarea>
+								<form:errors path="comments" class="error"/>
 							</td>
 						</tr>
 					</tbody>
 				</table>
 				<div class="row">
 					<div class="col-sm-12 text-center">
+						<button type="submit" class="btn btn-primary btn-sm">수정하기</button>
+						<button type="reset" class="btn btn-primary btn-sm">재입력</button>
 						<button type="button" class="btn btn-primary btn-sm"
-							onclick="update(this.form)">
-						수정하기
-						</button>
-						<button type="reset" class="btn btn-primary btn-sm">
-						재입력
-						</button>
+							onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
 						<button type="button" class="btn btn-primary btn-sm"
-							onclick="location.href='${pageContext.request.contextPath}/board/list'">
-						목록
-						</button>
-						<button type="button" class="btn btn-primary btn-sm"
-							onclick="del(${board.idx})">
-						삭제
-						</button>
+							onclick="del(${board.idx})">삭제</button>
 					</div>
 				</div>
 			</fieldset>
-		</form>
+		</form:form>
 	</div>
 	<br />
 
@@ -113,6 +102,10 @@
 	<script>
 		/* 게시글 삭제 눌렀을 때 */
 		function del(idx){
+			var answer = confirm("정말로 삭제하시겠습니까?")
+			if(!answer){
+				return;
+			}
 			$.ajax({
 				url:"/board/delete",
 				type:"post",
@@ -129,43 +122,16 @@
 			});
 		}
 		
-		/* 수정 눌렀을 때 */
-		function update(form) {
-			var title = form.title.value;
-			var idx = form.idx.value;
-			var comments = form.comments.value;
-			//제목,이름,내용 유효성 검사
-			if (!/^.{5,30}$/.test(form.title.value)) {
-				alert("제목 5글자이상 30이하로 작성하시오.")
-				form.title.focus();
+		//input태그에서 엔터눌러서 전송 안되게 막는거
+		function enabled_enter(){
+			if(event.keyCode==13){
+				event.returnValue=false;
+			}else{
 				return;
 			}
-
-			if (!/^.{10,1000}$/.test(form.comments.value)) {
-				alert("내용을 10글자이상 1000글자 이하로 작성하시오.")
-				form.comments.focus();
-				return;
-			}
-			$.ajax({
-				url:"/board/update",
-				type:"post",
-				data:{idx:idx,
-					title:title,
-					comments:comments},
-					success:function(data){
-					if(data=='y'){
-						alert("수정완료");
-						location.href='${pageContext.request.contextPath}/board/view?idx='+idx;
-					}else{
-						alert("수정실패");
-					}
-				}
-				
-			});
-			
-			form.submit();
-
 		}
+
+		
 	</script>
 </body>
 </html>

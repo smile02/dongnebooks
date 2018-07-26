@@ -1,8 +1,11 @@
 package com.inc.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,10 +23,7 @@ public class BoardController {
 	
 	@Autowired
 	private BoardService boardService;
-	
-	/*@Autowired
-	private ReplyService replyService;*/
-	
+		
 	@Autowired
 	private Paging paging;
 	
@@ -62,10 +62,14 @@ public class BoardController {
 	
 	//게시글 수정
 	@RequestMapping(value="/board/update", method=RequestMethod.POST)
-	@ResponseBody
-	public String update(@ModelAttribute Board board) throws Exception{
-		boardService.update(board);
-		return "y";
+	public String update(@ModelAttribute @Valid Board board, BindingResult result) throws Exception{
+		if(result.hasErrors()) {
+			return "/board/update.jsp";
+		}else {
+			boardService.update(board);
+			return "redirect:/board/view?idx="+board.getIdx();
+		}
+		
 	}
 	
 	//게시글 삭제
@@ -85,8 +89,10 @@ public class BoardController {
 	
 	//게시글 추가
 	@RequestMapping(value="/board/insert",method=RequestMethod.POST)
-	public String insert(@ModelAttribute Board board) throws Exception{
-		System.out.println(board.getNickname());
+	public String insert(@ModelAttribute @Valid Board board, BindingResult result) throws Exception{
+		if(result.hasErrors()) {
+			return "/board/insert.jsp";
+		}
 		boardService.insert(board);
 		return "redirect:/board/list";
 	}

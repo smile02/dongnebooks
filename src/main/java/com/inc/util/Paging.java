@@ -31,7 +31,7 @@ public class Paging {
 		} else {
 			totalPage = totalCount / numberOfList + 1;
 		}
-		
+		System.out.println(totalPage);
 		// 시작 페이지 구하기
 		startPage = (nowPage - 1) / numberOfPage * numberOfPage + 1;
 		//여기서의 시작페이지는 오른쪽 버튼을 클릭했을 때 시작하는 페이지

@@ -16,7 +16,7 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDao boardDao;
 	
-	public static final int numberOfList = 13;
+	public static final int numberOfList = 10;
 	public static final int numberOfPage = 3;
 
 	@Override
@@ -56,8 +56,6 @@ public class BoardServiceImpl implements BoardService {
 					String option, String text, int page) throws Exception{
 		int start = (page - 1) * numberOfList + 1;
 		int end = start + numberOfList - 1;
-		System.out.println("start : "+start);
-		System.out.println("end : "+end);
 		Map<String, Object> searchMap = new HashMap<>();
 		searchMap.put("start", start);
 		searchMap.put("end", end);

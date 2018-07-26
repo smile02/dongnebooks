@@ -2,19 +2,24 @@ package com.inc.domain;
 
 import java.util.List;
 
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Range;
+
 public class Board {
 	private int idx;
+	@Size(min=5, max=30, message="제목은 - 5~10글자이내")
 	private String title;
 	private String nickname;
+	@Size(min=10, max=1000, message="내용은 - 10~1000글자이내")
 	private String comments;
 	private int cnt;
 	private String regdate;
+	@Range(min=1, max=5, message="유형을 선택해주세요")
 	private int code;
 	private List<Reply> replyList;
 	private int replysize;
-	private boolean isNew;
-	
-	
 	
 	public int getReplysize() {
 		return replysize;

@@ -1,9 +1,15 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ page import="java.util.Date" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%
+	Calendar today = Calendar.getInstance();
+	today.set(Calendar.HOUR_OF_DAY, today.get(Calendar.HOUR_OF_DAY)-24);
+	Date yesterday = today.getTime();
+	pageContext.setAttribute("yesterday", yesterday);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +29,8 @@
 
 .select_option{
 	display: inline-block;
+	margin-top: 12px;
+	margin-bottm: 12px;
 }
 
 .pagination {
@@ -54,16 +62,6 @@ th {
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12">
-				<c:if test="${sessionScope.user.nickname == null }">
-					<input class="form-control col-3 d-inline" type="text" name="nickname" 
-					   value="방문자" readonly/> 님 환영합니다.
-				</c:if>
-				<c:if test="${sessionScope.user.nickname != null }">
-					<input class="form-control col-3 d-inline" type="text" name="nickname" 
-					   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
-				</c:if>
-			</div>
 		<h3 class="text-center display-5"> 게 시 판 </h3>
 		<table class="table table-hover">
 			<thead>
@@ -71,8 +69,8 @@ th {
 					<th width="7%" class="text-center">분 류</th>
 					<th width="*" class="text-center">제 목</th>
 					<th width="15%" class="text-center">작성자</th>
-					<th width="10%" class="text-center">날 짜</th>
-					<th width="10%" class="text-center">조회수</th>
+					<th width="12%" class="text-center">날 짜</th>
+					<th width="8%" class="text-center">조회수</th>
 				</tr>
 				<c:if test="${empty boardList }">
 				<tr>
@@ -87,84 +85,98 @@ th {
 					<tr class="table-light">
 						<c:if test="${bvo.code == 1 }">
 							<th>
-							<span class="badge badge-pill badge-warning">공지</span>
+							<span class="badge badge-pill badge-secondary">공지</span>
 							</th>
 						</c:if>
 						<c:if test="${bvo.code == 2 }">
 							<th>
-								<span class="badge badge-pill badge-secondary">일반</span>
+								<span class="badge badge-pill badge-success">일반</span>
+							</th>
+						</c:if>
+						<c:if test="${bvo.code == 3 }">
+							<th>
+								<span class="badge badge-pill badge-warning">질문</span>
+							</th>
+						</c:if>
+						<c:if test="${bvo.code == 4 }">
+							<th>
+								<span class="badge badge-pill badge-dark">신고</span>
 							</th>
 						</c:if>
 						<th>
 							<a href="${pageContext.request.contextPath }/board/view?idx=${bvo.idx}">
 							${bvo.title }
-							<span class="badge badge-info">댓글 ${bvo.replysize }</span>
-							<%-- <c:set var="today" value="<%=new Date()%>">
-							<f:parseDate var="regdate" value="${bvo.regdate}" pattern="yyyy-MM-dd"/>
-							<f:parseDate var="now" value="${sysdate}" pattern="yyyy-MM-dd"/>
-					        <f:parseNumber var="current" value="${now / (1000*60*60*24)}" integerOnly="true"/>
-					        <f:parseNumber var="reg_date" value="${regdate / (1000*60*60*24)}" integerOnly="true"/>
-							<c:if test="${curent - reg_date < 1 }">
-							<span class="badge badge-info">new</span>
-							</c:if> --%>
+								<!-- 댓글 갯수만큼 숫자 표시 -->
+								<span class="badge badge-info">댓글 ${bvo.replysize }</span>
+								<f:parseDate var="date2" value="${bvo.regdate }"
+								pattern="yyyy-MM-dddd HH:mm:ss"/>
+								<!-- 글작성 시간이 24시간 이내이면 새글표시 -->
+							<c:if test="${date2 ge yesterday}">	
+									<span class="badge badge-secondary">NEW</span>
+									<!-- 글작성시간 24시간 이내에서 게시글의 조회수가 100넘으면 인기게시글 표시 -->
+								<c:if test="${bvo.cnt >= 10 }">
+									<span class="badge badge-danger">HOT</span>
+								</c:if>
+							</c:if>
 							</a>
 						</th>
 						<th>${bvo.nickname }</th>
 						<th>
-							<!-- 날짜 한국시간으로 뿌리는거 -->
 							<f:parseDate var="date" value="${bvo.regdate }"
-								pattern="yyyy-MM-dddd HH:mm:ss" timeZone="KST"/> 
-							<f:formatDate value="${date }" pattern="yyyy/MM/dd HH:mm:ss"/>
+								pattern="yyyy-MM-dddd HH:mm:ss"/> <!-- timeZone="KST" 요거 우리나라 시간으로 맞출때-->
+							<c:if test="${date le yesterday}">	
+								<f:formatDate value="${date }" pattern="yyyy/MM/dd"/>
+							</c:if>
+							<c:if test="${date ge yesterday}">	
+								<f:formatDate value="${date }" pattern="MM/dd HH:mm"/>
+							</c:if>
 						</th>
 						<th>${bvo.cnt }</th>
 					</tr>
 				</tbody>
 			</c:forEach>
 		</table>
-		<div class="buttons">
-			<div class="col-sm-1 text-right">
-				<button type="button" class="btn btn-primary btn-sm btn-block text-center"
-					onclick="location.href='${pageContext.request.contextPath}/board/insert'">글쓰기</button>
-			</div>
-
-			<div class="row col-sm-12">
-				<div class="col-sm-2 form-group text-center">
-						<select class="select_option custom-select text-right form-control" id="search_option" onchange="lock()">
-							<option value="all">전체</option>
-							<option value="title">제목</option>
-							<option value="nickname">이름</option>
-							<option value="comments">내용</option>
-							<option value="title_name">제목+이름</option>
-						</select>
-						<div class="has-success">
-							<label class="form-control-label" for="inputSuccess1"> </label> 
-							<input id="search_text" type="text" placeholder="검색"
-								class="form-control is-valid" id="inputValid">
-							<div class="valid-feedback">무엇을 검색?</div>
-							<button class="btn btn-primary btn-sm" type="button"
-								onclick="search()">검색</button>
-						</div>
-					</div>
-				</div>
-			</div>
+		<div class="container-fluid">
 			<div class="row">
-					<div class="col-sm-12 text-center">
-						<div class="paging" id="paging">
-							<ul class="pagination">
+				<div class="col-md-10 form-group">
+							<select class="select_option custom-select-width form-control col-3" 
+									id="search_option" onchange="lock()">
+								<option value="all">전체</option>
+								<option value="title">제목</option>
+								<option value="nickname">작성자</option>
+								<option value="comments">내용</option>
+								<option value="title_name">제목+작성자</option>
+							</select>
+							<input id="search_text" type="text" placeholder="검색할 단어를 이곳에" disabled="disabled"
+								   class="form-control is-valid custom-input-width col-3" id="inputValid">
+							<div class="valid-feedback">무엇을 검색 하실껀가요?</div>
+							<button class="btn btn-primary btn-sm custom-select-width" type="button"
+									onclick="search()">검색</button>
+				</div>	
+				<div class="col-md-2 text-right">
+					<button type="button" class="btn btn-primary btn-block custom-button-width .navbar-right col-8"
+							onclick="location.href='${pageContext.request.contextPath}/board/insert'">글쓰기</button>
+				</div>	
+			</div>
+		</div>
+			<div class="row">
+				<div class="col-sm-12 text-center">
+					<div class="paging" id="paging">
+						<ul class="pagination">
 							${paging }
-							</ul>
-						</div>
+						</ul>
 					</div>
 				</div>
+			</div>
 		</div>
 		<jsp:include page="../include/footer.jsp" />
 		<script>
 	function lock(){
-		if($("#search_option").val() == 'all'){
-			$("#search_text").attr("disabled","disabled");
+		if($("#search_option").val() != 'all'){
+			$("#search_text").removeAttr("disabled");
 			$("#search_text").val("");
 		}else{
-			$("#search_text").removeAttr("disabled");
+			$("#search_text").attr("disabled",true);
 		} 
  	}
  	
