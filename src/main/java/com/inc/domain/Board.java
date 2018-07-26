@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Range;
 
 public class Board {
 	private int idx;
-	@Size(min=5, max=30, message="제목은 - 5~10글자이내")
+	@Size(min=5, max=30, message="제목은 - 5~30글자이내")
 	private String title;
 	private String nickname;
 	@Size(min=10, max=1000, message="내용은 - 10~1000글자이내")

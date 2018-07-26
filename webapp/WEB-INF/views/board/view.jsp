@@ -153,15 +153,10 @@
 						<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
 						<td>
 							<c:if test="${sessionScope.user.nickname == reply.nickname }">
-<<<<<<< HEAD
-								<button id="replyMod_${reply.rno}" class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
-								<button class="btn btn-primary btn-sm" type="button" onclick="reply_del(${reply.rno})">삭제</button>
-=======
 								<button id="replyMod_${reply.rno }" class="btn btn-primary btn-sm" type="button" 
 										onclick="reply_update(${reply.rno})">수정</button>
 								<button class="btn btn-primary btn-sm" type="button" 
 										onclick="reply_del(${reply.rno})">삭제</button>
->>>>>>> f31b325144907cee42515625a1938f5f6aac07d3
 							</c:if>
 							<!-- 관리자권한으로 댓글 삭제 -->
 							 <c:choose>
@@ -297,19 +292,10 @@
 	
 	//댓글수정
 	function reply_update(rno) {
-<<<<<<< HEAD
-		console.log(rno);
-		$("#replyMod_"+rno).attr("disabled",true);
-		console.log($("#replyMod_"+rno).val());
-		var comments_td = $("#td_"+rno);		
-		var $input = $("<input id='input_"+rno+"' type='text'/>");
-		console.log(comments_td.text());
-=======
 		var comments_td = $("#td_"+rno);
 		//$("#replyMod_"+rno).attr('disabled',true);
 		$("#replyMod_"+rno).css('display',"none");
 		var $input = $("<input id='input_"+rno+"' type='text' onkeypress='enabled_enter()'/>");
->>>>>>> f31b325144907cee42515625a1938f5f6aac07d3
 		$input.val(comments_td.text());
 		comments_td.empty();
 		comments_td.append($input);

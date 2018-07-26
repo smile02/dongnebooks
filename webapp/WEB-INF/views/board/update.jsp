@@ -34,7 +34,11 @@
 		</div>
 		<form:form action="${pageContext.request.contextPath}/board/update"
 			method="post" modelAttribute="board">
+			<input type="hidden" name="nickname" value="${board.nickname }" />
 			<input type="hidden" name="idx" value="${board.idx }" />
+			<input type="hidden" name="code" value="${board.code }" />
+			<input type="hidden" name="cnt" value="${board.cnt }" />
+			<input type="hidden" name="regdate" value="${board.regdate }" />
 			<fieldset>
 				<table class="table">
 					<tbody>
