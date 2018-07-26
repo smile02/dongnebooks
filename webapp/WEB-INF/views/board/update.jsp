@@ -32,14 +32,6 @@
 				</div>
 			</div>
 		</div>
-		<c:if test="${sessionScope.user.nickname == null }">
-			<input class="form-control col-3 d-inline" type="text" name="nickname" 
-				   value="방문자" readonly> 님 환영합니다.
-		</c:if>
-		<c:if test="${sessionScope.user.nickname != null }">
-			<input class="form-control col-3 d-inline" type="text" name="nickname" 
-				   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
-		</c:if>
 		<form:form action="${pageContext.request.contextPath}/board/update"
 			method="post" modelAttribute="board">
 			<input type="hidden" name="idx" value="${board.idx }" />
@@ -140,45 +132,6 @@
 		}
 
 		
-		/* 수정 눌렀을 때 */
-		/* function update(form) {
-			
-			var title = form.title.value;
-			var idx = form.idx.value;
-			var comments = form.comments.value;
-			//제목,이름,내용 유효성 검사
-			if (!/^.{5,30}$/.test(form.title.value)) {
-				alert("제목 5글자이상 30이하로 작성하시오.")
-				form.title.focus();
-				return;
-			}
-	        
-			if (!/^.{10,1000}$/.test(form.comments.value)) {
-				alert("내용을 10글자이상 1000글자 이하로 작성하시오.")
-				form.comments.focus();
-				return;
-			}
-			
-			$.ajax({
-				url:"/board/update",
-				type:"post",
-				data:{idx:idx,
-					title:title,
-					comments:comments},
-					success:function(data){
-					if(data=='y'){
-						alert("수정완료");
-						location.href='${pageContext.request.contextPath}/board/view?idx='+idx;
-					}else{
-						alert("수정실패");
-					}
-				}
-				
-			});
-			
-			form.submit();
-
-		} */
 	</script>
 </body>
 </html>

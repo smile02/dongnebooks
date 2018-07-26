@@ -1,8 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="java.util.Date"%>
+<%@page import="java.util.Calendar"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%
+	Calendar today = Calendar.getInstance();
+	today.set(Calendar.HOUR_OF_DAY, today.get(Calendar.HOUR_OF_DAY)-24);
+	Date yesterday = today.getTime();
+	pageContext.setAttribute("yesterday", yesterday);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,20 +48,6 @@
 				</div>
 			</div>
 		</div>
-		<div class="row col-lg-12">
-			<div class="col-sm-12">
-				<input type="hidden" name="idx" value="${board.idx }"/>	
-				<c:if test="${sessionScope.user.nickname == null }">
-					<input class="form-control col-3 d-inline text-center" type="text" name="nickname" 
-					   	   value="방문자" readonly/> 
-				</c:if>
-				<c:if test="${sessionScope.user.nickname != null }">
-					<input class="form-control col-3 d-inline text-center" type="text" name="nickname" 
-					  	   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
-				</c:if>
-				
-			</div>
-		</div>	
 		<div class="row">
 				<table class="table table-hover">
 					<tr>
@@ -103,7 +97,7 @@
 					</c:if>
 					<!-- 관리자로 로그인 했을 때 이상한글 올렸을 때 관리자가 임의로 삭제할수 있는버튼 생성 -->
 					<c:if test="${sessionScope.user.nickname == '관리자' }">
-					<button type="button" class="btn btn-primary btn-sm btn-center"
+					<button type="button" class="btn btn-dark btn-sm btn-center"
 						onclick="admin_delete(${board.idx})">관리자삭제</button>
 					</c:if>
 				</div>
@@ -116,7 +110,7 @@
 		<div class="row col-12">
 			<form:form action="/reply/insert" method="post" modelAttribute="reply">
 				<!-- 로그인 했을 때만 댓글 작성할 수 있는 input태그 추가 -->
-			<span class="badge badge-danger">댓글</span>
+			<button class="btn btn-info btn-sm" type="button" disabled="disabled">댓글</button>
 			<c:if test="${!empty sessionScope.user.nickname }">
 				<input type="hidden" name="idx" value="${board.idx }" />
 				<form:input class="form-control col-12 d-inline text-center" type="text" path="comments" id="comments"
@@ -131,9 +125,10 @@
 			<form>
 			<table class="table table-hover">
 				<tr>
-					<th>작성자</th>
-					<th>댓글내용</th>
-					<th>댓글시간</th>
+					<th width="12%">작성자</th>
+					<th width="*">댓글내용</th>
+					<th width="10%">댓글시간</th>
+					<th width="20%"></th>
 				</tr>
 				<c:if test="${empty board.replyList }">
 					<tr>
@@ -145,16 +140,35 @@
 						<td>${reply.nickname }</td>
 						<td id="td_${reply.rno }">${reply.comments }
 						</td>
-						<td>${reply.regdate }
+						<td>
+							<f:parseDate var="date" value="${reply.regdate }"
+								pattern="yyyy-MM-dddd HH:mm:ss"/>
+							<c:if test="${date le yesterday}">	
+								<f:formatDate value="${date }" pattern="yyyy/MM/dd"/>
+							</c:if>
+							<c:if test="${date ge yesterday}">	
+								<f:formatDate value="${date }" pattern="HH:mm:ss"/>
+							</c:if>	
+						</td>
 						<!-- 해당 댓글 작성자만 수정하고 삭제 할 수 있게 -->
-						<c:if test="${sessionScope.user.nickname == reply.nickname }">
-							<button id="replyMod_${reply.rno }" class="btn btn-primary btn-sm" type="button" onclick="reply_update(${reply.rno})">수정</button>
-							<button class="btn btn-primary btn-sm" type="button" onclick="reply_del(${reply.rno})">삭제</button>
-						</c:if>
-						<!-- 관리자권한으로 댓글 삭제 -->
-						<c:if test="${sessionScope.user.nickname == '관리자' }">
-							<button class="btn btn-primary btn-sm" type="button" onclick="reply_del_admin(${reply.rno})">관리자삭제</button>
-						</c:if>
+						<td>
+							<c:if test="${sessionScope.user.nickname == reply.nickname }">
+								<button id="replyMod_${reply.rno }" class="btn btn-primary btn-sm" type="button" 
+										onclick="reply_update(${reply.rno})">수정</button>
+								<button class="btn btn-primary btn-sm" type="button" 
+										onclick="reply_del(${reply.rno})">삭제</button>
+							</c:if>
+							<!-- 관리자권한으로 댓글 삭제 -->
+							 <c:choose>
+							 	<c:when test="${sessionScope.user.nickname == '관리자' && reply.nickname  == sessionScope.user.nickname}">
+									<button id="reply_deladmin_${reply.rno}" class="btn btn-primary btn-sm" type="button" 
+										onclick="reply_del_admin(${reply.rno})" style="display:none;">관리자삭제</button>
+								</c:when> 
+								<c:when test="${sessionScope.user.nickname == '관리자' }">
+									<button id="reply_deladmin_${reply.rno}" class="btn btn-dark btn-sm" type="button" 
+										onclick="reply_del_admin(${reply.rno})">관리자삭제</button>
+								</c:when>
+							</c:choose> 
 						</td>
 					</tr>
 				</c:forEach>
@@ -168,6 +182,16 @@
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script>
+	
+		
+	//댓글수정하는 input태그에서 엔터눌러서 전송 안되게 막는거
+	function enabled_enter(){
+		if(event.keyCode==13){
+			event.returnValue=false;
+		}else{
+			return;
+		}
+	}
 	
 	//해당 사용자에게만 뜨는 게시글 삭제 눌렀을 때 
 	function del(idx){
@@ -271,7 +295,7 @@
 		var comments_td = $("#td_"+rno);
 		//$("#replyMod_"+rno).attr('disabled',true);
 		$("#replyMod_"+rno).css('display',"none");
-		var $input = $("<input id='input_"+rno+"' type='text'/>");
+		var $input = $("<input id='input_"+rno+"' type='text' onkeypress='enabled_enter()'/>");
 		$input.val(comments_td.text());
 		comments_td.empty();
 		comments_td.append($input);

@@ -62,16 +62,6 @@ th {
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12">
-				<c:if test="${sessionScope.user.nickname == null }">
-					<input class="form-control col-3 d-inline" type="text" name="nickname" 
-					   value="방문자" readonly/> 님 환영합니다.
-				</c:if>
-				<c:if test="${sessionScope.user.nickname != null }">
-					<input class="form-control col-3 d-inline" type="text" name="nickname" 
-					   value="${sessionScope.user.nickname }" readonly/> 님 환영합니다.
-				</c:if>
-			</div>
 		<h3 class="text-center display-5"> 게 시 판 </h3>
 		<table class="table table-hover">
 			<thead>
@@ -79,8 +69,8 @@ th {
 					<th width="7%" class="text-center">분 류</th>
 					<th width="*" class="text-center">제 목</th>
 					<th width="15%" class="text-center">작성자</th>
-					<th width="10%" class="text-center">날 짜</th>
-					<th width="10%" class="text-center">조회수</th>
+					<th width="12%" class="text-center">날 짜</th>
+					<th width="8%" class="text-center">조회수</th>
 				</tr>
 				<c:if test="${empty boardList }">
 				<tr>
@@ -138,7 +128,7 @@ th {
 								<f:formatDate value="${date }" pattern="yyyy/MM/dd"/>
 							</c:if>
 							<c:if test="${date ge yesterday}">	
-								<f:formatDate value="${date }" pattern="HH:mm:ss"/>
+								<f:formatDate value="${date }" pattern="MM/dd HH:mm"/>
 							</c:if>
 						</th>
 						<th>${bvo.cnt }</th>
