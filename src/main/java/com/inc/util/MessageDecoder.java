@@ -11,7 +11,7 @@ import org.json.simple.parser.ParseException;
 import com.inc.domain.Message;
 
 public class MessageDecoder implements Decoder.Text<Message> {
-
+	private static long cnt = 0;
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
@@ -33,6 +33,8 @@ public class MessageDecoder implements Decoder.Text<Message> {
 			message.setFrom((String)jsonObject.get("from"));
 			message.setTo((String)jsonObject.get("to"));
 			message.setMsg((String)jsonObject.get("msg"));
+			cnt += (Long)jsonObject.get("userCnt");
+			message.setUserCnt(cnt);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			throw new DecodeException(jsonMessage,e.getMessage());

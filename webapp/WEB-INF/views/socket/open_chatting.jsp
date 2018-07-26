@@ -22,6 +22,7 @@
 		<div class="col-sm-6">
 			<input type="hidden" id="nick" value="${loginUser.nickname}" />		
 			<p id="outNick" class="control-label"></p>
+			접속자 수 : <input type="text" id="cnt" readonly="readonly" />
 		</div>					
 	</div>
 		   <br />		
@@ -32,6 +33,7 @@
 	<div class="row">
 		<div id="textbox" class="panel panel-default col-sm-7"
 		 style="height:500px; padding-left:20px; overflow:auto; border: 1px solid black;"></div>
+		 <textarea name="" id="userBox" cols="30" rows="10"></textarea>
 	</div>
 		<br />
 	<div class="row">			
@@ -65,6 +67,8 @@
 <script>
     	var name = $("#nick").val();
     	var ws;
+    	var users = [];
+    	
     	//닉네임 : 
     	console.log(typeof name);
     	$(document).ready(function(){
@@ -85,7 +89,7 @@
     		
            //웹 소켓이 연결되었을 때 호출되는 이벤트
              ws.onopen = function(message){
-             	ws.send(JSON.stringify({from:name, to:"", msg:"님이 입장하셨습니다."}));
+             	ws.send(JSON.stringify({from:name, to:"", msg:"님이 입장하셨습니다.",userCnt:1}));
              };
              
              //웹 소켓이 에러가 났을 때 호출되는 이벤트
@@ -97,15 +101,22 @@
                
              
              //웹 소켓에서 메시지가 날라왔을 때 호출되는 이벤트
-             ws.onmessage = function(message){
+             ws.onmessage = function(message){        	   	
              	console.log(message.data);
              	var json = JSON.parse(message.data);
+             	$("#cnt").val(json.userCnt);
+             	//console.log("사용자 : " +json.from);
+             	for(var i=0; i<json.userCnt; i++){
+             		console.log(i);
+             		users[i] = json.from;
+             		console.log(users[i]);
+             	}
              	var $item = $("<div>").addClass("row");
              	var $entity = $("<p class='col-sm-12'>");
              	if(json.msg.indexOf("입장하셨습니다.") != -1){
-             		$entity.text(json.from+json.msg);        		
+             		$entity.text(json.from+json.msg);      
              	}else if(json.msg.indexOf("퇴장하셨습니다.") != -1){
-             		$entity.text(json.from+json.msg);
+             		$entity.text(json.from+json.msg);           		
              	}else{
                  	$entity.text(json.from+" : "+json.msg);
                  	if(json.from == name){            		
@@ -126,13 +137,13 @@
         function sendMessage(event){
             //웹소켓으로 textMessage객체의 값을 보낸다.
             if(event.type == "click" || event.type == "keypress" && event.key =="Enter"){
-            	ws.send(JSON.stringify({from:name, to:$("#to").val(), msg:$("#message").val()}));
+            	ws.send(JSON.stringify({from:name, to:$("#to").val(), msg:$("#message").val(),userCnt:0}));
             	event.preventDefault();
                 $("#message").val('');	
             }            
         }
          window.onbeforeunload = function(){
-            ws.send(JSON.stringify({from:name, to:"", msg:"님이 퇴장하셨습니다."}));
+            ws.send(JSON.stringify({from:name, to:"", msg:"님이 퇴장하셨습니다.",userCnt:-1}));
         	  ws.onclose = function(message){
             		
                };
