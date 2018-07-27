@@ -337,8 +337,10 @@
 											<label for="mod_comments" class="control-label">내용 : </label>
 										</div>
 										<div class="col-xs-5">
-											<div class="form-control res_comments"
-												style="overflow: scroll; width: 100%; height: 100px; padding: 10px;"></div>
+											<!-- <div class="form-control res_comments"
+												style="overflow: scroll; width: 100%; height: 100px; padding: 10px;"></div> -->
+											<textarea class="form-control res_comments"
+												rows="10" readonly="readonly" ></textarea>
 											<textarea id="mod_comments" class="form-control"
 												name="comments" rows="10">${bk.comments }</textarea>
 											<br /> <span class="error error_comments err_color"></span>
@@ -606,7 +608,7 @@ var commentsPage = "";
 	}
 	
 	function commentsMod(rno){
-		var comments = $("#mod_area"+rno).val(); //textarea의 내용
+		var comments = $.trim($("#mod_area"+rno).val()); //textarea의 내용
 		var btn = $("#mod_"+rno+"").html();//댓글번호의 버튼이름 가져오기
 		
 		console.log("btn : "+btn);
@@ -851,6 +853,11 @@ var commentsPage = "";
 				 alert("배송비를 입력해주세요.");
 				 return;
 			 }
+
+			 var title = formData.get("title");
+			 var comments = formData.get("comments");
+			 formData.set("title",$.trim(title));
+			 formData.set("comments",$.trim(comments));
 			 $.ajax({
 				 url:"/books/add",
 				 enctype:"multipart/form-data",
@@ -928,14 +935,16 @@ var commentsPage = "";
 				return;
 			}
 			var deal = $(".res_deal").html();
+			var comments = $.trim(form.comments.value);
+			var author = $.trim(form.author.value);
 			 $.ajax({
 				 url:"/books/mod",
 				 type:"post",
 				 data:{
-					 comments:form.comments.value,
+					 comments:comments,
 					 status:form.status.value,
 					 d_type:form.d_type.value,
-					 author:form.author.value,
+					 author:author,
 					 b_category:form.b_category.value,
 					 s_category:form.s_category.value,
 					 price:form.price.value,

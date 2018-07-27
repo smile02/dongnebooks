@@ -21,19 +21,23 @@
 	<div class="row">
 		<div class="col-sm-6">
 			<input type="hidden" id="nick" value="${loginUser.nickname}" />		
-			<p id="outNick" class="control-label"></p>
-			접속자 수 : <input type="text" id="cnt" readonly="readonly" />
+			<p id="outNick" class="control-label bold"></p>
+			접속자 수 : <label id="cnt" for=""></label>
 		</div>					
 	</div>
-		   <br />		
-		   <h2 class="text-muted text-center">의사소통 공간</h2>
+		   <br />
+		   <div class="row well">
+			   <span class="col-sm-6 text-center" style="font-size:20pt"><strong>동네북스 오픈채팅방</strong></span>
+			   <span class="col-sm-6 text-center" style="font-size:20pt"><strong>사용자 목록</strong></span>
+		   </div>	   
 		   <br />
 		<!-- 결과 메시지 보여주는 창 -->
 		
 	<div class="row">
 		<div id="textbox" class="panel panel-default col-sm-7"
 		 style="height:500px; padding-left:20px; overflow:auto; border: 1px solid black;"></div>
-		 <textarea name="" id="userBox" cols="30" rows="10"></textarea>
+		 <div id="userBox" class="panel panel-default col-sm-3"
+		 style="height:500px; padding-left:20px; overflow:auto; border: 1px solid black; margin-left:40px;"></div>
 	</div>
 		<br />
 	<div class="row">			
@@ -67,7 +71,7 @@
 <script>
     	var name = $("#nick").val();
     	var ws;
-    	var users = [];
+    	var check = false;
     	
     	//닉네임 : 
     	console.log(typeof name);
@@ -85,11 +89,12 @@
     		$("#outNick").html(name+"님 환영합니다~!!");
     		//WebSocketEx는 프로젝트 이름
             //websocket 클래스 이름
-             ws = new WebSocket("ws://localhost:9090/chat");
+             ws = new WebSocket("ws://192.168.0.23:9090/chat");
     		
            //웹 소켓이 연결되었을 때 호출되는 이벤트
              ws.onopen = function(message){
              	ws.send(JSON.stringify({from:name, to:"", msg:"님이 입장하셨습니다.",userCnt:1}));
+         	   check = true;
              };
              
              //웹 소켓이 에러가 났을 때 호출되는 이벤트
@@ -102,15 +107,25 @@
              
              //웹 소켓에서 메시지가 날라왔을 때 호출되는 이벤트
              ws.onmessage = function(message){        	   	
-             	console.log(message.data);
+             	console.log(message.data);             	
              	var json = JSON.parse(message.data);
-             	$("#cnt").val(json.userCnt);
-             	//console.log("사용자 : " +json.from);
-             	for(var i=0; i<json.userCnt; i++){
-             		console.log(i);
-             		users[i] = json.from;
-             		console.log(users[i]);
-             	}
+             	console.log(json.userCnt);
+             	$("#cnt").html(json.userCnt);
+             	$("#userBox").empty();
+             	console.log(json.userList);
+		        	for(var user of json.userList){
+		        		var $user_div = $("<div>").addClass("row");
+		            	var $user_p = $("<p>").text(user);
+		            	
+		            	if(check){
+		            		$user_div.append($user_p);
+		            	}else{
+		            		$user_p.text("");
+		            		$user_div.append($user_p);
+		            	}		            	
+		            	$("#userBox").append($user_div);
+		        	}
+             	
              	var $item = $("<div>").addClass("row");
              	var $entity = $("<p class='col-sm-12'>");
              	if(json.msg.indexOf("입장하셨습니다.") != -1){
@@ -144,7 +159,8 @@
         }
          window.onbeforeunload = function(){
             ws.send(JSON.stringify({from:name, to:"", msg:"님이 퇴장하셨습니다.",userCnt:-1}));
-        	  ws.onclose = function(message){
+            check = false;
+            ws.onclose = function(message){
             		
                };
         } 

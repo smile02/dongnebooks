@@ -28,6 +28,7 @@ public class MessageEncoder implements Encoder.Text<Message> {
 		jsonObject.put("to", message.getTo());
 		jsonObject.put("msg", message.getMsg());
 		jsonObject.put("userCnt", message.getUserCnt());
+		jsonObject.put("userList", message.getUserList());
 		return jsonObject.toJSONString();
 	}
 	

@@ -1,5 +1,8 @@
 package com.inc.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
@@ -12,6 +15,7 @@ import com.inc.domain.Message;
 
 public class MessageDecoder implements Decoder.Text<Message> {
 	private static long cnt = 0;
+	private static List<String> saveList = new ArrayList<>();
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
@@ -33,7 +37,14 @@ public class MessageDecoder implements Decoder.Text<Message> {
 			message.setFrom((String)jsonObject.get("from"));
 			message.setTo((String)jsonObject.get("to"));
 			message.setMsg((String)jsonObject.get("msg"));
+			if((Long)jsonObject.get("userCnt") == 1) {
+				saveList.add(message.getFrom());
+			}else if((Long)jsonObject.get("userCnt") ==  -1) {
+				saveList.remove(message.getFrom());
+			}
+			message.setUserList(saveList);
 			cnt += (Long)jsonObject.get("userCnt");
+			System.out.println("cnt : "+cnt);
 			message.setUserCnt(cnt);
 		} catch (ParseException e) {
 			e.printStackTrace();

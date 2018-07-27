@@ -1,9 +1,11 @@
 package com.inc.domain;
 
+import java.util.*;
+
 public class Message {
 	private String to, from, msg;
 	private long userCnt;
-
+	private List<String> userList;
 	public String getTo() {
 		return to;
 	}
@@ -36,6 +38,11 @@ public class Message {
 		this.userCnt = userCnt;
 	}
 
-	
-	
+	public List<String> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(List<String> userList) {
+		this.userList = userList;
+	}	
 }
