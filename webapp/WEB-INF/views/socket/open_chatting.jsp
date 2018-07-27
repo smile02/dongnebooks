@@ -89,7 +89,7 @@
     		$("#outNick").html(name+"님 환영합니다~!!");
     		//WebSocketEx는 프로젝트 이름
             //websocket 클래스 이름
-             ws = new WebSocket("ws://192.168.0.23:9090/chat");
+             ws = new WebSocket("ws://13.209.89.95:9090/chat");
     		
            //웹 소켓이 연결되었을 때 호출되는 이벤트
              ws.onopen = function(message){
