@@ -114,7 +114,7 @@
 			var sessionUser = "${sessionScope.user.nickname}";
 			var out = "";
 			var nickname = $("#nickname").val();
-			var comments = $("#comments").val();
+			var comments = $.trim($("#comments").val());
 			console.log("등록 : "+nickname);
 			console.log("등록 : "+comments);
 			console.log("등록 : "+idx);

@@ -1,7 +1,5 @@
 package com.inc.domain;
 
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;

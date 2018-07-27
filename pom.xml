@@ -15,20 +15,20 @@
   </repositories>
   
   <properties>
-  	<java.version>9</java.version>
+  	<java.version>8</java.version>
   	<spring.version>4.2.6.RELEASE</spring.version>
   </properties>
   
   
   <build>
-  	<finalName>default</finalName><!-- 나중에 war파일의 이름 -->
+  	<finalName>dongnebooks</finalName><!-- 나중에 war파일의 이름 -->
   	<plugins>
   		<plugin>
   			<artifactId>maven-compiler-plugin</artifactId>
   			<version>3.1</version>
   			<configuration>
-  				<source>9</source>
-  				<target>9</target>
+  				<source>8</source>
+  				<target>8</target>
   				<encoding>UTF-8</encoding>
   			</configuration>
   		</plugin>
