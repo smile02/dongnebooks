@@ -96,8 +96,77 @@
 			</fieldset>
 		</form:form>
 	</div>
-	<br />
-
+	<div class="container">
+		<div class="form-control">
+			<div class="row form-control" style="margin: 0 auto;">
+				<form:form action="${pageContext.request.contextPath}/board/update"
+					method="post" modelAttribute="board">
+					<input type="hidden" name="nickname" value="${board.nickname }" />
+					<input type="hidden" name="idx" value="${board.idx }" />
+					<input type="hidden" name="code" value="${board.code }" />
+					<input type="hidden" name="cnt" value="${board.cnt }" />
+					<input type="hidden" name="regdate" value="${board.regdate }" />
+					<fieldset>
+						<table class="table">
+							<tbody>
+								<tr>
+									<th>분류</th>
+									<td>
+										<c:if test="${board.code == 1 }">
+											<td>[공지]</td>
+										</c:if> 
+										<c:if test="${board.code == 2 }">
+											<td>[일반]</td>
+										</c:if> 
+										<c:if test="${board.code == 3 }">
+											<td>[질문]</td>
+										</c:if> 
+										<c:if test="${board.code == 4 }">
+											<td>[신고]</td>
+										</c:if>
+									</td>
+									<th>작성자</th>
+									<td>${board.nickname }</td>
+									<th>작성시간</th>
+									<td>${board.regdate }</td>
+									<th>조회수</th>
+									<td>${board.cnt }</td>
+								</tr>
+								<tr>
+									<th>제목</th>
+									<td colspan="7">
+									<form:input path="title" type="text"
+											class="form-control" onkeypress="enabled_enter()"
+											style="width:500px; height:50px;" value="${board.title}" />
+										<form:errors path="title" class="error" />
+									</td>
+								</tr>
+								<tr>
+									<th>내용</th>
+									<td colspan="7">
+										<form:textarea class="form-control"
+											path="comments" title="${board.comments}"
+											wrap="hard" cols="8" rows="10" />
+										<form:errors path="comments" class="error" />	
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="row">
+							<div class="col-sm-12 text-center">
+								<button type="submit" class="btn btn-primary btn-sm">수정하기</button>
+								<button type="reset" class="btn btn-primary btn-sm">재입력</button>
+								<button type="button" class="btn btn-primary btn-sm"
+									onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
+								<button type="button" class="btn btn-primary btn-sm"
+									onclick="del(${board.idx})">삭제</button>
+							</div>
+						</div>
+					</fieldset>
+				</form:form>
+			</div>
+		</div>
+	</div>
 	<jsp:include page="../include/footer.jsp" />
 	<!-- script library -->
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -134,7 +203,6 @@
 				return;
 			}
 		}
-
 		
 	</script>
 </body>

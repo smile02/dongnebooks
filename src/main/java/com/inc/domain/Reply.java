@@ -1,14 +1,13 @@
 package com.inc.domain;
 
-import javax.validation.constraints.Size;
-
-import org.hibernate.validator.constraints.NotEmpty;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Pattern;
 
 public class Reply {
 	private int rno;
 	private int idx;
 	private String nickname;
-	@Size(min=1, max=300, message="댓글은 1글자이이상 300이하") 
+	@Pattern(regexp=".*{1,300}", message="영문,숫자,한글 1자이상 300자 이하로 내용을 입력해주세요.")
 	private String comments;
 	private String regdate;
 	private Board board;

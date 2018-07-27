@@ -9,14 +9,14 @@ import org.hibernate.validator.constraints.Range;
 
 public class Board {
 	private int idx;
-	@Size(min=5, max=30, message="제목은 - 5~30글자이내")
+	@Pattern(regexp="[0-9a-zA-Z가-힣!@#$%^&*]{5,30}", message="영문,숫자,한글 5자이상 30자 이하로 제목을 입력해주세요.")
 	private String title;
 	private String nickname;
-	@Size(min=10, max=1000, message="내용은 - 10~1000글자이내")
+	@Pattern(regexp="[0-9a-zA-Z가-힣]{10,1000}", message="영문,숫자,한글 10자이상 1000자 이하로 내용을 입력해주세요.")
 	private String comments;
 	private int cnt;
 	private String regdate;
-	@Range(min=1, max=5, message="유형을 선택해주세요")
+	@Range(min=1, max=5, message="어떤 게시물을 작성하시겠습니까?")
 	private int code;
 	private List<Reply> replyList;
 	private int replysize;
