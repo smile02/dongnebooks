@@ -19,13 +19,9 @@
 <body>
 	<jsp:include page="../include/header.jsp" />
 	<div class="container">
-		<form:form action="${pageContext.request.contextPath}/board/insert"
-			method="post" modelAttribute="board">
-			<input type="hidden" name="nickname" value="${sessionScope.user.nickname }" />
-			<fieldset>
-				<div class="row">
-					<div class="col-sm-12">
-						<div class="jumbotron">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="jumbotron">
 							<h1 class="display-6">Welcome to DongneBooks!</h1>
 							<p class="lead">This is a simple hero unit, a simple
 								jumbotron-style component for calling extra attention to
@@ -33,58 +29,72 @@
 							<hr class="my-4">
 							<p>It uses utility classes for typography and spacing to
 								space content out within the larger container.</p>
-						</div>
-					</div>
 				</div>
-				<div class="row">
-					<input type="hidden" name="idx" value="${board.idx }" />
-					<div class="col-sm-12">
-						<h3 class="text-center">글 쓰 기</h3>
-						<br /> <br />
-						<div class="form-group row">
-							<label for="code" class="col-sm-1">분 류</label>
-							<div class="col-sm-3">
-								<form:select path="code" class="custom-select">
-									<option value="0">【유형선택】</option>
-									<!-- 관리자만 공지 선택할 수 있게 -->
-									<c:if test="${sessionScope.user.nickname == '관리자' }">
-										<option value="1">공지</option>
-									</c:if>
-										<option value="2">일반</option>
-										<option value="3">질문</option>
-										<option value="4">신고</option>
-								</form:select>
-								<form:errors path="code" class="error"/>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<div class="form-contorl">
+			<div class="row form-control" style="margin: 0 auto;">
+				<form:form action="${pageContext.request.contextPath}/board/insert"
+					method="post" modelAttribute="board">
+					<input type="hidden" name="nickname"
+						value="${sessionScope.user.nickname }" />
+					<fieldset>
+						<div class="row form-control" style="margin: 0 auto;">
+							<input type="hidden" name="idx" value="${board.idx }" />
+							<div class="col-sm-12">
+								<h3 class="text-center">글 쓰 기</h3>
+								<br /> 
+								<br />
+								<div class="form-group row">
+									<div class="col-sm-4">
+										<label for="code" class="text-center">분 류</label>
+										<form:errors path="code" class="error" />
+										<form:select path="code" class="custom-select" 
+										style="width:100%;text-align:center;">
+											<option value="0">【유형선택】</option>
+											<!-- 관리자만 공지 선택할 수 있게 -->
+											<c:if test="${sessionScope.user.nickname == '관리자' }">
+											<option value="1">공지</option>
+											</c:if>
+											<option value="2">일반</option>
+											<option value="3">질문</option>
+											<option value="4">신고</option>
+										</form:select>
+									</div>
+									<div class="col-sm-7">
+										<label for="title" class="text-center">제 목</label>
+										<form:errors path="title" class="error"/>
+										<form:input type="text" class="form-control" path="title"
+											placeholder="글의 제목을 입력해주세요."/>
+										
+									</div>
+									<br />
+								</div>
+								<div class="form-group row col-sm-12 ">
+									<label for="comments" class="col-sm-3">내용</label>
+									<div class="col-sm-12">
+									<form:errors path="comments" class="error"/>
+										<pre>
+											<form:textarea class="form-control col-sm-12" path="comments"
+												wrap="hard" cols="7" rows="10" maxlength="500"
+												placeholder="여기에 글의 내용을 작성해주세요."/>
+										</pre>
+									</div>
+								</div>
 							</div>
-							<label for="title" class="col-sm-1">제 목</label>
-							<div class="col-sm-6">
-								<form:input type="text" class="form-control" path="title"
-									placeholder="글의 제목을 입력해주세요." />
-								<form:errors path="title" class="error"/>
+							<div class="col-sm-12 text-center">
+								<button type="submit" class="btn btn-primary btn-sm">글쓰기</button>
+								<button type="reset" class="btn btn-primary btn-sm">재입력</button>
+								<button type="button" class="btn btn-primary btn-sm"
+									onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
 							</div>
-							<br />
 						</div>
-					</div>
-					<div class="form-group row col-sm-12 ">
-						<label for="comments" class="col-sm-3">내용</label>
-						<div class="col-sm-12">
-							<form:textarea class="form-control col-sm-12" path="comments" style="height:230px;" 
-								placeholder="여기에 글의 내용을 작성해주세요."></form:textarea>
-							<form:errors path="comments" class="error"/>
-						</div>
-						<br />
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-sm-12 text-center">
-						<button type="submit" class="btn btn-primary btn-sm">글쓰기</button>
-						<button type="reset" class="btn btn-primary btn-sm">재입력</button>
-						<button type="button" class="btn btn-primary btn-sm"
-						onclick="location.href='${pageContext.request.contextPath}/board/list'">목록</button>
-					</div>
-				</div>
-			</fieldset>
-		</form:form>
+					</fieldset>
+				</form:form>
+			</div>
+		</div>
 	</div>
 	<jsp:include page="../include/footer.jsp" />
 	<!-- script library -->

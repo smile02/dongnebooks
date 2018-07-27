@@ -700,9 +700,9 @@ var commentsPage = "";
 				var adminBtn = "";
 				if(data.commentsList.length == 0){			
 					$("#commentsTitle").html("작성된 댓글이 없습니다~~");
-					$("#commentsCount").html(0);
+					 $("#commentsCount").html(0);
 					$("#commentsPaging").empty();
-					$("#replies").empty();
+					$("#replies").empty(); 
 				}else{
 					$(data.commentsList).each(function(){
 						console.log(this.commentsSize);
@@ -750,6 +750,7 @@ var commentsPage = "";
 			});		
 		} 
 	
+	//도서 등록, 수정시 가격이나 배송비에 숫자만 입력이 가능하도록하는 함수
 	function onlyMyNumber(event) {			
 		var keyValue = event.keyCode; 
 		if( ((keyValue >= 48) && (keyValue <= 57)) ) 
@@ -758,7 +759,7 @@ var commentsPage = "";
 			return false; 
 		}
 	
-	//로그인을 안하게 되면 도서등록이 안되도록
+	//로그인을 안하게 되면 도서등록이 안되도록하는 함수
 	function login(){
 		var answer = confirm("로그인 후 이용가능합니다.\n로그인 페이지로 이동하시겠습니까?");
 		console.log(answer);
@@ -803,7 +804,7 @@ var commentsPage = "";
 		});
 	}
 	
-	//구매버튼 클릭 시 구매화면으로 이동
+	//구매버튼 클릭 시 구매화면으로 이동하는 함수
 	function buy(){
 		var getIdx = $("#getIdx").val();		
 		console.log("getIdx : "+getIdx);
@@ -820,7 +821,7 @@ var commentsPage = "";
 		//도서등록시 거래유형 바뀔 때
 		 function reg_deal(){
 			 var $d_type = $("#d_type").val();
-			 
+			 //택배비가 선불일때만 입력이 가능하고 나머지는 입력 불가
 			 if($d_type=='start'){
 				 $("#fee").val('');
 				 $("#fee").removeAttr("disabled","disabled");

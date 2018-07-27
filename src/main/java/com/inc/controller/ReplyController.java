@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,8 +32,9 @@ public class ReplyController {
 	//댓글입력
 	@RequestMapping(value="/reply/insert", method=RequestMethod.POST)
 	public String insert(@ModelAttribute @Valid Reply reply, BindingResult result, HttpSession session,HttpServletRequest req, Model model) throws Exception {
+		
 		//에러있으면 
-		if(result.hasErrors()) {
+		if(result.hasErrors() || (reply.getComments().length() == 0 || reply.getComments().equals("") || reply.getComments() == null)) {
 			model.addAttribute("board", boardService.selectOne(reply.getIdx()));
 			return "/board/view.jsp";
 		}
@@ -51,9 +53,13 @@ public class ReplyController {
 	}
 	
 	//댓글수정
-	@RequestMapping(value="/reply/update", method=RequestMethod.POST)
+	@RequestMapping(value="/reply/update", method=RequestMethod.POST, produces = "application/text; charset=utf8")
 	@ResponseBody
-	public String update(@ModelAttribute Reply reply) throws Exception{
+	public String update(@ModelAttribute @Valid Reply reply, BindingResult result) throws Exception{
+		if(result.hasErrors()) {
+			System.out.println(result.getFieldError().getDefaultMessage());
+			return result.getFieldError().getDefaultMessage();
+		}
 		replyService.update(reply);
 		return "y";
 	}
