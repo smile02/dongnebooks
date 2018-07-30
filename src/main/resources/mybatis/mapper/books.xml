@@ -23,6 +23,12 @@
 	    					<when test="tag == '문학'">
 	    						and b_category = #{tag}
 	    					</when>
+	    					<when test="tag == '교육'">
+	    						and b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '기타'">
+	    						and b_category = #{tag}
+	    					</when>
 	    				</choose>	    				
 	    			</if>	    			
 	    			order by regdate desc	    		
@@ -85,6 +91,12 @@
 	    						and b_category = #{tag}
 	    					</when>
 	    					<when test="tag == '문학'">
+	    						and b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '교육'">
+	    						and b_category = #{tag}
+	    					</when>
+	    					<when test="tag == '기타'">
 	    						and b_category = #{tag}
 	    					</when>
 	    				</choose>	    				

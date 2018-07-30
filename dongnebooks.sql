@@ -132,9 +132,13 @@ insert into big_category
     values(seq_big_category_idx.nextval,'교육');
 insert into big_category
     values(seq_big_category_idx.nextval,'기타');
-    
+
     
 select * from big_category;
+delete from BIG_CATEGORY where B_NAME = '정치';
+commit;
+
+select * from tabs;
 -----------------------------------------------------
 --소분류
 
@@ -154,6 +158,22 @@ insert into small_category
     values(seq_small_category_idx.nextval,'사회','현대사회');
 insert into small_category
     values(seq_small_category_idx.nextval,'사회','근대사회');
+insert into small_category
+    values(seq_small_category_idx.nextval,'문학','에세이');
+insert into small_category
+    values(seq_small_category_idx.nextval,'기타','기타');
+insert into small_category
+    values(seq_small_category_idx.nextval,'교육','교육');
+commit;
+    
+/*
+insert into big_category
+    values(seq_big_category_idx.nextval,'정치');
+insert into big_category
+    values(seq_big_category_idx.nextval,'교육');
+insert into big_category
+    values(seq_big_category_idx.nextval,'기타');
+*/
 
 commit;
 -----------------------------------------------------
