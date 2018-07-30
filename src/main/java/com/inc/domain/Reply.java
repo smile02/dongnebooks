@@ -1,12 +1,12 @@
 package com.inc.domain;
 
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class Reply {
 	private int rno;
 	private int idx;
 	private String nickname;
-	@Pattern(regexp=".*{1,300}", message="1자이상 300자 이하로 내용을 입력해주세요.")
+	@Size(min=1, max=300, message="1자이상 300자 이하로 내용을 입력해주세요.")
 	private String comments;
 	private String regdate;
 	private Board board;

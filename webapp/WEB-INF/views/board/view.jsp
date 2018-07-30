@@ -41,9 +41,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-12">			
-				<div class="jumbotron">
-					<jsp:include page="../include/pageView.jsp"/>
-				</div>
+				<jsp:include page="../include/pageView.jsp"/>
 			</div>
 		</div>
 	</div>

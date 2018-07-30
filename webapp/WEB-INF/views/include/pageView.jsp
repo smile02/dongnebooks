@@ -36,38 +36,18 @@
   <div class="carousel-inner">
     <div class="carousel-item active">
       <img src="/image/photo/main_photo1.jpg" alt="Los Angeles">
-      <div class="carousel-caption">
-        <h3>메인화면</h3>
-        <p>최근등록된 도서와 게시판의 내용을 볼 수있습니다.</p>
-      </div>   
     </div>
     <div class="carousel-item">
       <img src="/image/photo/main_photo2.jpg" alt="Chicago">
-      <div class="carousel-caption">
-        <h3>소개화면</h3>
-        <p>Dongnebooks의 소개페이지입니다.</p>
-      </div>   
     </div>
     <div class="carousel-item">
       <img src="/image/photo/main_photo3.jpg" alt="New York">
-      <div class="carousel-caption">
-        <h3>도서등록화면</h3>
-        <p>도서를 등록하거나 수정,구매할 수 있으며 댓글을 달 수 있습니다.</p>
-      </div>   
     </div>
     <div class="carousel-item">
       <img src="/image/photo/main_photo4.jpg" alt="New York">
-      <div class="carousel-caption">
-        <h3>게시판화면</h3>
-        <p>질문,신고,일반적인 내용을 작성할 수 있습니다.</p>
-      </div>   
     </div>
     <div class="carousel-item">
       <img src="/image/photo/main_photo5.jpg" alt="New York">
-      <div class="carousel-caption">
-        <h3>New York</h3>
-        <p>We love the Big Apple!</p>
-      </div>   
     </div>
   </div>
   <a class="carousel-control-prev" href="#demo" data-slide="prev">
@@ -76,7 +56,10 @@
   <a class="carousel-control-next" href="#demo" data-slide="next">
     <span class="carousel-control-next-icon"></span>
   </a>
+  <br /><br />
 </div>
+
+  
 
 		<script
 			src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

@@ -26,12 +26,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-12">
-			<div class="jumbotron">
-  <h1 class="display-6">Welcome to DongneBooks!</h1>
-  <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-  <hr class="my-4">
-  <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-</div>
+			<jsp:include page="../include/pageView.jsp"/>
 		</div>
   </div>
 	<div class="row">
@@ -294,16 +289,16 @@
 			  </tbody>
 			 </table>
 		</div>
-		<div class="row">
-			<div class="col-sm-12" >
-				<div class="paging text-center">
-					<ul class="pagination pagination-sm text-center" id="salePaging">
+	</div>
+	<div class="row">
+			<div class="col-sm-12 text-center" >
+				<div class="paging">
+					<ul class="pagination pagination-sm" id="salePaging">
 						<!-- saleList 페이징 -->
 					</ul>
 				</div>
 			</div>
 		</div>
-	</div>
 		</div>
 		<div class="col-sm-3">
 		<jsp:include page="../include/right.jsp"/>

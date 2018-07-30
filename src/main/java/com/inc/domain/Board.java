@@ -3,6 +3,7 @@ package com.inc.domain;
 import java.util.List;
 
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Range;
 
@@ -11,7 +12,7 @@ public class Board {
 	@Pattern(regexp=".*{5,30}", message="5자이상 30자 이하로 제목을 입력해주세요.")
 	private String title;
 	private String nickname;
-	@Pattern(regexp=".*{10,1000}", message="10자이상 1000자 이하로 내용을 입력해주세요.")
+	@Size(min=10, max=1000, message="10자이상 1000자 이하로 내용을 입력해주세요.")
 	private String comments;
 	private int cnt;
 	private String regdate;
