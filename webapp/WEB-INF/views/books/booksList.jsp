@@ -45,13 +45,7 @@
 	<div class="row">
 			<div class="col-sm-12">
 				<div class="jumbotron">
-					<h1 class="display-6">Welcome to DongneBooks!</h1>
-					<p class="lead">This is a simple hero unit, a simple
-						jumbotron-style component for calling extra attention to featured
-						content or information.</p>
-					<hr class="my-4">
-					<p>It uses utility classes for typography and spacing to space
-						content out within the larger container.</p>
+					<jsp:include page="../include/pageView.jsp"/>
 				</div>
 			</div>			
 		</div>
@@ -239,7 +233,7 @@
 										<div class="col-xs-5">
 											<p class="form-control res_price"></p>
 											<input id="mod_price" name="price" type="text" onkeypress="return onlyMyNumber(event);"
-												class="form-control" />
+												class="form-control"/>
 											<span class="error error_price err_color"></span>
 										</div>
 									</div>
@@ -430,7 +424,7 @@
 									</div>
 									<div class="col-xs-5">
 										<input type="text" id="price" name="price" onkeypress="return onlyMyNumber(event);"
-											class="form-control reg_price" placeholder="가격을 입력해주세요." />
+											class="form-control reg_price" placeholder="가격을 입력해주세요."  value="0"/>											
 										<span class="error error_price err_color"></span>
 									</div>
 								</div>
@@ -1059,7 +1053,8 @@ var commentsPage = "";
 								}
 								
 								$("#mod_comments").html(data.book.comments);
-								if(data.book.photo == null){
+								console.log("data.book.photo : "+data.book.photo);
+								if(data.book.photo == 'no_file'){
 									$("#mod_photo").attr("src","/image/photo/noimage.png");
 								}else{
 									$("#mod_photo").attr("src","/image/photo/"+data.book.photo);
@@ -1111,8 +1106,8 @@ var commentsPage = "";
 									case "complete": $(".res_deal").html('거래 완료'); break;
 								}
 								
-								$(".res_fee").html(data.book.fee+"원");								
-								if(data.book.photo == null){
+								$(".res_fee").html(data.book.fee+"원");
+								if(data.book.photo == 'no_file'){
 									$(".res_photo").attr("src","/image/photo/noimage.png");
 								}else{
 									$(".res_photo").attr("src","/image/photo/"+data.book.photo);

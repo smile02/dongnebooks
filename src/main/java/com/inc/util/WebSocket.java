@@ -2,9 +2,7 @@ package com.inc.util;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.websocket.EncodeException;
