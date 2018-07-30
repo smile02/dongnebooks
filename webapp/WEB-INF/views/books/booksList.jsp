@@ -44,7 +44,7 @@
 	<div class="container">
 	<div class="row">
 			<div class="col-sm-12">
-					<jsp:include page="../include/pageView.jsp"/>
+				<jsp:include page="../include/pageView.jsp"/>
 			</div>			
 		</div>
 
