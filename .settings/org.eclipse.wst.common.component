@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+<<<<<<< HEAD
+                                                                                                        
+=======
                                                                                                 
     
+>>>>>>> b92669ef5f680fed27c38cb4db772b036bcabb76
     
     
     
@@ -19,12 +23,27 @@
     
     
     
+    
+    
+    
+<<<<<<< HEAD
     
     
     
     <wb-module deploy-name="dongnebooks">
         <wb-resource deploy-path="/WEB-INF/web.xml" source-path="/webapp/WEB-INF/web.xml"/>
+                                                                                                                                                                                                                
+        
+        
+        
+        
+        
+        
+=======
+    <wb-module deploy-name="dongnebooks">
+        <wb-resource deploy-path="/WEB-INF/web.xml" source-path="/webapp/WEB-INF/web.xml"/>
                                                                                                                                                                                                 
+>>>>>>> b92669ef5f680fed27c38cb4db772b036bcabb76
         
         
         
@@ -40,6 +59,18 @@
         
         
         
+<<<<<<< HEAD
+        
+        
+        
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+                                                                                                                                                                                                                
+        
+        
+        
+        
+=======
+>>>>>>> b92669ef5f680fed27c38cb4db772b036bcabb76
         
         
         
@@ -62,6 +93,8 @@
         
         
         
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                                                                                                                                                                                                                
         
         
         
@@ -88,6 +121,8 @@
         
         
         
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+                                                                                                                                                                                                        
         
         
         
@@ -113,6 +148,8 @@
         
         
         
+        <wb-resource deploy-path="/" source-path="/webapp"/>
+                                                                                                                                                                                                        
         
         
         
@@ -138,6 +175,8 @@
         
         
         
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                                                                                                                                                                                                                
         
         
         
@@ -164,10 +203,19 @@
         
         
         
+        <property name="java-output-path" value="/ch07_Maven_D_guestbook/target/classes"/>
+                        
         
+<<<<<<< HEAD
+        <property name="context-root" value="dongnebooks"/>
+                                                                                                                                                                                                            
+    
+    
+=======
         <property name="java-output-path" value="/ch07_Maven_D_guestbook/target/classes"/>
         <property name="context-root" value="dongnebooks"/>
                                                                                                                                                                                             
+>>>>>>> b92669ef5f680fed27c38cb4db772b036bcabb76
     
     
     
@@ -191,7 +239,13 @@
     
     
     </wb-module>
+<<<<<<< HEAD
+                                                                                                    
+
+
+=======
                                                                                             
+>>>>>>> b92669ef5f680fed27c38cb4db772b036bcabb76
 
 
 
