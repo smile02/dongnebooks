@@ -124,8 +124,7 @@
 	<br />
 	<!--  댓글입력하는  -->
 	<div class="container">
-		<form:form action="/reply/insert" method="post" modelAttribute="reply"
-			name="form1">
+		<form:form action="/reply/insert" method="post" modelAttribute="reply">
 			<div class="row col-12"
 				style="margin: 0 auto; margin-top: 18px; margin-bottom: 20px;">
 				<input type="hidden" name="idx" value="${board.idx }" />
@@ -138,7 +137,7 @@
 									disabled="disabled">댓글</button>
 							</div>
 							<div class="col-xs-12">
-								<form:textarea class="form-control" name="comments" cols="180"
+								<form:textarea class="form-control" name="comments" cols="180" 
 									rows="3" path="comments" maxlength="100" id="comments"
 									wrap="hard" placeholder="댓글을 여기에 엄청 서둘러서 열심히 입력해보세요." />
 							</div>
@@ -222,14 +221,14 @@
 	<script>
 	
 		
-	//댓글수정하는 input태그에서 엔터눌러서 전송 안되게 막는거
-	/* function enabled_enter(){
+	/* //댓글수정하는 input태그에서 엔터눌러서 전송 안되게 막는거
+	 function enabled_enter(){
 		if(event.keyCode==13){
 			event.returnValue=false;
 		}else{
 			return;
 		}
-	} */
+	}  */
 	
 	//해당 사용자에게만 뜨는 게시글 삭제 눌렀을 때 
 	function del(idx){
@@ -333,7 +332,7 @@
 		var comments_td = $("#td_"+rno);
 		//$("#replyMod_"+rno).attr('disabled',true);
 		$("#replyMod_"+rno).css('display',"none");
-		var $input = $("<textarea id='textarea_"+rno+"' maxlength='300' name='comments' class='form-control d-inline text-center' rows='1' cols='1' wrap='hard'></textarea><span id='reply_comments' class='error'/>");
+		var $input = $("<textarea id='textarea_"+rno+"' maxlength='300'name='comments' class='form-control d-inline text-center' rows='1' cols='1' wrap='hard'></textarea><span id='reply_comments' class='error'/>");
 		console.log(comments_td.text());
 		$input.val(comments_td.text());
 		comments_td.empty();
@@ -361,9 +360,9 @@
 		
 		var out_comments = $.trim(comments);
         if(out_comments == null || out_comments == '' || out_comments.length == 0){
-        	$("#reply_comments").html("공백 안되");
+        	$("#reply_comments").html("공백은 입력 할 수 없습니다.");
         	return;
-        }
+        } 
 		console.log("너 뭐니 : "+out_comments);
 		$.ajax({
 			url:"/reply/update",

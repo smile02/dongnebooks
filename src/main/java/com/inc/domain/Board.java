@@ -3,16 +3,15 @@ package com.inc.domain;
 import java.util.List;
 
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Range;
 
 public class Board {
 	private int idx;
-	@Pattern(regexp="[0-9a-zA-Z가-힣!@#$%^&*]{5,30}", message="영문,숫자,한글 5자이상 30자 이하로 제목을 입력해주세요.")
+	@Pattern(regexp=".*{5,30}", message="5자이상 30자 이하로 제목을 입력해주세요.")
 	private String title;
 	private String nickname;
-	@Pattern(regexp="[0-9a-zA-Z가-힣]{10,1000}", message="영문,숫자,한글 10자이상 1000자 이하로 내용을 입력해주세요.")
+	@Pattern(regexp=".*{10,1000}", message="10자이상 1000자 이하로 내용을 입력해주세요.")
 	private String comments;
 	private int cnt;
 	private String regdate;
@@ -43,7 +42,7 @@ public class Board {
 		return title;
 	}
 	public void setTitle(String title) {
-		this.title = title;
+		this.title = title.trim();
 	}
 	public String getNickname() {
 		return nickname;
@@ -55,7 +54,7 @@ public class Board {
 		return comments;
 	}
 	public void setComments(String comments) {
-		this.comments = comments;
+		this.comments = comments.trim();
 	}
 	public int getCnt() {
 		return cnt;

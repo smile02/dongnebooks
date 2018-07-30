@@ -32,7 +32,10 @@ public class ReplyController {
 	//댓글입력
 	@RequestMapping(value="/reply/insert", method=RequestMethod.POST)
 	public String insert(@ModelAttribute @Valid Reply reply, BindingResult result, HttpSession session,HttpServletRequest req, Model model) throws Exception {
+		System.out.println("확인1 : "+reply.getComments());
 		
+		reply.setComments(reply.getComments().trim());
+		System.out.println("확인2 : "+reply.getComments());
 		//에러있으면 
 		if(result.hasErrors() || (reply.getComments().length() == 0 || reply.getComments().equals("") || reply.getComments() == null)) {
 			model.addAttribute("board", boardService.selectOne(reply.getIdx()));
