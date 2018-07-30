@@ -44,6 +44,9 @@ public class MessageDecoder implements Decoder.Text<Message> {
 			}
 			message.setUserList(saveList);
 			cnt += (Long)jsonObject.get("userCnt");
+			if(cnt <=0 ) {
+				cnt = 0;
+			}
 			System.out.println("cnt : "+cnt);
 			message.setUserCnt(cnt);
 		} catch (ParseException e) {

@@ -89,7 +89,7 @@
     		$("#outNick").html(name+"님 환영합니다~!!");
     		//WebSocketEx는 프로젝트 이름
             //websocket 클래스 이름
-             ws = new WebSocket("ws://13.209.89.95:9090/chat");
+             ws = new WebSocket("ws://localhost:9090/chat");
     		
            //웹 소켓이 연결되었을 때 호출되는 이벤트
              ws.onopen = function(message){
@@ -115,14 +115,24 @@
              	console.log(json.userList);
 		        	for(var user of json.userList){
 		        		var $user_div = $("<div>").addClass("row");
-		            	var $user_p = $("<p>").text(user);
-		            	
+		            	var $user_p = $("<p>").text(user).css("margin-left","20px");
+		            	/* if(name == '관리자'){
+		            		var $admin_button = $("<button u_out='/main'>").attr("type","button").attr("id",user);
+		            		$admin_button.html("강퇴");
+		            		$admin_button.addClass("btn btn-danger text-right");
+		            		$admin_button.css("dispaly","block").css("margin-left","20px");
+		            		$admin_button.attr("onclick","userOut(this);")
+		            		if(name == user){
+		            			$admin_button.css("display","none");
+		            		}
+		            		$user_p.append($admin_button);
+		            	} */
 		            	if(check){
 		            		$user_div.append($user_p);
 		            	}else{
 		            		$user_p.text("");
 		            		$user_div.append($user_p);
-		            	}		            	
+		            	}
 		            	$("#userBox").append($user_div);
 		        	}
              	
@@ -132,6 +142,8 @@
              		$entity.text(json.from+json.msg);      
              	}else if(json.msg.indexOf("퇴장하셨습니다.") != -1){
              		$entity.text(json.from+json.msg);           		
+             	}else if(json.msg.indexOf("추방당하셨습니다.") != -1){
+             		$entity.text(json.from+json.msg);
              	}else{
                  	$entity.text(json.from+" : "+json.msg);
                  	if(json.from == name){            		
@@ -164,6 +176,12 @@
             		
                };
         } 
+        function userOut(user){        	
+        	console.log(user);
+        	alert("강퇴 눌림"+user.id);
+        	ws.send(JSON.stringify({from:user.id, to:"", msg:"님이 추방당하셨습니다.",userCnt:-1}));
+        	//location.href=user.u_out;
+        }
        
     </script>
 </body>
