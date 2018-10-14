@@ -18,13 +18,6 @@
 <body>
 	<jsp:include page="../include/header.jsp" />
 	<div class="container">
-		<div class="row">
-			<div class="col-sm-12">
-				<div class="jumbotron">
-					<jsp:include page="../include/pageView.jsp"/>
-				</div>
-			</div>
-		</div>
 			<h1 class="text-center">DongneBooks 소개</h1>	
 		<div class="row">
 		<div class="rightImage text-right" style="display:block;">

@@ -1,0 +1,201 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.inc</groupId>
+  <artifactId></artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <name></name>
+  <description></description>
+  <repositories>
+  	<repository>
+  		<id>oracle</id>
+  		<name>ORACLE JDBC Repository</name>
+  		<url>https://maven.atlassian.com/3rdparty</url>
+  	</repository>
+  </repositories>
+  
+  <properties>
+  	<java.version>8</java.version>
+  	<spring.version>4.2.6.RELEASE</spring.version>
+  </properties>
+  
+  
+  <build>
+  	<finalName>dongnebooks</finalName><!-- 나중에 war파일의 이름 -->
+  	<plugins>
+  		<plugin>
+  			<artifactId>maven-compiler-plugin</artifactId>
+  			<version>3.1</version>
+  			<configuration>
+  				<source>8</source>
+  				<target>8</target>
+  				<encoding>UTF-8</encoding>
+  			</configuration>
+  		</plugin>
+  		
+  		<plugin> <!-- 소스폴더안이 아닌 밖으로 빼려는 작업 -->
+  			<artifactId>maven-war-plugin</artifactId>
+  			<version>2.6</version>
+  			<configuration>
+  				<webappDirectory>webapp</webappDirectory>
+  				<webXml>webapp/WEB-INF/web.xml</webXml>
+  				<failOnMissingWebXml>false</failOnMissingWebXml>
+  			</configuration>
+  		</plugin>
+  		
+  		<plugin> <!-- 배포할 때 편하기 위한 플러그인 추가 -->
+  			<groupId>org.apache.tomcat.maven</groupId>
+  			<artifactId>tomcat7-maven-plugin</artifactId>
+  			<version>2.2</version>
+  			<configuration>
+  				<url>http://localhost:9090/manager/text</url>
+  				<server>tomcatserver</server>
+  				<path>/</path>
+  				<username>admin</username>
+  				<password>admin</password>
+  			</configuration>
+  		</plugin>
+  	</plugins>
+  </build>
+  
+  <dependencies>
+  <!-- servlet  -->
+  <dependency>
+  	<groupId>javax.servlet</groupId>
+  	<artifactId>javax.servlet-api</artifactId>
+  	<version>3.1.0</version> <!-- 웹 모듈 버전 -->
+  	<scope>provided</scope>
+  </dependency>  
+  
+  <!-- jstl -->	
+  	<dependency>
+  		<groupId>jstl</groupId>
+  		<artifactId>jstl</artifactId>
+  		<version>1.2</version>
+  		<scope>provided</scope>
+  	</dependency>
+  	<!-- tomcat -->
+	<dependency>
+		<groupId>javax</groupId>
+		<artifactId>javaee-web-api</artifactId>
+		<version>8.0</version>
+		<scope>provided</scope>
+	</dependency>
+  <!-- spring (core,bean,context,expression,aop) -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-webmvc</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-web</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	
+  	<!-- spring(tx, bean, core) -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-jdbc</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	<!-- spring(core) -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-test</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-context-support</artifactId>
+  		<version>${spring.version}</version>
+  	</dependency>
+  	<!-- 웹 소켓 라이브러리 -->
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-websocket</artifactId>
+  		<version>4.0.4.RELEASE</version>
+  	</dependency>
+  	
+  	<!-- 웹소켓에서 대화내용을 객체로 보낼 때 -->
+	<dependency>
+	    <groupId>com.googlecode.json-simple</groupId>
+	    <artifactId>json-simple</artifactId>
+	    <version>1.1.1</version>
+	</dependency>
+  	
+  	
+  	<!-- dbcp (pool) -->
+  	<dependency>
+		<groupId>commons-dbcp</groupId>
+		<artifactId>commons-dbcp</artifactId>
+		<version>1.4</version>
+	</dependency>
+  	
+  	<!-- validator -->
+	<dependency>
+		<groupId>org.hibernate</groupId>
+		<artifactId>hibernate-validator</artifactId>
+		<version>5.0.3.Final</version>
+	</dependency>	
+	<dependency>
+	    <groupId>javax.xml.bind</groupId>
+	    <artifactId>jaxb-api</artifactId>
+	    <version>2.2.8</version>
+	</dependency>
+	
+	<!-- jackson -->	
+	<dependency>
+    	<groupId>com.fasterxml.jackson.core</groupId>
+    	<artifactId>jackson-databind</artifactId>
+    	<version>2.7.3</version>
+	</dependency>
+	
+	<!-- junit -->
+	<dependency>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.12</version>
+	    <scope>test</scope>
+	</dependency>
+	
+	<!-- mybatis -->
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis</artifactId>
+		<version>3.3.1</version>
+	</dependency>	
+	<dependency>
+		<groupId>org.mybatis</groupId>
+		<artifactId>mybatis-spring</artifactId>
+		<version>1.2.4</version>
+	</dependency>
+	<!-- javaMail API -->
+	<dependency>
+		<groupId>javax.mail</groupId>
+		<artifactId>mail</artifactId>
+		<version>1.4.7</version>
+	</dependency>
+	<dependency>
+		<groupId>com.oracle</groupId>
+		<artifactId>ojdbc6</artifactId>
+		<version>12.1.0.1-atlassian-hosted</version>		
+	</dependency>
+	
+	<!-- file upload -->
+	<dependency>
+		<groupId>commons-fileupload</groupId>
+		<artifactId>commons-fileupload</artifactId>
+		<version>1.2.1</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>1.3.1</version>
+	</dependency>
+	
+  </dependencies>
+  
+</project>
